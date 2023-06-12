@@ -1,0 +1,623 @@
+{% extends 'Store/base.html' %}
+{% block title %} Top Deals - Add to Cart {% endblock title %}
+{% block body %}
+{% load social_share %}
+<style>
+    .accordion-button:not(.collapsed) {
+        color: #fff !important;
+    }
+
+    .accordion-button:not(.collapsed) {
+        background-color: #192430 !important;
+    }
+
+    .accordion-button:not(.collapsed),
+    .accordion-button {
+        background-color: #192430 !important;
+    }
+
+    .accordion-button:after {
+        background-image: url("data:image/svg+xml,%3Csvg width='14' height='7' viewBox='0 0 16 9' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1L8 8L15 1' stroke='white' stroke-width='1.75' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") !important;
+        width: 1rem !important;
+        background-size: contain !important;
+        height: 1rem !important;
+    }
+
+    .accordion-button:after {
+        transform: rotate(-90deg) !important;
+    }
+
+    .accordion-button:not(.collapsed):after {
+        transform: rotate(0deg) !important;
+    }
+
+    button[disabled] {
+        cursor: not-allowed;
+    }
+</style>
+<div class="px-[4rem] py-[2rem] grid lg:grid-cols-4 gap-[2rem]">
+    <div class="lg:col-span-3 flex flex-col gap-6">
+{#                {% if options %}#}
+
+        <div class="flex flex-col gap-2">
+            <h1 class="text-2xl font-bold ">Shopping Cart</h1>
+            <p class="text-[#6C6C6C] text-sm font-semibold">You have {{ cart_items | length }} Items in the cart</p>
+        </div>
+        {% for item in cart_items %}
+        <div class="flex flex-col gap-4">
+            <div class="p-3 dark-shadow rounded-lg flex items-center gap-[1rem] justify-between relative delete_deal_p___">
+                <div class="absolute top-0 right-0 translate-x-1/2 -translate-y-1/2 cursor-pointer delete_deal____" data-id='{{item.id}}'>
+                    <svg class="" width="22" height="22" viewBox="0 0 26 26" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M13.0263 0.796082C6.0604 0.796082 0.523438 6.33305 0.523438 13.2989C0.523438 20.2648 6.0604 25.8017 13.0263 25.8017C19.9921 25.8017 25.5291 20.2648 25.5291 13.2989C25.5291 6.33305 19.9921 0.796082 13.0263 0.796082ZM17.8488 19.5503L13.0263 14.7278L8.20375 19.5503L6.77485 18.1214L11.5974 13.2989L6.77485 8.47639L8.20375 7.0475L13.0263 11.87L17.8488 7.0475L19.2777 8.47639L14.4552 13.2989L19.2777 18.1214L17.8488 19.5503Z" fill="red"/>
+                        </svg>
+                </div>
+                <div class="flex items-start gap-3">
+                    <div>
+                        <div class="h-[5rem] w-[5rem] rounded-lg overflow-hidden">
+                            <img src="{{item.image}}"
+                                class="w-full h-full object-cover">
+                        </div>
+                    </div>
+                    <div class="flex flex-col gap-1">
+                        <div class="flex items-start gap-4">
+                            {% comment %} <p class="font-semibold capitalize">AED 20</p> {% endcomment %}
+                            <p class="bg-[#2B87FF] px-3 py-1 rounded-sm text-xs text-white">-{{ item.option_id.discount_percentage }}%</p>
+                        </div>
+                        <p class="font-semibold capitalize">{{ item.option_id.title }}</p>
+                        <div class='flex text-xs items-center justify-center gap-5'>
+                            <p>Reservation Fee : AED {{item.reservation_fee}}</p>
+                            <div class="flex items-center gap-2">
+                                <svg width="11" height="15" viewBox="0 0 11 15" fill="none"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <path
+                                        d="M6.16824 14.0773C6.26337 13.9629 7.42138 12.5628 8.55603 10.8655C9.1233 10.0169 9.68586 9.09235 10.1069 8.21597C10.5267 7.34206 10.8108 6.50614 10.8108 5.83783C10.8108 3.11053 8.59216 0.89188 5.86486 0.89188C3.13761 0.89188 0.918919 3.11053 0.918919 5.83783C0.918919 6.50614 1.20299 7.34206 1.62284 8.21598C2.04388 9.09236 2.60644 10.0169 3.17371 10.8655C4.30837 12.5628 5.46638 13.9629 5.56149 14.0773L5.5615 14.0773C5.63645 14.1674 5.74759 14.2196 5.86486 14.2196C5.98207 14.2196 6.09327 14.1675 6.16824 14.0773ZM6.16824 14.0773L6.1059 14.0255M6.16824 14.0773C6.16824 14.0773 6.16824 14.0773 6.16825 14.0773L6.1059 14.0255M6.1059 14.0255C6.04634 14.0971 5.95798 14.1385 5.86486 14.1385C5.7717 14.1385 5.68339 14.0971 5.62383 14.0255C5.43504 13.7984 1 8.43491 1 5.83783C1 3.15531 3.18239 0.972961 5.86486 0.972961C8.54738 0.972961 10.7297 3.15531 10.7297 5.83783C10.7297 8.43491 6.29473 13.7984 6.1059 14.0255ZM7.81654 10.5489C7.05081 11.6816 6.27727 12.6799 5.86486 13.1977C5.45245 12.6799 4.67888 11.6816 3.91319 10.5489C3.18876 9.47732 2.63645 8.53312 2.26556 7.73813C1.89369 6.94104 1.70801 6.30188 1.70801 5.83783C1.70801 3.54578 3.57286 1.68097 5.86486 1.68097C8.15687 1.68097 10.0217 3.54578 10.0217 5.83783C10.0217 6.30186 9.83605 6.94101 9.46419 7.7381C9.0933 8.53309 8.54099 9.4773 7.81654 10.5489Z"
+                                        fill="#6C6C6C" stroke="#6C6C6C" stroke-width="0.162162"></path>
+                                    <path
+                                        d="M7.45906 9.91537C7.31562 9.81845 7.12073 9.85623 7.02385 9.99968C6.60083 10.6259 6.12696 11.2821 5.61538 11.9503C5.51014 12.0877 5.53622 12.2845 5.67369 12.3897C5.73053 12.4333 5.79753 12.4543 5.86402 12.4543C5.95823 12.4543 6.05143 12.412 6.11312 12.3314C6.63222 11.6535 7.11341 10.9871 7.54332 10.3506C7.64025 10.2072 7.60255 10.0123 7.45906 9.91537Z"
+                                        fill="#6C6C6C"></path>
+                                    <path
+                                        d="M5.86534 3.29514C4.40324 3.29514 3.21384 4.48454 3.21384 5.94664C3.21384 7.40875 4.40324 8.59814 5.86534 8.59814C7.32745 8.59814 8.51684 7.40875 8.51684 5.94664C8.51684 4.48454 7.32745 3.29514 5.86534 3.29514ZM5.86534 7.80905C4.83849 7.80905 4.00293 6.9735 4.00293 5.94664C4.00293 4.91979 4.83849 4.08423 5.86534 4.08423C6.89224 4.08423 7.72775 4.91978 7.72775 5.94664C7.72775 6.9735 6.89224 7.80905 5.86534 7.80905Z"
+                                        fill="#6C6C6C" stroke="#6C6C6C" stroke-width="0.162162"></path>
+                                </svg>
+                                <p class="text-sm text-[#6C6C6C]">{{ item.location }}</p>
+                            </div>
+                        </div>
+                        
+                    </div>
+                </div>
+                <div class="flex items-center gap-4">
+                    <div class="border rounded-lg px-2 py-1 flex items-center gap-4 counter">
+                        {% comment %} <div class="text-[#767E7E] text-lg counter_minus cursor-pointer">-</div> {% endcomment %}
+                        <div class="text-[#767E7E] text-lg cursor-pointer">-</div>
+                        <div class="font-bold text-lg counter_value" data-total="123">{{ item.quantity }}</div>
+                        {% comment %} <div class="text-[#767E7E] text-lg counter_plus cursor-pointer">+</div> {% endcomment %}
+                        <div class="text-[#767E7E] text-lg cursor-pointer">+</div>
+                    </div>
+                    {% comment %} <h1 class="text-[#205a42] font-extrabold text-2xl whitespace-nowrap">
+                        AED {{ item.discount_price }}
+                    </h1> {% endcomment %}
+                </div>
+            </div>
+
+        </div>
+            {% endfor %}
+{#        {% endif %}#}
+    </div>
+    <div class="lg:col-span-1 h-fit sticky top-[150px]">
+
+        <form method="POST" action="{% url 'pay_now' %}" class="checkout_val">
+              {% csrf_token %}
+            <div class="bg-[#205a42] rounded-xl flex flex-col gap-5">
+                <div class="px-3 py-3 text-center">
+                    <h1 class="font-semibold text-white text-lg">
+                        Checkout
+                        <button type="button" class="popup_success" data-bs-toggle="modal"
+                            data-bs-target="#success"></button>
+                        <button type="button" class="popup_error" data-bs-toggle="modal"
+                            data-bs-target="#error"></button>
+                    </h1>
+                </div>
+
+
+                <div class="accordion accordion-flush" id="accordionFlushExample">
+                    <div
+                        class="accordion-item border-t-0 border-l-0 border-r-0 rounded-none bg-[#205a42] border border-gray-200">
+                        <h2 class="accordion-header mb-0" id="flush-headingOne">
+                            <button
+                                class="accordion-button relative flex items-center w-full py-4 px-5 text-sm font-semibold text-white text-left bg-[#192430] border-0 rounded-none transition focus:outline-none tab-1"
+                                type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne"
+                                aria-expanded="false" aria-controls="flush-collapseOne">
+                                Add User Details
+                            </button>
+                        </h2>
+                        <div id="flush-collapseOne" class="accordion-collapse text-white border-0 collapse show"
+                            aria-labelledby="flush-headingOne" data-bs-parent="#accordionFlushExample">
+                            <div class="accordion-body py-4 px-5">
+                                <div class="step-1 flex flex-col gap-5">
+                                    <div class="grid lg:grid-cols-2 gap-4">
+                                        <div class="flex flex-col gap-1">
+                                            <p class="text-[0.7rem]">Name *</p>
+                                            <input type="text" required="" placeholder="Enter your name"
+                                                class="border rounded-md text-[0.6rem] outline-none px-2 py-2 text-white placeholder:text-[#A1A1A1] focus:border-[#205a42] ease-in transition-all focus:border-l-[7px]  bg-transparent"
+                                                value="" name='Name'>
+                                        </div>
+                                        <div class="flex flex-col gap-1">
+                                            <p class="text-[0.7rem]">Email Address *</p>
+                                            <input type="email" required="" placeholder="Enter your email address"
+                                                name="email"
+                                                class="border email_field rounded-md text-[0.6rem] outline-none px-2 py-2 text-white placeholder:text-[#A1A1A1] focus:border-[#205a42] ease-in transition-all focus:border-l-[7px]  bg-transparent"
+                                                value="" name='UserEmail'>
+                                        </div>
+                                    </div>
+
+                                    <div class="flex flex-col gap-1">
+                                        <p class="text-[0.7rem]">Phone Number *</p>
+                                        <div
+                                            class="flex border rounded-md overflow-hidden ease-in transition-all text-[0.6rem] phone-input-form-field" >
+                                            <div class="px-3 py-2 flex items-center before-plus border-r">
+                                                <select required=""
+                                                    class="bg-transparent px-1 w-[8ch] outline-none flex-1" id="">
+                                                    <option value="678" name="dial_code">+971
+                                                    </option>
+                                                </select>
+                                            </div>
+                                            <input type="number" name="Phone" minlength="8" maxlength="12"
+                                                class="bg-transparent pl-2 text-white placeholder:text-[#A1A1A1] outline-none w-full flex-1"
+                                                placeholder="Enter your phone number" required="" autocomplete="off"
+                                                id="id_phone" >
+                                        </div>
+                                    </div>
+{% comment %} 
+                                    <div class="flex flex-col gap-1">
+                                        <p class="text-[0.7rem]">City *</p>
+                                        <select name="" id=""
+                                            class="border rounded-md text-[0.6rem] outline-none px-3 py-2 placeholder:text-[#A1A1A1] text-[#fff] focus:border-[#205a42] ease-in transition-all focus:border-l-[7px]  bg-transparent">
+                                            <option value="">City</option>
+                                        </select>
+                                    </div> {% endcomment %}
+
+                                    <div class="flex flex-col gap-1">
+                                        <p class="text-[0.7rem]">Address *</p>
+                                        <input type="text" required="" placeholder="Enter your Address" name="Address"
+                                            class="border rounded-md text-[0.6rem] outline-none px-2 py-2 text-white placeholder:text-[#A1A1A1] focus:border-[#205a42] ease-in transition-all focus:border-l-[7px]  bg-transparent"
+                                            value="">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% comment %} <div
+                        class="accordion-item border-l-0 border-r-0 border-b-0 rounded-none bg-[#205a42] border border-gray-200 mt-3">
+                        <h2 class="accordion-header mb-0" id="flush-headingThree">
+                            <button
+                                class="step-2-btn accordion-button relative flex items-center w-full py-4 px-5 text-sm font-semibold text-white text-left bg-[#192430] border-0 rounded-none transition focus:outline-none tab-2 collapsed"
+                                type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseThree"
+                                aria-expanded="false" aria-controls="flush-collapseThree"> Add Card Details
+                            </button>
+                        </h2>
+                        <div id="flush-collapseThree" class="accordion-collapse text-white collapse"
+                            aria-labelledby="flush-headingThree" data-bs-parent="#accordionFlushExample">
+                            <div class="accordion-body py-4 px-5">
+                                <div class="step-2 flex flex-col gap-5">
+                                    <div class="flex flex-col gap-1">
+                                        <p class="text-[0.7rem]">Card Number *</p>
+                                        <input type="number" required="" placeholder="0000 0000 0000 0000"
+                                            class="border rounded-md text-[0.6rem] outline-none px-2 py-2 text-white placeholder:text-[#A1A1A1] focus:border-[#205a42] ease-in transition-all focus:border-l-[7px]  bg-transparent"
+                                            value="" name='CardNumber'>
+                                    </div>
+                                    <div class="flex flex-col gap-1">
+                                        <p class="text-[0.7rem]">Cardholder Name *</p>
+                                        <input type="text" required="" placeholder="Enter Cardholder Name"
+                                            class="border rounded-md text-[0.6rem] outline-none px-2 py-2 text-white placeholder:text-[#A1A1A1] focus:border-[#205a42] ease-in transition-all focus:border-l-[7px]  bg-transparent"
+                                            value="" name='CardName'>
+                                    </div>
+                                    <div class="grid lg:grid-cols-1 gap-4">
+                                        <div class="flex flex-col gap-1">
+                                            <p class="text-[0.7rem]">Valid Thru *</p>
+                                            <input type="month" required="" placeholder="MM/YY"
+                                                class="border rounded-md text-[0.6rem] outline-none px-2 py-2 text-white placeholder:text-[#A1A1A1] focus:border-[#205a42] ease-in transition-all focus:border-l-[7px]  bg-transparent"
+                                                value="" name='Validity'>
+                                        </div>
+                                        <div class="flex flex-col gap-1">
+                                            <p class="text-[0.7rem]">CVV *</p>
+                                            <input type="number" required="" placeholder="***"
+                                                class="border rounded-md text-[0.6rem] outline-none px-2 py-2 text-white placeholder:text-[#A1A1A1] focus:border-[#205a42] ease-in transition-all focus:border-l-[7px]  bg-transparent"
+                                                value="" name='CVVNumber'>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div> {% endcomment %}
+                </div>
+
+                <div class="flex flex-col gap-3 px-4">
+                    {% comment %} <div class="flex items-center justify-between text-xs">
+                        <p class="text-[#B4B4B4]">Sub Total</p>
+                        <p class="text-sm text-white font-semibold">AED {{ total_amount }}</p>
+                    </div>
+                    <div class="flex items-center justify-between text-xs">
+                        <p class="text-[#B4B4B4]">Discount Price</p>
+                        <p class="text-sm text-white font-semibold">AED {{ discount_amount }}</p>
+                    </div>
+                    <div class="flex items-center justify-between text-xs">
+                        <p class="text-[#B4B4B4]">GST Tax</p>
+                        <p class="text-sm text-white font-semibold">AED 0</p>
+                    </div> {% endcomment %}
+                    <div class="flex items-center justify-between text-xs">
+                        <p class="text-[#B4B4B4]">Reservation Fee</p>
+                        <p class="text-sm text-white font-semibold">AED {{total_price}}</p>
+                    </div>
+                </div>
+
+                <button type="submit" class="p-4 pt-0 step_submit">
+
+                    <div
+                        class="px-3 py-2 flex items-center justify-between bg-white rounded-md text-[#192430] cursor-pointer">
+                        <div>
+                            <p class="text-sm font-semibold">AED {{total_price}}</p>
+                        </div>
+                        <div
+                         id='payNowBtn'
+                        >
+                            <p class="text-sm font-semibold">Pay Now</p>
+
+                        </div>
+                    </div>
+
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+<div class="modal fade fixed top-0 left-0 hidden w-full h-full outline-none overflow-x-hidden overflow-y-auto"
+    id="error" tabindex="-1" aria-labelledby="errorTitle" aria-modal="true" role="dialog">
+    <div class="modal-dialog modal-dialog-centered relative w-auto pointer-events-none">
+        <div
+            class="modal-content border-none shadow-lg relative flex flex-col w-full pointer-events-auto bg-white bg-clip-padding rounded-md outline-none text-current">
+            <div class="modal-body relative p-4 flex items-center justify-center">
+                {% comment %} <div class="cursor-pointer absolute top-3 right-3" data-bs-dismiss="modal" aria-label="Close">
+                    <svg class="" width="26" height="26" viewBox="0 0 26 26" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M13.0263 0.796082C6.0604 0.796082 0.523438 6.33305 0.523438 13.2989C0.523438 20.2648 6.0604 25.8017 13.0263 25.8017C19.9921 25.8017 25.5291 20.2648 25.5291 13.2989C25.5291 6.33305 19.9921 0.796082 13.0263 0.796082ZM17.8488 19.5503L13.0263 14.7278L8.20375 19.5503L6.77485 18.1214L11.5974 13.2989L6.77485 8.47639L8.20375 7.0475L13.0263 11.87L17.8488 7.0475L19.2777 8.47639L14.4552 13.2989L19.2777 18.1214L17.8488 19.5503Z" fill="#205a42"/>
+                        </svg>
+                </div> {% endcomment %}
+                <div class="flex flex-col gap-4 text-center">
+                    <svg class="mx-auto" width="209" height="218" viewBox="0 0 209 218" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="114.567" cy="121.058" r="45.1685" fill="#205a42" />
+                        <path
+                            d="M106.773 144.076L127.811 164.37C154.64 155.065 160.068 131.536 159.738 120.316L144.765 106.084L106.773 144.076Z"
+                            fill="#E38A00" />
+                        <rect x="82.0078" y="120.78" width="16.5176" height="37.1649" rx="6.18747"
+                            transform="rotate(-45.0326 82.0078 120.78)" fill="white" />
+                        <rect x="135.562" y="96.432" width="16.5176" height="52.6654" rx="5.19748"
+                            transform="rotate(45 135.562 96.432)" fill="white" />
+                        <circle cx="113.58" cy="120.563" r="92.4408" stroke="#E5E7EB" stroke-width="4.94998" />
+                        <rect x="19.5938" y="77.1579" width="7.67789" height="48.7678" rx="3.83895"
+                            transform="rotate(-45 19.5938 77.1579)" fill="#E5E7EB" />
+                        <rect x="28.3203" y="42.7089" width="7.67789" height="48.7678" rx="3.83895"
+                            transform="rotate(-45 28.3203 42.7089)" fill="#E5E7EB" />
+                        <rect x="177.914" y="171.971" width="3.74716" height="15.409" rx="1.87358"
+                            transform="rotate(-45 177.914 171.971)" fill="#E5E7EB" />
+                        <rect x="40.4453" y="21.1172" width="4.79389" height="18.8289" rx="2.39694"
+                            transform="rotate(-45 40.4453 21.1172)" fill="#E5E7EB" />
+                        <rect x="35.625" y="27.3273" width="2.22749" height="19.1074" rx="1.11375"
+                            transform="rotate(-44.884 35.625 27.3273)" fill="#E5E7EB" />
+                        <rect x="167.156" y="187.662" width="1.96605" height="20.2655" rx="0.983025"
+                            transform="rotate(-44.884 167.156 187.662)" fill="#E5E7EB" />
+                        <rect x="183.094" y="203.608" width="1.96605" height="20.2655" rx="0.983025"
+                            transform="rotate(-44.884 183.094 203.608)" fill="#E5E7EB" />
+                        <rect x="17.4297" y="44.0617" width="2.2453" height="23.1439" rx="1.12265"
+                            transform="rotate(-44.884 17.4297 44.0617)" fill="#E5E7EB" />
+                        <rect x="35.6406" y="62.2736" width="2.2453" height="23.1439" rx="1.12265"
+                            transform="rotate(-44.884 35.6406 62.2736)" fill="#E5E7EB" />
+                        <rect x="38.9609" y="77.214" width="2.22749" height="43.0346" rx="1.11375"
+                            transform="rotate(-44.884 38.9609 77.214)" fill="#E5E7EB" />
+                        <rect x="51.1016" y="42.6246" width="2.22749" height="4.70042" rx="1.11375"
+                            transform="rotate(-44.884 51.1016 42.6246)" fill="#E5E7EB" />
+                        <rect x="58.0156" y="49.4941" width="2.22749" height="15.1562" rx="1.11375"
+                            transform="rotate(-44.884 58.0156 49.4941)" fill="#E5E7EB" />
+                        <circle cx="68.1709" cy="86.7796" r="3.95998" fill="#E5E7EB" />
+                        <circle cx="5.05373" cy="37.2798" r="3.95998" fill="#E5E7EB" />
+                        <circle cx="2.82374" cy="70.1972" r="1.97999" fill="#E5E7EB" />
+                        <circle cx="6.78468" cy="74.1571" r="1.97999" fill="#E5E7EB" />
+                        <circle cx="10.7456" cy="78.1171" r="1.97999" fill="#E5E7EB" />
+                        <circle cx="14.7066" cy="82.0771" r="1.97999" fill="#E5E7EB" />
+                        <circle cx="18.6597" cy="86.0371" r="1.97999" fill="#E5E7EB" />
+                        <circle cx="22.6284" cy="89.9971" r="1.97999" fill="#E5E7EB" />
+                        <circle cx="26.5737" cy="93.957" r="1.97999" fill="#E5E7EB" />
+                        <circle cx="30.5503" cy="97.917" r="1.97999" fill="#E5E7EB" />
+                        <circle cx="34.5034" cy="101.877" r="1.97999" fill="#E5E7EB" />
+                        <circle cx="167.156" cy="172.895" r="1.71874" fill="#E5E7EB" />
+                        <circle cx="170.602" cy="176.333" r="1.71874" fill="#E5E7EB" />
+                        <circle cx="174.031" cy="179.77" r="1.71874" fill="#E5E7EB" />
+                        <circle cx="177.469" cy="183.208" r="1.71874" fill="#E5E7EB" />
+                        <circle cx="180.914" cy="186.645" r="1.71874" fill="#E5E7EB" />
+                        <circle cx="184.336" cy="190.083" r="1.71874" fill="#E5E7EB" />
+                        <circle cx="187.781" cy="193.52" r="1.71874" fill="#E5E7EB" />
+                        <circle cx="191.227" cy="196.958" r="1.71874" fill="#E5E7EB" />
+                        <circle cx="194.648" cy="200.395" r="1.71874" fill="#E5E7EB" />
+                        <circle cx="88.4658" cy="25.1524" r="23.6361" stroke="#E5E7EB" stroke-width="1.23749"
+                            stroke-linejoin="round" stroke-dasharray="4.95 4.95" />
+                        <circle cx="172.109" cy="178.107" r="28.8336" stroke="#E5E7EB" stroke-width="1.23749"
+                            stroke-linejoin="round" stroke-dasharray="4.95 4.95" />
+                    </svg>
+                    <h1 class="font-semibold text-xl">
+                        Payment Successful
+                    </h1>
+                    <p class="text-[#555555] text-sm">Congratulations! You have been purchased <br class="md:block hidden ">
+                        Deals Successfully.</p>
+                    <a href='/?clear_session=true' class="w-fit px-6 py-3 text-white bg-[#205a42] mx-auto rounded-md">Back to Home</a>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<div class="modal fade fixed top-0 left-0 hidden w-full h-full outline-none overflow-x-hidden overflow-y-auto"
+    id="success" tabindex="-1" aria-labelledby="errorTitle" aria-modal="true" role="dialog">
+    <div class="modal-dialog modal-dialog-centered relative w-auto pointer-events-none">
+        <div
+            class="modal-content border-none shadow-lg relative flex flex-col w-full pointer-events-auto bg-white bg-clip-padding rounded-md outline-none text-current">
+            <div class="modal-body relative p-4 flex items-center justify-center">
+                {% comment %} <div class="cursor-pointer absolute top-3 right-3" data-bs-dismiss="modal" aria-label="Close">
+                    <svg class="" width="26" height="26" viewBox="0 0 26 26" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M13.0263 0.796082C6.0604 0.796082 0.523438 6.33305 0.523438 13.2989C0.523438 20.2648 6.0604 25.8017 13.0263 25.8017C19.9921 25.8017 25.5291 20.2648 25.5291 13.2989C25.5291 6.33305 19.9921 0.796082 13.0263 0.796082ZM17.8488 19.5503L13.0263 14.7278L8.20375 19.5503L6.77485 18.1214L11.5974 13.2989L6.77485 8.47639L8.20375 7.0475L13.0263 11.87L17.8488 7.0475L19.2777 8.47639L14.4552 13.2989L19.2777 18.1214L17.8488 19.5503Z" fill="#205a42"/>
+                        </svg>
+                        
+                </div> {% endcomment %}
+                <div class="flex flex-col gap-4 text-center">
+                    <svg class="mx-auto" width="209" height="218" viewBox="0 0 306 320" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="167.937" cy="176.596" r="66.3827" fill="#E6212B"/>
+                        <path d="M142.5 204L183.5 241C220.5 231 233.5 199.5 233.5 183.5L195.006 150.5L142.5 204Z" fill="#CB0E18"/>
+                        <rect x="186.734" y="140" width="24.2754" height="77.4006" rx="7.63856" transform="rotate(45 186.734 140)" fill="white"/>
+                        <rect x="132" y="157.165" width="24.2754" height="77.4006" rx="7.63856" transform="rotate(-45 132 157.165)" fill="white"/>
+                        <circle cx="166.503" cy="175.869" r="135.857" stroke="#E5E7EB" stroke-width="7.27482"/>
+                        <rect x="28.3672" y="112.078" width="11.2839" height="71.6724" rx="5.64197" transform="rotate(-45 28.3672 112.078)" fill="#E5E7EB"/>
+                        <rect x="41.1953" y="61.4489" width="11.2839" height="71.6724" rx="5.64197" transform="rotate(-45 41.1953 61.4489)" fill="#E5E7EB"/>
+                        <rect x="261.047" y="251.421" width="5.50708" height="22.646" rx="2.75354" transform="rotate(-45 261.047 251.421)" fill="#E5E7EB"/>
+                        <rect x="59.0156" y="29.7162" width="7.04542" height="27.6722" rx="3.52271" transform="rotate(-45 59.0156 29.7162)" fill="#E5E7EB"/>
+                        <rect x="51.9375" y="38.8431" width="3.27367" height="28.0815" rx="1.63683" transform="rotate(-44.884 51.9375 38.8431)" fill="#E5E7EB"/>
+                        <rect x="245.25" y="274.481" width="2.88944" height="29.7835" rx="1.44472" transform="rotate(-44.884 245.25 274.481)" fill="#E5E7EB"/>
+                        <rect x="268.68" y="297.918" width="2.88944" height="29.7835" rx="1.44472" transform="rotate(-44.884 268.68 297.918)" fill="#E5E7EB"/>
+                        <rect x="25.1875" y="63.4371" width="3.29985" height="34.0139" rx="1.64992" transform="rotate(-44.884 25.1875 63.4371)" fill="#E5E7EB"/>
+                        <rect x="51.9531" y="90.2025" width="3.29985" height="34.0139" rx="1.64992" transform="rotate(-44.884 51.9531 90.2025)" fill="#E5E7EB"/>
+                        <rect x="56.8359" y="112.16" width="3.27367" height="63.2466" rx="1.63683" transform="rotate(-44.884 56.8359 112.16)" fill="#E5E7EB"/>
+                        <rect x="74.6797" y="61.325" width="3.27367" height="6.90805" rx="1.63683" transform="rotate(-44.884 74.6797 61.325)" fill="#E5E7EB"/>
+                        <rect x="84.8438" y="71.4209" width="3.27367" height="22.2746" rx="1.63683" transform="rotate(-44.884 84.8438 71.4209)" fill="#E5E7EB"/>
+                        <circle cx="99.7574" cy="126.218" r="5.81986" fill="#E5E7EB"/>
+                        <circle cx="6.99954" cy="53.4699" r="5.81986" fill="#E5E7EB"/>
+                        <circle cx="3.72243" cy="101.847" r="2.90993" fill="#E5E7EB"/>
+                        <circle cx="9.54274" cy="107.667" r="2.90993" fill="#E5E7EB"/>
+                        <circle cx="15.3631" cy="113.487" r="2.90993" fill="#E5E7EB"/>
+                        <circle cx="21.1834" cy="119.307" r="2.90993" fill="#E5E7EB"/>
+                        <circle cx="26.9959" cy="125.127" r="2.90993" fill="#E5E7EB"/>
+                        <circle cx="32.824" cy="130.947" r="2.90993" fill="#E5E7EB"/>
+                        <circle cx="38.6365" cy="136.767" r="2.90993" fill="#E5E7EB"/>
+                        <circle cx="44.4646" cy="142.586" r="2.90993" fill="#E5E7EB"/>
+                        <circle cx="50.2771" cy="148.406" r="2.90993" fill="#E5E7EB"/>
+                        <circle cx="245.237" cy="252.78" r="2.52598" fill="#E5E7EB"/>
+                        <circle cx="250.292" cy="257.832" r="2.52598" fill="#E5E7EB"/>
+                        <circle cx="255.346" cy="262.884" r="2.52598" fill="#E5E7EB"/>
+                        <circle cx="260.393" cy="267.936" r="2.52598" fill="#E5E7EB"/>
+                        <circle cx="265.448" cy="272.988" r="2.52598" fill="#E5E7EB"/>
+                        <circle cx="270.495" cy="278.04" r="2.52598" fill="#E5E7EB"/>
+                        <circle cx="275.549" cy="283.092" r="2.52598" fill="#E5E7EB"/>
+                        <circle cx="280.604" cy="288.144" r="2.52598" fill="#E5E7EB"/>
+                        <circle cx="285.651" cy="293.195" r="2.52598" fill="#E5E7EB"/>
+                        <circle cx="129.584" cy="35.6466" r="34.7373" stroke="#E5E7EB" stroke-width="1.81871" stroke-linejoin="round" stroke-dasharray="7.27 7.27"/>
+                        <circle cx="252.52" cy="260.439" r="42.3758" stroke="#E5E7EB" stroke-width="1.81871" stroke-linejoin="round" stroke-dasharray="7.27 7.27"/>
+                        </svg>
+                        
+                    <h1 class="font-semibold text-xl">
+                        Payment Failed
+                    </h1>
+                    <p class="text-[#555555] text-sm">Sorry! Unfortunately, your payment is failed. <br class="lg:block hidden">
+                        Please try again.</p>
+                    <a href='/?clear_session=true' class="w-fit px-6 py-3 text-white bg-[#205a42] mx-auto rounded-md">Back to Home</a>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<!-- popup will open here -->
+<!--  <script>
+    setTimeout(() => {
+        let popup_success = document.querySelector('.popup_error')
+        let popup_error = document.querySelector('.popup_success')
+        popup_success.click();
+    }, 1000);
+</script>  -->
+
+
+{% include 'common/footer-com.html' %}
+<script>
+    try{
+        $(".checkout_val").validate()
+    }
+    catch{}
+
+    let delete_deal_p___ = document.querySelectorAll('.delete_deal_p___');
+
+    delete_deal_p___.forEach(del=>{
+        let btn = del.querySelector('.delete_deal____');
+        console.log(btn)
+        btn?.addEventListener('click',()=>{
+            let auth_token = '{{auth_token}}'
+            let id = btn.getAttribute('data-id')
+            console.log(auth_token)
+            if (auth_token == 'None'){
+                const prev_itms = get_cookies('cart_items')
+                console.log(prev_itms)
+                delete prev_itms[`${id}`]
+                set_cookies('cart_items' , prev_itms , 300)
+            }
+            else{
+                fetch(
+                    `/api/add_to_cart/${id}/`,
+                    {
+                        method : 'DELETE',
+                        headers : {
+                            'Authorization' : `Token ${auth_token}`
+                        }
+                    }
+                )
+                .then(response =>{
+                    if (response.ok){
+                        return response.json()
+                    }
+                })
+                .then(result =>{
+                    console.log(result)
+                })
+                .catch(err =>{
+                    console.log(err)
+                })
+            }
+            del.remove();
+            let cart_box = document.querySelector('#cart-items-p span#cart-count')
+            if(cart_box){
+                cart_box.innerText = +cart_box.innerText - 1
+            }
+            Toast.fire({
+                icon: 'success',
+                title: 'Item removed from cart'
+            });
+        })
+    })
+
+    setTimeout(()=>{
+        document.querySelector('.checkout_val').addEventListener('submit', (e) => {
+            e.preventDefault()
+            let name = $('[name="Name"]').val()
+            let email = document.querySelector('.email_field').value
+            let phone = $('[name="Phone"]').val()
+            let address = $('[name="Address"]').val()
+            // let card_number = $('[name="CardNumber"]').val()
+            // let card_name = $('[name="CardName"]').val()
+            // let validity = $('[name="Validity"]').val()
+            // let cvv_number = $('[name="CVVNumber"]').val()
+
+            if (!name || !email || !phone || !address){
+               
+                let first_tab = $('.tab-1.collapsed[type="button"][aria-expanded="false"]')
+                if(first_tab.length > 0){
+                    first_tab.click()
+                }
+                Toast.fire({
+                    icon: 'error',
+                    title: 'Fill All The Fields!'
+                });
+                return
+            }
+            // if (!card_number || !card_name || !validity || !cvv_number){
+            //     let second_tab = $('.tab-2.collapsed[type="button"][aria-expanded="false"]')
+            //     if(second_tab.length > 0){
+            //         second_tab.click()
+            //     }
+            //     Toast.fire({
+            //         icon: 'error',
+            //         title: 'Fill All The Fields!'
+            //     });
+            //     return
+            // }
+            
+            let errors = document.querySelectorAll('input.error');
+            let errors_select = document.querySelectorAll('select.error');
+            if (errors.length != 0 || errors_select.length != 0) {
+                let phone_err = $('.error[name="Phone"]')
+                if(phone_err){
+                    let first_tab = $('.tab-1.collapsed[type="button"][aria-expanded="false"]')
+                    if(first_tab.length > 0){
+                        first_tab.click()
+                    }
+                }
+                Toast.fire({
+                    icon: 'error',
+                    title: 'Fill All The Fields!'
+                });
+                return
+            }
+            else{
+                Toast.fire({
+                    icon: 'info',
+                    title: 'Please wait...!'
+                });
+                let s_code;
+                let new_form = new FormData()
+
+                new_form.append('name', name)
+                new_form.append('email', email)
+                new_form.append('phone', phone)
+                new_form.append('address', address)
+
+                // new_form.append('card_number', card_number)
+                // new_form.append('card_name', card_name)
+                // new_form.append('exp', validity)
+                // new_form.append('cvv', cvv_number)
+
+                new_form.append('total', 20)
+                new_form.append('reservation_fee', 20)
+                new_form.append('discount', 0)
+                new_form.append('gst', 0)
+                new_form.append('gross_total', 20)
+                new_form.append('deal_options', 20)
+                let auth_token = '{{auth_token}}'
+
+                let headers = {}
+                if(auth_token && auth_token != 'None'){
+                    headers['Authorization'] = `Token ${auth_token}`
+                }
+
+                fetch(
+                    '/api/cart_order_checkout/',
+                    {
+                        method : 'POST',
+                        body : new_form,
+                        headers : headers
+                    }
+                )
+                .then(response =>{
+                    s_code = response.status
+                    if(response.ok){
+                        return response.json()
+                    }
+                })
+                .then(result =>{
+                    if(s_code == 200){
+                        sessionStorage.clear()
+                        Toast.fire({
+                            icon: 'success',
+                            title: 'Your Order has been placed!'
+                        });
+                        let popup_success = document.querySelector('.popup_error')
+                        popup_success.click();
+                    }
+                    else{
+                        Toast.fire({
+                            icon: 'error',
+                            title: result.response
+                        });
+                        let popup_error = document.querySelector('.popup_success')
+                        popup_error.click();
+                    }
+                })
+                .catch(err =>{
+                    Toast.fire({
+                        icon: 'error',
+                        title: 'Something went wrong!'
+                    });
+                    let popup_error = document.querySelector('.popup_success')
+                    popup_error.click();
+                })
+            }
+
+        })
+    } , 1000)
+
+</script>
+{% endblock body %}

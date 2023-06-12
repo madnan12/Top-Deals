@@ -1,0 +1,1630 @@
+{% extends 'Business/base.html' %}
+{% block title %} Top Deals - Create Store {% endblock title %}
+{% block body %}
+<div class="col-span-1 lg:col-span-4 m-4 lg:ml-0 ">
+    <div class="flex flex-col gap-6 py-[1rem] h-full">
+        <div class="flex items-center justify-between gap-4 flex-wrap">
+            <h1 class="font-bold text-2xl text-[#205a42]">Manage Stores</h1>
+            <div class="flex items-center gap-4 flex-wrap lg:w-fit w-full">
+                <div class="rounded-xl bg-white py-2 px-5 flex items-center gap-2 flex-1">
+                    <div>
+                        <svg width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path
+                                d="M5.4344 0.665436C6.79903 0.665436 8.10777 1.20753 9.0727 2.17247C10.0376 3.13741 10.5797 4.44615 10.5797 5.81077C10.5797 7.08523 10.1127 8.25679 9.34486 9.1592L9.55859 9.37293H10.1839L14.1419 13.3309L12.9545 14.5183L8.99656 10.5603V9.93496L8.78283 9.72123C7.88041 10.4891 6.70886 10.9561 5.4344 10.9561C4.06977 10.9561 2.76104 10.414 1.7961 9.44908C0.831159 8.48414 0.289063 7.1754 0.289062 5.81077C0.289062 4.44615 0.831159 3.13741 1.7961 2.17247C2.76104 1.20753 4.06977 0.665436 5.4344 0.665436ZM5.4344 2.24862C3.45542 2.24862 1.87224 3.8318 1.87224 5.81077C1.87224 7.78975 3.45542 9.37293 5.4344 9.37293C7.41338 9.37293 8.99656 7.78975 8.99656 5.81077C8.99656 3.8318 7.41338 2.24862 5.4344 2.24862Z"
+                                fill="#868686"></path>
+                        </svg>
+                    </div>
+                    <form action="{% url 'create_store' %}" method='get'>
+                    <input type="text" class="text-[#373737] outline-none w-full min-w-[120px]"
+                        placeholder="Search amazing stores... " name="item">
+                    </form>
+                </div>
+                <div>
+                    {% if request.user.business_status == 'Pending' %}
+                    <button class="w-full bg-[#205a42] font-semibold px-5 py-2 text-sm text-white rounded-md"
+                        data-bs-target="#AddStore" data-bs-toggle="modal" disabled>
+                        + Add Store
+                    </button>
+                    {% else %}
+                    <button class="w-full bg-[#205a42] font-semibold px-5 py-2 text-sm text-white rounded-md"
+                        data-bs-target="#AddStore" data-bs-toggle="modal">
+                        + Add Store
+                    </button>
+
+                    {% endif %}
+
+                </div>
+            </div>
+        </div>
+
+        {% if store_list %}
+        <div class="flex items-center gap-3">
+            <div
+                class="cursor-pointer business_tab business_tab_active rounded-full py-1 px-3 border flex items-center gap-2" tab-name="1">
+                <h1 class="text-sm">All</h1>
+            </div>
+            <div class="cursor-pointer business_tab rounded-full py-1 px-3 border flex items-center gap-2" tab-name="2">
+                <h1 class="text-sm">Active Stores</h1>
+            </div>
+            <div class="cursor-pointer business_tab rounded-full py-1 px-3 border flex items-center gap-2" tab-name="3">
+                <h1 class="text-sm">Inactive Stores</h1>
+            </div>
+        </div>
+        <div class="rounded-2xl shadow bg-white business_tab_data" tab-name="1">
+            <div class="flex items-start justify-between gap-4 lg:flex-row flex-col flex-wrap">
+
+                <ul class="business-tabss nav nav-tabs flex flex-wrap list-none border-b-0 pl-0 text-center"
+                    id="tabs-tab" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <a href="#tabs-all-cats"
+                            class="nav-link block font-medium text-xs leading-tight uppercase border-x-0 border-t-0 border-b-2 border-transparent px-6 py-3 my-2 hover:border-transparent hover:bg-gray-100 focus:border-transparent active"
+                            id="tabs-home-tab" data-bs-toggle="pill" data-bs-target="#tabs-all-cats"
+                            role="tab" aria-controls="tabs-home" aria-selected="true">All</a>
+                    </li>
+                    {% for category in parent_category_filter_by_status %}
+                            <li class="nav-item" role="presentation">
+                                <a href="#tabs-{{ category.id }}"
+                                    class="nav-link block font-medium text-xs leading-tight uppercase border-x-0 border-t-0 border-b-2 border-transparent px-6 py-3 my-2 hover:border-transparent hover:bg-gray-100 focus:border-transparent "
+                                    id="tabs-home-tab" data-bs-toggle="pill" data-bs-target="#tabs-{{ category.id }}"
+                                    role="tab" aria-controls="tabs-home" aria-selected="true">{{category.name}}</a>
+                            </li>
+                            {% endfor %}
+                </ul>
+            </div>
+            <div class="tab-content p-[1.2rem]" id="tabs-tabContent">
+                <div class="tab-pane fade  show active" id="tabs-all-cats" role="tabpanel" aria-labelledby="tabs-all-cats">
+                    <div class="flex items-center gap-4 flex-wrap">
+
+                        {% for store in store_list %}
+                        <div class="text-center rounded-lg admin-card-hover w-[13rem] md:w-[16rem] bg-white shadow">
+                            <div class="flex flex-col gap-3 p-3 pb-4">
+                                <div class="flex items-center justify-between">
+                                    {% if store.store_status == 'Active' %}
+                                    <div
+                                        class="rounded-full py-1 px-3 border border-[#05D672] bg-[#E7FFF3] text-sm text-[#05D672]">
+                                        {{store.store_status}}
+                                    </div>
+                                    {% else %}
+                                    <div
+                                        class="rounded-full py-1 px-3 border border-[#FF0000] bg-[#ffa590] text-sm text-[#FF0000]">
+                                        {{store.store_status}}
+                                    </div>
+                                    {% endif %}
+                                    {% if store.account_officer_business_store.all%}
+                                        <div class="flex items-center">
+                                            <div data-bs-toggle="modal" data-bs-target="#account_officer-1-{{store.id}}" class="cursor-pointer border flex items-center gap-1 rounded-md border-[#205a42] py-1 px-1 text-[#205a42]">
+                                                <svg width="11" height="11" viewBox="0 0 7 8" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                    <path d="M2.96042 3.4676C3.43681 3.4676 3.84926 3.29675 4.18637 2.95964C4.52336 2.62259 4.69428 2.21019 4.69428 1.73375C4.69428 1.25747 4.52342 0.845015 4.18631 0.507855C3.84921 0.170859 3.43675 0 2.96042 0C2.48398 0 2.07158 0.170859 1.73453 0.50791C1.39748 0.84496 1.22656 1.25742 1.22656 1.73375C1.22656 2.21019 1.39748 2.62264 1.73453 2.9597C2.07169 3.29669 2.48414 3.4676 2.96042 3.4676ZM2.03286 0.806186C2.29148 0.547563 2.59487 0.421849 2.96042 0.421849C3.32592 0.421849 3.62936 0.547563 3.88804 0.806186C4.14666 1.06486 4.27243 1.3683 4.27243 1.73375C4.27243 2.0993 4.14666 2.40269 3.88804 2.66136C3.62936 2.92004 3.32592 3.04576 2.96042 3.04576C2.59498 3.04576 2.29159 2.91999 2.03286 2.66136C1.77418 2.40274 1.64841 2.0993 1.64841 1.73375C1.64841 1.3683 1.77418 1.06486 2.03286 0.806186Z" fill="#205a42"/>
+                                                    <path d="M5.99128 5.5354C5.98156 5.39513 5.9619 5.24212 5.93296 5.08054C5.90374 4.91776 5.86612 4.76387 5.82108 4.62322C5.77451 4.47784 5.71129 4.33428 5.63303 4.1967C5.55191 4.0539 5.45657 3.92956 5.34958 3.82725C5.23771 3.7202 5.10074 3.63414 4.94234 3.57137C4.7845 3.50892 4.60958 3.47729 4.42246 3.47729C4.34898 3.47729 4.27791 3.50744 4.14066 3.5968C4.05619 3.65188 3.95739 3.71559 3.84711 3.78605C3.75281 3.84614 3.62506 3.90243 3.46728 3.9534C3.31333 4.00321 3.15703 4.02848 3.0027 4.02848C2.84848 4.02848 2.69217 4.00321 2.53812 3.9534C2.3805 3.90249 2.2527 3.84619 2.15856 3.78611C2.04932 3.71631 1.95047 3.6526 1.86473 3.59674C1.7276 3.50739 1.65653 3.47723 1.58304 3.47723C1.39587 3.47723 1.221 3.50892 1.06322 3.57142C0.904934 3.63409 0.767906 3.72015 0.655922 3.8273C0.548936 3.92967 0.453593 4.05396 0.372529 4.1967C0.294377 4.33428 0.231108 4.47779 0.184535 4.62327C0.139554 4.76392 0.101933 4.91776 0.0727155 5.08054C0.0437172 5.2419 0.0241103 5.39497 0.0143893 5.53556C0.00483305 5.67303 0 5.8161 0 5.96065C0 6.33642 0.119453 6.64063 0.35501 6.86498C0.587655 7.08637 0.895433 7.19863 1.26983 7.19863H4.73601C5.11029 7.19863 5.41807 7.08637 5.65077 6.86498C5.88638 6.6408 6.00584 6.33648 6.00584 5.9606C6.00578 5.81555 6.00089 5.67248 5.99128 5.5354ZM5.35991 6.55935C5.20619 6.70566 5.0021 6.77678 4.73595 6.77678H1.26983C1.00363 6.77678 0.799541 6.70566 0.645872 6.5594C0.495113 6.41589 0.421849 6.21999 0.421849 5.96065C0.421849 5.82577 0.426297 5.69258 0.435194 5.56473C0.443872 5.43929 0.461611 5.30149 0.487919 5.15507C0.513896 5.01046 0.546959 4.87475 0.586282 4.7519C0.624013 4.63409 0.675474 4.51744 0.739292 4.40507C0.8002 4.29797 0.870279 4.20609 0.947608 4.13206C1.01994 4.0628 1.11111 4.00612 1.21853 3.96361C1.31789 3.92429 1.42954 3.90276 1.55075 3.89952C1.56552 3.90738 1.59183 3.92237 1.63445 3.95016C1.72117 4.00667 1.82113 4.07115 1.93163 4.14172C2.05619 4.22114 2.21667 4.29287 2.4084 4.35476C2.60441 4.41814 2.80432 4.45033 3.00275 4.45033C3.20118 4.45033 3.40115 4.41814 3.59705 4.35482C3.78895 4.29281 3.94937 4.22114 4.0741 4.14161C4.18718 4.06934 4.28434 4.00673 4.37106 3.95016C4.41367 3.92242 4.43998 3.90738 4.45476 3.89952C4.57602 3.90276 4.68768 3.92429 4.78708 3.96361C4.89445 4.00612 4.98562 4.06286 5.05795 4.13206C5.13528 4.20604 5.20536 4.29792 5.26627 4.40513C5.33014 4.51744 5.38166 4.63415 5.41933 4.75184C5.45871 4.87486 5.49183 5.01052 5.51775 5.15502C5.544 5.30171 5.5618 5.43956 5.57048 5.56478V5.56489C5.57943 5.69225 5.58393 5.82538 5.58399 5.96065C5.58393 6.22005 5.51067 6.41589 5.35991 6.55935Z" fill="#205a42"/>
+                                                </svg>  
+                                                <p class="text-[0.6rem] text-[#205a42]">Officer</p>
+                                            </div>
+                                            
+                                            {% comment %} <button type="button" class="cursor-pointer h-[2rem] w-[2rem] rounded-full border flex items-center justify-center" data-bs-toggle="modal" data-bs-target="#exampleModal-all-{{store.id}}">
+                                                <svg width="1.25rem" height="1.25rem" viewBox="0 0 9 9" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                    <path d="M3.51298 1.45849H4.99012C4.99012 1.26261 4.91231 1.07475 4.7738 0.936243C4.63529 0.797733 4.44743 0.71992 4.25155 0.71992C4.05567 0.71992 3.86781 0.797733 3.7293 0.936243C3.59079 1.07475 3.51298 1.26261 3.51298 1.45849ZM3.0206 1.45849C3.0206 1.13202 3.15028 0.818925 3.38113 0.588077C3.61198 0.357228 3.92508 0.227539 4.25155 0.227539C4.57802 0.227539 4.89111 0.357228 5.12196 0.588077C5.35281 0.818925 5.4825 1.13202 5.4825 1.45849H7.94441C8.0097 1.45849 8.07232 1.48443 8.11849 1.5306C8.16466 1.57677 8.1906 1.63939 8.1906 1.70468C8.1906 1.76998 8.16466 1.83259 8.11849 1.87876C8.07232 1.92493 8.0097 1.95087 7.94441 1.95087H7.42544L6.83753 7.04406C6.79598 7.40408 6.62351 7.73627 6.35296 7.9774C6.08241 8.21854 5.73265 8.3518 5.37024 8.35182H3.13286C2.77044 8.3518 2.42068 8.21854 2.15013 7.9774C1.87958 7.73627 1.70712 7.40408 1.66556 7.04406L1.07766 1.95087H0.55869C0.493397 1.95087 0.430777 1.92493 0.384608 1.87876C0.338438 1.83259 0.3125 1.76998 0.3125 1.70468C0.3125 1.63939 0.338438 1.57677 0.384608 1.5306C0.430777 1.48443 0.493397 1.45849 0.55869 1.45849H3.0206ZM3.75917 3.42801C3.75917 3.36272 3.73323 3.3001 3.68706 3.25393C3.64089 3.20776 3.57827 3.18182 3.51298 3.18182C3.44768 3.18182 3.38506 3.20776 3.33889 3.25393C3.29272 3.3001 3.26679 3.36272 3.26679 3.42801V6.3823C3.26679 6.44759 3.29272 6.51021 3.33889 6.55638C3.38506 6.60255 3.44768 6.62849 3.51298 6.62849C3.57827 6.62849 3.64089 6.60255 3.68706 6.55638C3.73323 6.51021 3.75917 6.44759 3.75917 6.3823V3.42801ZM4.99012 3.18182C4.92483 3.18182 4.86221 3.20776 4.81604 3.25393C4.76987 3.3001 4.74393 3.36272 4.74393 3.42801V6.3823C4.74393 6.44759 4.76987 6.51021 4.81604 6.55638C4.86221 6.60255 4.92483 6.62849 4.99012 6.62849C5.05541 6.62849 5.11803 6.60255 5.1642 6.55638C5.21037 6.51021 5.23631 6.44759 5.23631 6.3823V3.42801C5.23631 3.36272 5.21037 3.3001 5.1642 3.25393C5.11803 3.20776 5.05541 3.18182 4.99012 3.18182Z" fill="#555555"></path>
+                                                </svg>
+                                            </button> {% endcomment %}
+                                        </div>
+                                        
+                                    {% endif %}
+                                </div>
+
+
+
+
+
+                                
+                                <div class="p-2 w-fit h-fit mx-auto rounded-full border border-[#205a42]">
+                                    <div class="h-[6rem] w-[6rem] overflow-hidden rounded-full">
+                                        {% if store.business_logo %}
+                                        <img class="object-cover w-full h-full"
+                                            src="/media/{{store.business_logo}}">
+                                            {% else %}
+                                            <img class="object-cover w-full h-full"
+                                            src="/static/assets/images/dummy.png">
+                                            {% endif %}
+                                    </div>
+                                </div>
+                                <div class="flex items-center justify-center gap-3">
+                                    <button class="outline-none border flex items-center justify-center h-[2rem] w-[2rem] text-xs rounded-full edit_store_btns" data-url="{% url 'retrieve_store'  store.id %}"
+                                    data-bs-target="#EditStore" 
+                                    data-bs-toggle="modal"
+                                    >
+                                    <svg width="14" height="14" viewBox="0 0 7 7" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M1.02745 6.36342C0.97939 6.36333 0.931876 6.35325 0.887926 6.3338C0.843977 6.31436 0.804553 6.28597 0.772163 6.25046C0.739187 6.21525 0.714024 6.17347 0.698324 6.12785C0.682624 6.08223 0.676742 6.03381 0.681064 5.98576L0.765928 5.05234L4.68629 1.1323L5.91145 2.35744L1.99212 6.27714L1.05897 6.36203C1.04849 6.363 1.03797 6.36346 1.02745 6.36342ZM6.15599 2.11248L4.93118 0.887338L5.66586 0.15246C5.69803 0.120245 5.73623 0.0946894 5.77829 0.0772532C5.82033 0.059817 5.86541 0.0508423 5.91093 0.0508423C5.95645 0.0508423 6.00152 0.059817 6.04357 0.0772532C6.08562 0.0946894 6.12383 0.120245 6.15599 0.15246L6.89067 0.887338C6.92288 0.919517 6.94843 0.957729 6.96586 0.999791C6.98329 1.04185 6.99226 1.08694 6.99226 1.13247C6.99226 1.178 6.98329 1.22309 6.96586 1.26515C6.94843 1.30721 6.92288 1.34543 6.89067 1.3776L6.15634 2.11214L6.15599 2.11248Z" fill="#205a42"/>
+                                    </svg>
+                                </button> 
+                                <a href="{% url 'add_store_location' store.slug %}" class="block">
+                                    <svg width="2rem" height="2rem" viewBox="0 0 17 17" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M7.60294 11.8518C7.64617 11.9166 7.71895 11.9556 7.79687 11.9556C7.8748 11.9556 7.94758 11.9166 7.99081 11.8518C8.5424 11.0244 9.35484 10.0026 9.92099 8.96338C10.3737 8.13246 10.5937 7.42378 10.5937 6.79688C10.5937 5.25468 9.33907 4 7.79687 4C6.25468 4 5 5.25468 5 6.79688C5 7.42378 5.22007 8.13246 5.67276 8.96338C6.23849 10.0018 7.05249 11.0261 7.60294 11.8518ZM7.79687 4.46615C9.08204 4.46615 10.1276 5.51171 10.1276 6.79688C10.1276 7.34388 9.92612 7.97961 9.51165 8.74038C9.02365 9.63614 8.32726 10.5448 7.79687 11.3087C7.26657 10.5449 6.57013 9.63619 6.0821 8.74038C5.66763 7.97961 5.46615 7.34388 5.46615 6.79688C5.46615 5.51171 6.51171 4.46615 7.79687 4.46615V4.46615Z" fill="#205a42"/>
+                                        <path d="M7.79688 8.19531C8.56797 8.19531 9.19531 7.56797 9.19531 6.79688C9.19531 6.02578 8.56797 5.39844 7.79688 5.39844C7.02578 5.39844 6.39844 6.02578 6.39844 6.79688C6.39844 7.56797 7.02578 8.19531 7.79688 8.19531ZM7.79688 5.86458C8.31094 5.86458 8.72917 6.28281 8.72917 6.79688C8.72917 7.31094 8.31094 7.72917 7.79688 7.72917C7.28281 7.72917 6.86458 7.31094 6.86458 6.79688C6.86458 6.28281 7.28281 5.86458 7.79688 5.86458Z" fill="#205a42"/>
+                                        <circle cx="8.20635" cy="8.20635" r="8.04222" stroke="#D8D1D1" stroke-width="0.328254"/>
+                                    </svg>
+                                </a>
+                                </div>
+                                <h2 class="font-semibold capitalize">{{store.name}}</h2>
+                                
+                            </div>
+                            <div class="border-t p-2 flex items-center gap-3">
+                                <svg width="1rem" height="1rem" viewBox="0 0 8 9" fill="none"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <path
+                                        d="M3.86826 8.35614L3.86825 8.35613C3.80841 8.29195 3.08019 7.50653 2.36661 6.55434C2.00987 6.07832 1.65592 5.55945 1.39091 5.0674C1.12692 4.57723 0.947056 4.1063 0.947056 3.72828C0.947056 2.18913 2.34867 0.947056 4.05851 0.947056C5.76838 0.947056 7.16997 2.18913 7.16997 3.72828C7.16997 4.1063 6.99011 4.57723 6.72612 5.0674C6.46111 5.55944 6.10716 6.07831 5.75042 6.55433C5.03686 7.5065 4.30866 8.2919 4.24878 8.35613L3.86826 8.35614ZM3.86826 8.35614C3.91643 8.40779 3.98634 8.43638 4.05851 8.43638M3.86826 8.35614L4.05851 8.43638M4.05851 8.43638C4.13064 8.43638 4.20059 8.40783 4.24878 8.35613L4.05851 8.43638ZM5.28555 6.36381C4.80406 6.99912 4.31764 7.55907 4.05851 7.84929C3.79938 7.55907 3.31294 6.99912 2.83147 6.36381C2.37616 5.76302 2.02923 5.23392 1.79637 4.78869C1.56268 4.34187 1.44709 3.98547 1.44709 3.72828C1.44709 2.45253 2.61278 1.40454 4.05851 1.40454C5.50424 1.40454 6.66993 2.45253 6.66993 3.72828C6.66993 3.98546 6.55435 4.34185 6.32066 4.78867C6.08781 5.2339 5.74088 5.76301 5.28555 6.36381Z"
+                                        fill="#6C6C6C" stroke="#6C6C6C" stroke-width="0.105889" />
+                                    <path
+                                        d="M5.0591 6.0149C4.96892 5.96054 4.84639 5.98173 4.78548 6.06217C4.51954 6.41334 4.22161 6.78139 3.89999 7.15609C3.83382 7.23319 3.85022 7.34352 3.93664 7.40254C3.97238 7.42696 4.0145 7.43877 4.05631 7.43877C4.11554 7.43877 4.17413 7.41503 4.21292 7.36984C4.53927 6.98965 4.84179 6.61591 5.11207 6.25899C5.17301 6.17855 5.14931 6.06925 5.0591 6.0149Z"
+                                        fill="#6C6C6C" />
+                                    <path
+                                        d="M4.06132 2.29523C3.14687 2.29523 2.39237 2.96008 2.39237 3.7897C2.39237 4.61932 3.14687 5.28417 4.06132 5.28417C4.97578 5.28417 5.73027 4.61932 5.73027 3.7897C5.73027 2.96008 4.97578 2.29523 4.06132 2.29523ZM4.06132 4.82669C3.41098 4.82669 2.89241 4.35592 2.89241 3.7897C2.89241 3.22348 3.41098 2.75271 4.06132 2.75271C4.71169 2.75271 5.23024 3.22348 5.23024 3.7897C5.23024 4.35593 4.71169 4.82669 4.06132 4.82669Z"
+                                        fill="#6C6C6C" stroke="#6C6C6C" stroke-width="0.105889" />
+                                </svg>
+                                <p class="text-[#555555] text-xs line-clamp-1">{{store.country}}, {{store.city}}</p>
+                            </div>
+                        </div>
+
+
+                        <div class="modal fade fixed top-0 left-0 hidden w-full h-full outline-none overflow-x-hidden overflow-y-auto"
+                        id="exampleModal-all-{{store.id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog relative w-auto pointer-events-none">
+                            <div
+                                class="modal-content border-none shadow-lg relative flex flex-col w-full pointer-events-auto bg-white bg-clip-padding rounded-md outline-none text-current">
+                                <div
+                                    class="modal-header flex flex-shrink-0 items-center justify-between p-4 border-b border-gray-200 rounded-t-md">
+                                    <h5 class="text-xl font-medium leading-normal text-gray-800"
+                                        id="exampleModalLabel">Confirm Delete
+                                        
+                                       </h5> 
+                                    <button type="button"
+                                        class="btn-close box-content w-4 h-4 p-1 text-black border-none rounded-none opacity-50 focus:shadow-none focus:outline-none focus:opacity-100 hover:text-black hover:opacity-75 hover:no-underline"
+                                        data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body relative p-4">
+                                    Do you want to delete this Store?
+                                </div>
+                                <div
+                                    class="modal-footer flex flex-shrink-0 flex-wrap items-center justify-end p-4 border-t border-gray-200 rounded-b-md">
+                                    <button type="button" class="px-6 py-2.5 bg-purple-600 text-white font-medium text-xs leading-tight uppercase rounded shadow-md hover:bg-purple-700 hover:shadow-lg focus:bg-purple-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-purple-800 active:shadow-lg transition duration-150 ease-in-out" data-bs-dismiss="modal">Close</button>
+       <a href="{% url 'delete_store' store.id %}">
+       
+                                    <button type="button" class="px-6 py-2.5 bg-blue-600 text-white font-medium text-xs leading-tight uppercase rounded shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150       ease-in-out
+       ml-1">Delete</button>
+       </a>
+       
+    
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+        {% if store.account_officer_business_store.all%}
+        {% for i in store.account_officer_business_store.all %}
+        <div class="modal fade fixed top-0 left-0 hidden w-full h-full outline-none overflow-x-hidden overflow-y-auto"
+        id="account_officer-1-{{store.id}}" tabindex="-1" aria-labelledby="BusinessDeatailsLabel"
+        aria-modal="true" role="dialog">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg relative w-auto pointer-events-none">
+        <div
+            class="modal-content border-none rounded-lg shadow-lg relative flex flex-col w-full pointer-events-auto bg-white bg-clip-padding outline-none text-current">
+            <div class="modal-body relative">
+                <div class="absolute top-2 right-2" data-bs-dismiss="modal" aria-label="Close">
+                    <svg class="cursor-pointer" width="27" height="27" viewBox="0 0 27 27" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M13.5 0C5.97857 0 0 5.97857 0 13.5C0 21.0214 5.97857 27 13.5 27C21.0214 27 27 21.0214 27 13.5C27 5.97857 21.0214 0 13.5 0ZM18.7071 20.25L13.5 15.0429L8.29286 20.25L6.75 18.7071L11.9571 13.5L6.75 8.29286L8.29286 6.75L13.5 11.9571L18.7071 6.75L20.25 8.29286L15.0429 13.5L20.25 18.7071L18.7071 20.25Z" fill="#205a42"></path>
+                    </svg>
+                </div>
+                <div class="bg-[#FCFCFC] p-[3rem] flex flex-col items-center gap-3">
+                    
+                    <h1 class="font-semibold text-xl">Account Officer Details</h1>
+                    <div class="h-[6rem] w-[6rem] rounded-full overflow-hidden">
+                        <img src="{{i.image_logo.url}}" class="rounded-lg w-full h-full object-cover">
+                    </div>
+                    <h1 class="text-[#1E1E1E] font-semibold">{{store.name}}</h1>
+                    {% comment %} <div class="flex items-center gap-1">
+                        <svg width="12" height="16" viewBox="0 0 12 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M5.97617 14.7884L5.97618 14.7884L6.6502 14.7884C6.65021 14.7884 6.65021 14.7884 6.65021 14.7884C6.75421 14.6633 8.01911 13.134 9.25851 11.2799C9.87815 10.353 10.4928 9.34295 10.9528 8.38537C11.4114 7.43071 11.7223 6.51651 11.7223 5.78487C11.7223 2.80216 9.2959 0.375736 6.31319 0.375736C3.33052 0.375736 0.904057 2.80216 0.904057 5.78487C0.904057 6.51651 1.21493 7.43072 1.67358 8.38538C2.13362 9.34296 2.74824 10.353 3.36789 11.28C4.60732 13.134 5.87224 14.6634 5.97617 14.7884ZM8.4386 10.926C7.60601 12.1575 6.76495 13.2436 6.31319 13.8111C5.86142 13.2436 5.02033 12.1575 4.18778 10.926C3.39672 9.75581 2.79374 8.72495 2.38888 7.85717C1.98287 6.98691 1.78065 6.29004 1.78065 5.78487C1.78065 3.28568 3.81404 1.25233 6.31319 1.25233C8.81233 1.25233 10.8457 3.28568 10.8457 5.78487C10.8457 6.29002 10.6435 6.98688 10.2375 7.85713C9.83266 8.72492 9.22968 9.75579 8.4386 10.926Z" fill="#6C6C6C" stroke="#6C6C6C" stroke-width="0.191886"></path>
+                            <path d="M8.05289 10.2364C7.89623 10.1306 7.68338 10.1718 7.57757 10.3285C7.11557 11.0124 6.59802 11.7291 6.0393 12.4589C5.92436 12.609 5.95285 12.8238 6.10298 12.9388C6.16506 12.9863 6.23823 13.0094 6.31086 13.0094C6.41375 13.0094 6.51554 12.9631 6.58291 12.8751C7.14985 12.1347 7.67539 11.4069 8.14491 10.7118C8.25077 10.5551 8.2096 10.3423 8.05289 10.2364Z" fill="#6C6C6C"></path>
+                            <path d="M6.3073 3.00171C4.70637 3.00171 3.40406 4.30403 3.40406 5.90495C3.40406 7.50588 4.70637 8.8082 6.3073 8.8082C7.90823 8.8082 9.21054 7.50588 9.21054 5.90495C9.21054 4.30403 7.90823 3.00171 6.3073 3.00171ZM6.3073 7.9316C5.18989 7.9316 4.28065 7.02236 4.28065 5.90495C4.28065 4.78755 5.18989 3.87831 6.3073 3.87831C7.42475 3.87831 8.33395 4.78755 8.33395 5.90495C8.33395 7.02236 7.42475 7.9316 6.3073 7.9316Z" fill="#6C6C6C" stroke="#6C6C6C" stroke-width="0.191886"></path>
+                        </svg>
+                        <p class="text-[#6C6C6C] text-sm">....</p>
+                    </div> {% endcomment %}
+                </div>
+                <div class="grid lg:grid-cols-3 grid-cols-2 gap-4 p-[2.2rem]">
+                    <div class="flex flex-col gap-2">
+                        <h1 class="font-semibold">Name</h1>
+                        <div class="flex items-center gap-2">
+                            
+                            <p class="text-[#555555] font-semibold text-sm">{{i.user.username}}</p>
+                        </div>
+                    </div>
+                    <div class="flex flex-col gap-2">
+                        <h1 class="font-semibold">Email Address</h1>
+                        <p class="text-[#555555] font-semibold text-sm">{{i.user.email}}</p>
+                    </div>
+                    <div class="flex flex-col gap-2">
+                        <h1 class="font-semibold">Contact</h1>
+                        <p class="text-[#555555] font-semibold text-sm">{{i.user.phone}}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endfor %}
+{% endif %}
+
+
+                        {% endfor %}
+
+
+                    </div>
+
+                </div>
+                {% for category in parent_category_filter_by_status %}
+                <div class="tab-pane fade" id="tabs-{{category.id}}" role="tabpanel" aria-labelledby="tabs-{{category.id}}">
+                    <div class="flex items-center gap-4 flex-wrap">
+                        {% for store in store_list %}
+                        {% if store.category.name == category.name %}
+                        <div class="text-center rounded-lg admin-card-hover w-[13rem] md:w-[16rem] bg-white shadow">
+                            <div class="flex flex-col gap-3 p-3 pb-4">
+                                <div class="flex items-center justify-between">
+                                    {% if store.store_status == 'Active' %}
+                                    <div
+                                        class="rounded-full py-1 px-3 border border-[#05D672] bg-[#E7FFF3] text-sm text-[#05D672]">
+                                        {{store.store_status}}
+                                    </div>
+                                    {% else %}
+                                    <div
+                                        class="rounded-full py-1 px-3 border border-[#FF0000] bg-[#ffa590] text-sm text-[#FF0000]">
+                                        {{store.store_status}}
+                                    </div>
+                                    {% endif %}
+                                    {% if store.account_officer_business_store.all%}
+                                        <div class="flex items-center">
+                                            <div data-bs-toggle="modal" data-bs-target="#account_officer-2-{{store.id}}" class="cursor-pointer border flex items-center gap-1 rounded-md border-[#205a42] py-1 px-1 text-[#205a42]">
+                                                <svg width="11" height="11" viewBox="0 0 7 8" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                    <path d="M2.96042 3.4676C3.43681 3.4676 3.84926 3.29675 4.18637 2.95964C4.52336 2.62259 4.69428 2.21019 4.69428 1.73375C4.69428 1.25747 4.52342 0.845015 4.18631 0.507855C3.84921 0.170859 3.43675 0 2.96042 0C2.48398 0 2.07158 0.170859 1.73453 0.50791C1.39748 0.84496 1.22656 1.25742 1.22656 1.73375C1.22656 2.21019 1.39748 2.62264 1.73453 2.9597C2.07169 3.29669 2.48414 3.4676 2.96042 3.4676ZM2.03286 0.806186C2.29148 0.547563 2.59487 0.421849 2.96042 0.421849C3.32592 0.421849 3.62936 0.547563 3.88804 0.806186C4.14666 1.06486 4.27243 1.3683 4.27243 1.73375C4.27243 2.0993 4.14666 2.40269 3.88804 2.66136C3.62936 2.92004 3.32592 3.04576 2.96042 3.04576C2.59498 3.04576 2.29159 2.91999 2.03286 2.66136C1.77418 2.40274 1.64841 2.0993 1.64841 1.73375C1.64841 1.3683 1.77418 1.06486 2.03286 0.806186Z" fill="#205a42"/>
+                                                    <path d="M5.99128 5.5354C5.98156 5.39513 5.9619 5.24212 5.93296 5.08054C5.90374 4.91776 5.86612 4.76387 5.82108 4.62322C5.77451 4.47784 5.71129 4.33428 5.63303 4.1967C5.55191 4.0539 5.45657 3.92956 5.34958 3.82725C5.23771 3.7202 5.10074 3.63414 4.94234 3.57137C4.7845 3.50892 4.60958 3.47729 4.42246 3.47729C4.34898 3.47729 4.27791 3.50744 4.14066 3.5968C4.05619 3.65188 3.95739 3.71559 3.84711 3.78605C3.75281 3.84614 3.62506 3.90243 3.46728 3.9534C3.31333 4.00321 3.15703 4.02848 3.0027 4.02848C2.84848 4.02848 2.69217 4.00321 2.53812 3.9534C2.3805 3.90249 2.2527 3.84619 2.15856 3.78611C2.04932 3.71631 1.95047 3.6526 1.86473 3.59674C1.7276 3.50739 1.65653 3.47723 1.58304 3.47723C1.39587 3.47723 1.221 3.50892 1.06322 3.57142C0.904934 3.63409 0.767906 3.72015 0.655922 3.8273C0.548936 3.92967 0.453593 4.05396 0.372529 4.1967C0.294377 4.33428 0.231108 4.47779 0.184535 4.62327C0.139554 4.76392 0.101933 4.91776 0.0727155 5.08054C0.0437172 5.2419 0.0241103 5.39497 0.0143893 5.53556C0.00483305 5.67303 0 5.8161 0 5.96065C0 6.33642 0.119453 6.64063 0.35501 6.86498C0.587655 7.08637 0.895433 7.19863 1.26983 7.19863H4.73601C5.11029 7.19863 5.41807 7.08637 5.65077 6.86498C5.88638 6.6408 6.00584 6.33648 6.00584 5.9606C6.00578 5.81555 6.00089 5.67248 5.99128 5.5354ZM5.35991 6.55935C5.20619 6.70566 5.0021 6.77678 4.73595 6.77678H1.26983C1.00363 6.77678 0.799541 6.70566 0.645872 6.5594C0.495113 6.41589 0.421849 6.21999 0.421849 5.96065C0.421849 5.82577 0.426297 5.69258 0.435194 5.56473C0.443872 5.43929 0.461611 5.30149 0.487919 5.15507C0.513896 5.01046 0.546959 4.87475 0.586282 4.7519C0.624013 4.63409 0.675474 4.51744 0.739292 4.40507C0.8002 4.29797 0.870279 4.20609 0.947608 4.13206C1.01994 4.0628 1.11111 4.00612 1.21853 3.96361C1.31789 3.92429 1.42954 3.90276 1.55075 3.89952C1.56552 3.90738 1.59183 3.92237 1.63445 3.95016C1.72117 4.00667 1.82113 4.07115 1.93163 4.14172C2.05619 4.22114 2.21667 4.29287 2.4084 4.35476C2.60441 4.41814 2.80432 4.45033 3.00275 4.45033C3.20118 4.45033 3.40115 4.41814 3.59705 4.35482C3.78895 4.29281 3.94937 4.22114 4.0741 4.14161C4.18718 4.06934 4.28434 4.00673 4.37106 3.95016C4.41367 3.92242 4.43998 3.90738 4.45476 3.89952C4.57602 3.90276 4.68768 3.92429 4.78708 3.96361C4.89445 4.00612 4.98562 4.06286 5.05795 4.13206C5.13528 4.20604 5.20536 4.29792 5.26627 4.40513C5.33014 4.51744 5.38166 4.63415 5.41933 4.75184C5.45871 4.87486 5.49183 5.01052 5.51775 5.15502C5.544 5.30171 5.5618 5.43956 5.57048 5.56478V5.56489C5.57943 5.69225 5.58393 5.82538 5.58399 5.96065C5.58393 6.22005 5.51067 6.41589 5.35991 6.55935Z" fill="#205a42"/>
+                                                </svg>  
+                                                <p class="text-[0.6rem] text-[#205a42]">Officer</p>
+                                            </div>
+                                            
+                                            {% comment %} <button type="button" class="cursor-pointer h-[2rem] w-[2rem] rounded-full border flex items-center justify-center" data-bs-toggle="modal" data-bs-target="#exampleModal-all-{{store.id}}">
+                                                <svg width="1.25rem" height="1.25rem" viewBox="0 0 9 9" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                    <path d="M3.51298 1.45849H4.99012C4.99012 1.26261 4.91231 1.07475 4.7738 0.936243C4.63529 0.797733 4.44743 0.71992 4.25155 0.71992C4.05567 0.71992 3.86781 0.797733 3.7293 0.936243C3.59079 1.07475 3.51298 1.26261 3.51298 1.45849ZM3.0206 1.45849C3.0206 1.13202 3.15028 0.818925 3.38113 0.588077C3.61198 0.357228 3.92508 0.227539 4.25155 0.227539C4.57802 0.227539 4.89111 0.357228 5.12196 0.588077C5.35281 0.818925 5.4825 1.13202 5.4825 1.45849H7.94441C8.0097 1.45849 8.07232 1.48443 8.11849 1.5306C8.16466 1.57677 8.1906 1.63939 8.1906 1.70468C8.1906 1.76998 8.16466 1.83259 8.11849 1.87876C8.07232 1.92493 8.0097 1.95087 7.94441 1.95087H7.42544L6.83753 7.04406C6.79598 7.40408 6.62351 7.73627 6.35296 7.9774C6.08241 8.21854 5.73265 8.3518 5.37024 8.35182H3.13286C2.77044 8.3518 2.42068 8.21854 2.15013 7.9774C1.87958 7.73627 1.70712 7.40408 1.66556 7.04406L1.07766 1.95087H0.55869C0.493397 1.95087 0.430777 1.92493 0.384608 1.87876C0.338438 1.83259 0.3125 1.76998 0.3125 1.70468C0.3125 1.63939 0.338438 1.57677 0.384608 1.5306C0.430777 1.48443 0.493397 1.45849 0.55869 1.45849H3.0206ZM3.75917 3.42801C3.75917 3.36272 3.73323 3.3001 3.68706 3.25393C3.64089 3.20776 3.57827 3.18182 3.51298 3.18182C3.44768 3.18182 3.38506 3.20776 3.33889 3.25393C3.29272 3.3001 3.26679 3.36272 3.26679 3.42801V6.3823C3.26679 6.44759 3.29272 6.51021 3.33889 6.55638C3.38506 6.60255 3.44768 6.62849 3.51298 6.62849C3.57827 6.62849 3.64089 6.60255 3.68706 6.55638C3.73323 6.51021 3.75917 6.44759 3.75917 6.3823V3.42801ZM4.99012 3.18182C4.92483 3.18182 4.86221 3.20776 4.81604 3.25393C4.76987 3.3001 4.74393 3.36272 4.74393 3.42801V6.3823C4.74393 6.44759 4.76987 6.51021 4.81604 6.55638C4.86221 6.60255 4.92483 6.62849 4.99012 6.62849C5.05541 6.62849 5.11803 6.60255 5.1642 6.55638C5.21037 6.51021 5.23631 6.44759 5.23631 6.3823V3.42801C5.23631 3.36272 5.21037 3.3001 5.1642 3.25393C5.11803 3.20776 5.05541 3.18182 4.99012 3.18182Z" fill="#555555"></path>
+                                                </svg>
+                                            </button> {% endcomment %}
+                                        </div>
+                                        
+                                    {% endif %}
+                                </div>
+
+
+
+
+
+                                
+                                <div class="p-2 w-fit h-fit mx-auto rounded-full border border-[#205a42]">
+                                    <div class="h-[6rem] w-[6rem] overflow-hidden rounded-full">
+                                        {% if store.business_logo %}
+                                        <img class="object-cover w-full h-full"
+                                            src="/media/{{store.business_logo}}">
+                                            {% else %}
+                                            <img class="object-cover w-full h-full"
+                                            src="/static/assets/images/dummy.png">
+                                            {% endif %}
+                                    </div>
+                                </div>
+                                <div class="flex items-center justify-center gap-3">
+                                    <button class="outline-none border flex items-center justify-center h-[2rem] w-[2rem] text-xs rounded-full edit_store_btns" data-url="{% url 'retrieve_store'  store.id %}"
+                                    data-bs-target="#EditStore" 
+                                    data-bs-toggle="modal"
+                                    >
+                                    <svg width="14" height="14" viewBox="0 0 7 7" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M1.02745 6.36342C0.97939 6.36333 0.931876 6.35325 0.887926 6.3338C0.843977 6.31436 0.804553 6.28597 0.772163 6.25046C0.739187 6.21525 0.714024 6.17347 0.698324 6.12785C0.682624 6.08223 0.676742 6.03381 0.681064 5.98576L0.765928 5.05234L4.68629 1.1323L5.91145 2.35744L1.99212 6.27714L1.05897 6.36203C1.04849 6.363 1.03797 6.36346 1.02745 6.36342ZM6.15599 2.11248L4.93118 0.887338L5.66586 0.15246C5.69803 0.120245 5.73623 0.0946894 5.77829 0.0772532C5.82033 0.059817 5.86541 0.0508423 5.91093 0.0508423C5.95645 0.0508423 6.00152 0.059817 6.04357 0.0772532C6.08562 0.0946894 6.12383 0.120245 6.15599 0.15246L6.89067 0.887338C6.92288 0.919517 6.94843 0.957729 6.96586 0.999791C6.98329 1.04185 6.99226 1.08694 6.99226 1.13247C6.99226 1.178 6.98329 1.22309 6.96586 1.26515C6.94843 1.30721 6.92288 1.34543 6.89067 1.3776L6.15634 2.11214L6.15599 2.11248Z" fill="#205a42"/>
+                                    </svg>
+                                </button> 
+                                <a href="{% url 'add_store_location' store.slug %}" class="block">
+                                    <svg width="2rem" height="2rem" viewBox="0 0 17 17" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M7.60294 11.8518C7.64617 11.9166 7.71895 11.9556 7.79687 11.9556C7.8748 11.9556 7.94758 11.9166 7.99081 11.8518C8.5424 11.0244 9.35484 10.0026 9.92099 8.96338C10.3737 8.13246 10.5937 7.42378 10.5937 6.79688C10.5937 5.25468 9.33907 4 7.79687 4C6.25468 4 5 5.25468 5 6.79688C5 7.42378 5.22007 8.13246 5.67276 8.96338C6.23849 10.0018 7.05249 11.0261 7.60294 11.8518ZM7.79687 4.46615C9.08204 4.46615 10.1276 5.51171 10.1276 6.79688C10.1276 7.34388 9.92612 7.97961 9.51165 8.74038C9.02365 9.63614 8.32726 10.5448 7.79687 11.3087C7.26657 10.5449 6.57013 9.63619 6.0821 8.74038C5.66763 7.97961 5.46615 7.34388 5.46615 6.79688C5.46615 5.51171 6.51171 4.46615 7.79687 4.46615V4.46615Z" fill="#205a42"/>
+                                        <path d="M7.79688 8.19531C8.56797 8.19531 9.19531 7.56797 9.19531 6.79688C9.19531 6.02578 8.56797 5.39844 7.79688 5.39844C7.02578 5.39844 6.39844 6.02578 6.39844 6.79688C6.39844 7.56797 7.02578 8.19531 7.79688 8.19531ZM7.79688 5.86458C8.31094 5.86458 8.72917 6.28281 8.72917 6.79688C8.72917 7.31094 8.31094 7.72917 7.79688 7.72917C7.28281 7.72917 6.86458 7.31094 6.86458 6.79688C6.86458 6.28281 7.28281 5.86458 7.79688 5.86458Z" fill="#205a42"/>
+                                        <circle cx="8.20635" cy="8.20635" r="8.04222" stroke="#D8D1D1" stroke-width="0.328254"/>
+                                    </svg>
+                                </a>
+                                </div>
+                                <h2 class="font-semibold capitalize">{{store.name}}</h2>
+                                
+                            </div>
+                            <div class="border-t p-2 flex items-center gap-3">
+                                <svg width="1rem" height="1rem" viewBox="0 0 8 9" fill="none"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <path
+                                        d="M3.86826 8.35614L3.86825 8.35613C3.80841 8.29195 3.08019 7.50653 2.36661 6.55434C2.00987 6.07832 1.65592 5.55945 1.39091 5.0674C1.12692 4.57723 0.947056 4.1063 0.947056 3.72828C0.947056 2.18913 2.34867 0.947056 4.05851 0.947056C5.76838 0.947056 7.16997 2.18913 7.16997 3.72828C7.16997 4.1063 6.99011 4.57723 6.72612 5.0674C6.46111 5.55944 6.10716 6.07831 5.75042 6.55433C5.03686 7.5065 4.30866 8.2919 4.24878 8.35613L3.86826 8.35614ZM3.86826 8.35614C3.91643 8.40779 3.98634 8.43638 4.05851 8.43638M3.86826 8.35614L4.05851 8.43638M4.05851 8.43638C4.13064 8.43638 4.20059 8.40783 4.24878 8.35613L4.05851 8.43638ZM5.28555 6.36381C4.80406 6.99912 4.31764 7.55907 4.05851 7.84929C3.79938 7.55907 3.31294 6.99912 2.83147 6.36381C2.37616 5.76302 2.02923 5.23392 1.79637 4.78869C1.56268 4.34187 1.44709 3.98547 1.44709 3.72828C1.44709 2.45253 2.61278 1.40454 4.05851 1.40454C5.50424 1.40454 6.66993 2.45253 6.66993 3.72828C6.66993 3.98546 6.55435 4.34185 6.32066 4.78867C6.08781 5.2339 5.74088 5.76301 5.28555 6.36381Z"
+                                        fill="#6C6C6C" stroke="#6C6C6C" stroke-width="0.105889" />
+                                    <path
+                                        d="M5.0591 6.0149C4.96892 5.96054 4.84639 5.98173 4.78548 6.06217C4.51954 6.41334 4.22161 6.78139 3.89999 7.15609C3.83382 7.23319 3.85022 7.34352 3.93664 7.40254C3.97238 7.42696 4.0145 7.43877 4.05631 7.43877C4.11554 7.43877 4.17413 7.41503 4.21292 7.36984C4.53927 6.98965 4.84179 6.61591 5.11207 6.25899C5.17301 6.17855 5.14931 6.06925 5.0591 6.0149Z"
+                                        fill="#6C6C6C" />
+                                    <path
+                                        d="M4.06132 2.29523C3.14687 2.29523 2.39237 2.96008 2.39237 3.7897C2.39237 4.61932 3.14687 5.28417 4.06132 5.28417C4.97578 5.28417 5.73027 4.61932 5.73027 3.7897C5.73027 2.96008 4.97578 2.29523 4.06132 2.29523ZM4.06132 4.82669C3.41098 4.82669 2.89241 4.35592 2.89241 3.7897C2.89241 3.22348 3.41098 2.75271 4.06132 2.75271C4.71169 2.75271 5.23024 3.22348 5.23024 3.7897C5.23024 4.35593 4.71169 4.82669 4.06132 4.82669Z"
+                                        fill="#6C6C6C" stroke="#6C6C6C" stroke-width="0.105889" />
+                                </svg>
+                                <p class="text-[#555555] text-xs line-clamp-1">{{store.country}}, {{store.city}}</p>
+                            </div>
+                        </div>
+
+
+                        <div class="modal fade fixed top-0 left-0 hidden w-full h-full outline-none overflow-x-hidden overflow-y-auto"
+                        id="exampleModal-allcats-{{store.id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog relative w-auto pointer-events-none">
+                            <div
+                                class="modal-content border-none shadow-lg relative flex flex-col w-full pointer-events-auto bg-white bg-clip-padding rounded-md outline-none text-current">
+                                <div
+                                    class="modal-header flex flex-shrink-0 items-center justify-between p-4 border-b border-gray-200 rounded-t-md">
+                                    <h5 class="text-xl font-medium leading-normal text-gray-800"
+                                        id="exampleModalLabel">Confirm Delete
+                                        
+                                       </h5> 
+                                    <button type="button"
+                                        class="btn-close box-content w-4 h-4 p-1 text-black border-none rounded-none opacity-50 focus:shadow-none focus:outline-none focus:opacity-100 hover:text-black hover:opacity-75 hover:no-underline"
+                                        data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body relative p-4">
+                                    Do you want to delete this Store?
+                                </div>
+                                <div
+                                    class="modal-footer flex flex-shrink-0 flex-wrap items-center justify-end p-4 border-t border-gray-200 rounded-b-md">
+                                    <button type="button" class="px-6
+       py-2.5
+       bg-purple-600
+       text-white
+       font-medium
+       text-xs
+       leading-tight
+       uppercase
+       rounded
+       shadow-md
+       hover:bg-purple-700 hover:shadow-lg
+       focus:bg-purple-700 focus:shadow-lg focus:outline-none focus:ring-0
+       active:bg-purple-800 active:shadow-lg
+       transition
+       duration-150
+       ease-in-out" data-bs-dismiss="modal">Close</button>
+       <a href="{% url 'delete_store' store.id %}">
+       
+                                    <button type="button" class="px-6
+       py-2.5
+       bg-blue-600
+       text-white
+       font-medium
+       text-xs
+       leading-tight
+       uppercase
+       rounded
+       shadow-md
+       hover:bg-blue-700 hover:shadow-lg
+       focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0
+       active:bg-blue-800 active:shadow-lg
+       transition
+       duration-150
+       ease-in-out
+       ml-1">Delete</button>
+       </a>
+       
+       
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+        {% if store.account_officer_business_store.all%}
+        {% for i in store.account_officer_business_store.all %}
+        <div class="modal fade fixed top-0 left-0 hidden w-full h-full outline-none overflow-x-hidden overflow-y-auto"
+        id="account_officer-2-{{store.id}}" tabindex="-1" aria-labelledby="BusinessDeatailsLabel"
+        aria-modal="true" role="dialog">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg relative w-auto pointer-events-none">
+        <div
+            class="modal-content border-none rounded-lg shadow-lg relative flex flex-col w-full pointer-events-auto bg-white bg-clip-padding outline-none text-current">
+            <div class="modal-body relative">
+                <div class="absolute top-2 right-2" data-bs-dismiss="modal" aria-label="Close">
+                    <svg class="cursor-pointer" width="27" height="27" viewBox="0 0 27 27" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M13.5 0C5.97857 0 0 5.97857 0 13.5C0 21.0214 5.97857 27 13.5 27C21.0214 27 27 21.0214 27 13.5C27 5.97857 21.0214 0 13.5 0ZM18.7071 20.25L13.5 15.0429L8.29286 20.25L6.75 18.7071L11.9571 13.5L6.75 8.29286L8.29286 6.75L13.5 11.9571L18.7071 6.75L20.25 8.29286L15.0429 13.5L20.25 18.7071L18.7071 20.25Z" fill="#205a42"></path>
+                    </svg>
+                </div>
+                <div class="bg-[#FCFCFC] p-[3rem] flex flex-col items-center gap-3">
+                    
+                    <h1 class="font-semibold text-xl">Account Officer Details</h1>
+                    <div class="h-[6rem] w-[6rem] rounded-full overflow-hidden">
+                        <img src="{{i.image_logo.url}}" class="rounded-lg w-full h-full object-cover">
+                    </div>
+                    <h1 class="text-[#1E1E1E] font-semibold">{{store.name}}</h1>
+                    {% comment %} <div class="flex items-center gap-1">
+                        <svg width="12" height="16" viewBox="0 0 12 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M5.97617 14.7884L5.97618 14.7884L6.6502 14.7884C6.65021 14.7884 6.65021 14.7884 6.65021 14.7884C6.75421 14.6633 8.01911 13.134 9.25851 11.2799C9.87815 10.353 10.4928 9.34295 10.9528 8.38537C11.4114 7.43071 11.7223 6.51651 11.7223 5.78487C11.7223 2.80216 9.2959 0.375736 6.31319 0.375736C3.33052 0.375736 0.904057 2.80216 0.904057 5.78487C0.904057 6.51651 1.21493 7.43072 1.67358 8.38538C2.13362 9.34296 2.74824 10.353 3.36789 11.28C4.60732 13.134 5.87224 14.6634 5.97617 14.7884ZM8.4386 10.926C7.60601 12.1575 6.76495 13.2436 6.31319 13.8111C5.86142 13.2436 5.02033 12.1575 4.18778 10.926C3.39672 9.75581 2.79374 8.72495 2.38888 7.85717C1.98287 6.98691 1.78065 6.29004 1.78065 5.78487C1.78065 3.28568 3.81404 1.25233 6.31319 1.25233C8.81233 1.25233 10.8457 3.28568 10.8457 5.78487C10.8457 6.29002 10.6435 6.98688 10.2375 7.85713C9.83266 8.72492 9.22968 9.75579 8.4386 10.926Z" fill="#6C6C6C" stroke="#6C6C6C" stroke-width="0.191886"></path>
+                            <path d="M8.05289 10.2364C7.89623 10.1306 7.68338 10.1718 7.57757 10.3285C7.11557 11.0124 6.59802 11.7291 6.0393 12.4589C5.92436 12.609 5.95285 12.8238 6.10298 12.9388C6.16506 12.9863 6.23823 13.0094 6.31086 13.0094C6.41375 13.0094 6.51554 12.9631 6.58291 12.8751C7.14985 12.1347 7.67539 11.4069 8.14491 10.7118C8.25077 10.5551 8.2096 10.3423 8.05289 10.2364Z" fill="#6C6C6C"></path>
+                            <path d="M6.3073 3.00171C4.70637 3.00171 3.40406 4.30403 3.40406 5.90495C3.40406 7.50588 4.70637 8.8082 6.3073 8.8082C7.90823 8.8082 9.21054 7.50588 9.21054 5.90495C9.21054 4.30403 7.90823 3.00171 6.3073 3.00171ZM6.3073 7.9316C5.18989 7.9316 4.28065 7.02236 4.28065 5.90495C4.28065 4.78755 5.18989 3.87831 6.3073 3.87831C7.42475 3.87831 8.33395 4.78755 8.33395 5.90495C8.33395 7.02236 7.42475 7.9316 6.3073 7.9316Z" fill="#6C6C6C" stroke="#6C6C6C" stroke-width="0.191886"></path>
+                        </svg>
+                        <p class="text-[#6C6C6C] text-sm">....</p>
+                    </div> {% endcomment %}
+                </div>
+                <div class="grid lg:grid-cols-3 grid-cols-2 gap-4 p-[2.2rem]">
+                    <div class="flex flex-col gap-2">
+                        <h1 class="font-semibold">Name</h1>
+                        <div class="flex items-center gap-2">
+                            
+                            <p class="text-[#555555] font-semibold text-sm">{{i.user.username}}</p>
+                        </div>
+                    </div>
+                    <div class="flex flex-col gap-2">
+                        <h1 class="font-semibold">Email Address</h1>
+                        <p class="text-[#555555] font-semibold text-sm">{{i.user.email}}</p>
+                    </div>
+                    <div class="flex flex-col gap-2">
+                        <h1 class="font-semibold">Contact</h1>
+                        <p class="text-[#555555] font-semibold text-sm">{{i.user.phone}}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endfor %}
+{% endif %}
+
+
+
+                        {% endif %}
+                        {% endfor %}
+
+                    </div>
+                </div>
+                {% endfor %}
+                
+            </div>
+        </div>
+        <div class="rounded-2xl shadow bg-white business_tab_data hidden" tab-name="2">
+            <div class="flex items-start justify-between gap-4 lg:flex-row flex-col flex-wrap">
+
+                <ul class="business-tabss nav nav-tabs flex flex-wrap list-none border-b-0 pl-0 text-center"
+                    id="tabs-tab" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <a href="#tabs-active-cats"
+                            class="nav-link block font-medium text-xs leading-tight uppercase border-x-0 border-t-0 border-b-2 border-transparent px-6 py-3 my-2 hover:border-transparent hover:bg-gray-100 focus:border-transparent active"
+                            id="tabs-home-tab" data-bs-toggle="pill" data-bs-target="#tabs-active-cats"
+                            role="tab" aria-controls="tabs-home" aria-selected="true">All</a>
+                    </li>
+                    {% for category in parent_category_filter_by_status %}
+                            <li class="nav-item" role="presentation">
+                                <a href="#tabs-active-{{ category.id }}"
+                                    class="nav-link block font-medium text-xs leading-tight uppercase border-x-0 border-t-0 border-b-2 border-transparent px-6 py-3 my-2 hover:border-transparent hover:bg-gray-100 focus:border-transparent "
+                                    id="tabs-home-tab" data-bs-toggle="pill" data-bs-target="#tabs-active-{{ category.id }}"
+                                    role="tab" aria-controls="tabs-home" aria-selected="true">{{category.name}}</a>
+                            </li>
+                            {% endfor %}
+                </ul>
+            </div>
+            <div class="tab-content p-[1.2rem]" id="tabs-tabContent">
+                <div class="tab-pane fade active show" id="tabs-active-cats" role="tabpanel" aria-labelledby="tabs-active-cats">
+                    <div class="flex items-center gap-4 flex-wrap">
+                        {% for store in store_list %}
+                        {% if store.store_status == 'Active' %}
+                        <div class="text-center rounded-lg admin-card-hover w-[13rem] md:w-[16rem] bg-white shadow">
+                            <div class="flex flex-col gap-3 p-3 pb-4">
+                                <div class="flex items-center justify-between">
+                                    {% if store.store_status == 'Active' %}
+                                    <div
+                                        class="rounded-full py-1 px-3 border border-[#05D672] bg-[#E7FFF3] text-sm text-[#05D672]">
+                                        {{store.store_status}}
+                                    </div>
+                                    {% else %}
+                                    <div
+                                        class="rounded-full py-1 px-3 border border-[#FF0000] bg-[#ffa590] text-sm text-[#FF0000]">
+                                        {{store.store_status}}
+                                    </div>
+                                    {% endif %}
+                                    {% if store.account_officer_business_store.all%}
+                                        <div class="flex items-center">
+                                            <div data-bs-toggle="modal" data-bs-target="#account_officer-3-{{store.id}}" class="cursor-pointer border flex items-center gap-1 rounded-md border-[#205a42] py-1 px-1 text-[#205a42]">
+                                                <svg width="11" height="11" viewBox="0 0 7 8" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                    <path d="M2.96042 3.4676C3.43681 3.4676 3.84926 3.29675 4.18637 2.95964C4.52336 2.62259 4.69428 2.21019 4.69428 1.73375C4.69428 1.25747 4.52342 0.845015 4.18631 0.507855C3.84921 0.170859 3.43675 0 2.96042 0C2.48398 0 2.07158 0.170859 1.73453 0.50791C1.39748 0.84496 1.22656 1.25742 1.22656 1.73375C1.22656 2.21019 1.39748 2.62264 1.73453 2.9597C2.07169 3.29669 2.48414 3.4676 2.96042 3.4676ZM2.03286 0.806186C2.29148 0.547563 2.59487 0.421849 2.96042 0.421849C3.32592 0.421849 3.62936 0.547563 3.88804 0.806186C4.14666 1.06486 4.27243 1.3683 4.27243 1.73375C4.27243 2.0993 4.14666 2.40269 3.88804 2.66136C3.62936 2.92004 3.32592 3.04576 2.96042 3.04576C2.59498 3.04576 2.29159 2.91999 2.03286 2.66136C1.77418 2.40274 1.64841 2.0993 1.64841 1.73375C1.64841 1.3683 1.77418 1.06486 2.03286 0.806186Z" fill="#205a42"/>
+                                                    <path d="M5.99128 5.5354C5.98156 5.39513 5.9619 5.24212 5.93296 5.08054C5.90374 4.91776 5.86612 4.76387 5.82108 4.62322C5.77451 4.47784 5.71129 4.33428 5.63303 4.1967C5.55191 4.0539 5.45657 3.92956 5.34958 3.82725C5.23771 3.7202 5.10074 3.63414 4.94234 3.57137C4.7845 3.50892 4.60958 3.47729 4.42246 3.47729C4.34898 3.47729 4.27791 3.50744 4.14066 3.5968C4.05619 3.65188 3.95739 3.71559 3.84711 3.78605C3.75281 3.84614 3.62506 3.90243 3.46728 3.9534C3.31333 4.00321 3.15703 4.02848 3.0027 4.02848C2.84848 4.02848 2.69217 4.00321 2.53812 3.9534C2.3805 3.90249 2.2527 3.84619 2.15856 3.78611C2.04932 3.71631 1.95047 3.6526 1.86473 3.59674C1.7276 3.50739 1.65653 3.47723 1.58304 3.47723C1.39587 3.47723 1.221 3.50892 1.06322 3.57142C0.904934 3.63409 0.767906 3.72015 0.655922 3.8273C0.548936 3.92967 0.453593 4.05396 0.372529 4.1967C0.294377 4.33428 0.231108 4.47779 0.184535 4.62327C0.139554 4.76392 0.101933 4.91776 0.0727155 5.08054C0.0437172 5.2419 0.0241103 5.39497 0.0143893 5.53556C0.00483305 5.67303 0 5.8161 0 5.96065C0 6.33642 0.119453 6.64063 0.35501 6.86498C0.587655 7.08637 0.895433 7.19863 1.26983 7.19863H4.73601C5.11029 7.19863 5.41807 7.08637 5.65077 6.86498C5.88638 6.6408 6.00584 6.33648 6.00584 5.9606C6.00578 5.81555 6.00089 5.67248 5.99128 5.5354ZM5.35991 6.55935C5.20619 6.70566 5.0021 6.77678 4.73595 6.77678H1.26983C1.00363 6.77678 0.799541 6.70566 0.645872 6.5594C0.495113 6.41589 0.421849 6.21999 0.421849 5.96065C0.421849 5.82577 0.426297 5.69258 0.435194 5.56473C0.443872 5.43929 0.461611 5.30149 0.487919 5.15507C0.513896 5.01046 0.546959 4.87475 0.586282 4.7519C0.624013 4.63409 0.675474 4.51744 0.739292 4.40507C0.8002 4.29797 0.870279 4.20609 0.947608 4.13206C1.01994 4.0628 1.11111 4.00612 1.21853 3.96361C1.31789 3.92429 1.42954 3.90276 1.55075 3.89952C1.56552 3.90738 1.59183 3.92237 1.63445 3.95016C1.72117 4.00667 1.82113 4.07115 1.93163 4.14172C2.05619 4.22114 2.21667 4.29287 2.4084 4.35476C2.60441 4.41814 2.80432 4.45033 3.00275 4.45033C3.20118 4.45033 3.40115 4.41814 3.59705 4.35482C3.78895 4.29281 3.94937 4.22114 4.0741 4.14161C4.18718 4.06934 4.28434 4.00673 4.37106 3.95016C4.41367 3.92242 4.43998 3.90738 4.45476 3.89952C4.57602 3.90276 4.68768 3.92429 4.78708 3.96361C4.89445 4.00612 4.98562 4.06286 5.05795 4.13206C5.13528 4.20604 5.20536 4.29792 5.26627 4.40513C5.33014 4.51744 5.38166 4.63415 5.41933 4.75184C5.45871 4.87486 5.49183 5.01052 5.51775 5.15502C5.544 5.30171 5.5618 5.43956 5.57048 5.56478V5.56489C5.57943 5.69225 5.58393 5.82538 5.58399 5.96065C5.58393 6.22005 5.51067 6.41589 5.35991 6.55935Z" fill="#205a42"/>
+                                                </svg>  
+                                                <p class="text-[0.6rem] text-[#205a42]">Officer</p>
+                                            </div>
+                                            
+                                            {% comment %} <button type="button" class="cursor-pointer h-[2rem] w-[2rem] rounded-full border flex items-center justify-center" data-bs-toggle="modal" data-bs-target="#exampleModal-all-{{store.id}}">
+                                                <svg width="1.25rem" height="1.25rem" viewBox="0 0 9 9" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                    <path d="M3.51298 1.45849H4.99012C4.99012 1.26261 4.91231 1.07475 4.7738 0.936243C4.63529 0.797733 4.44743 0.71992 4.25155 0.71992C4.05567 0.71992 3.86781 0.797733 3.7293 0.936243C3.59079 1.07475 3.51298 1.26261 3.51298 1.45849ZM3.0206 1.45849C3.0206 1.13202 3.15028 0.818925 3.38113 0.588077C3.61198 0.357228 3.92508 0.227539 4.25155 0.227539C4.57802 0.227539 4.89111 0.357228 5.12196 0.588077C5.35281 0.818925 5.4825 1.13202 5.4825 1.45849H7.94441C8.0097 1.45849 8.07232 1.48443 8.11849 1.5306C8.16466 1.57677 8.1906 1.63939 8.1906 1.70468C8.1906 1.76998 8.16466 1.83259 8.11849 1.87876C8.07232 1.92493 8.0097 1.95087 7.94441 1.95087H7.42544L6.83753 7.04406C6.79598 7.40408 6.62351 7.73627 6.35296 7.9774C6.08241 8.21854 5.73265 8.3518 5.37024 8.35182H3.13286C2.77044 8.3518 2.42068 8.21854 2.15013 7.9774C1.87958 7.73627 1.70712 7.40408 1.66556 7.04406L1.07766 1.95087H0.55869C0.493397 1.95087 0.430777 1.92493 0.384608 1.87876C0.338438 1.83259 0.3125 1.76998 0.3125 1.70468C0.3125 1.63939 0.338438 1.57677 0.384608 1.5306C0.430777 1.48443 0.493397 1.45849 0.55869 1.45849H3.0206ZM3.75917 3.42801C3.75917 3.36272 3.73323 3.3001 3.68706 3.25393C3.64089 3.20776 3.57827 3.18182 3.51298 3.18182C3.44768 3.18182 3.38506 3.20776 3.33889 3.25393C3.29272 3.3001 3.26679 3.36272 3.26679 3.42801V6.3823C3.26679 6.44759 3.29272 6.51021 3.33889 6.55638C3.38506 6.60255 3.44768 6.62849 3.51298 6.62849C3.57827 6.62849 3.64089 6.60255 3.68706 6.55638C3.73323 6.51021 3.75917 6.44759 3.75917 6.3823V3.42801ZM4.99012 3.18182C4.92483 3.18182 4.86221 3.20776 4.81604 3.25393C4.76987 3.3001 4.74393 3.36272 4.74393 3.42801V6.3823C4.74393 6.44759 4.76987 6.51021 4.81604 6.55638C4.86221 6.60255 4.92483 6.62849 4.99012 6.62849C5.05541 6.62849 5.11803 6.60255 5.1642 6.55638C5.21037 6.51021 5.23631 6.44759 5.23631 6.3823V3.42801C5.23631 3.36272 5.21037 3.3001 5.1642 3.25393C5.11803 3.20776 5.05541 3.18182 4.99012 3.18182Z" fill="#555555"></path>
+                                                </svg>
+                                            </button> {% endcomment %}
+                                        </div>
+                                        
+                                    {% endif %}
+                                </div>
+
+
+
+
+
+                                
+                                <div class="p-2 w-fit h-fit mx-auto rounded-full border border-[#205a42]">
+                                    <div class="h-[6rem] w-[6rem] overflow-hidden rounded-full">
+                                        {% if store.business_logo %}
+                                        <img class="object-cover w-full h-full"
+                                            src="/media/{{store.business_logo}}">
+                                            {% else %}
+                                            <img class="object-cover w-full h-full"
+                                            src="/static/assets/images/dummy.png">
+                                            {% endif %}
+                                    </div>
+                                </div>
+                                <div class="flex items-center justify-center gap-3">
+                                    <button class="outline-none border flex items-center justify-center h-[2rem] w-[2rem] text-xs rounded-full edit_store_btns" data-url="{% url 'retrieve_store'  store.id %}"
+                                    data-bs-target="#EditStore" 
+                                    data-bs-toggle="modal"
+                                    >
+                                    <svg width="14" height="14" viewBox="0 0 7 7" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M1.02745 6.36342C0.97939 6.36333 0.931876 6.35325 0.887926 6.3338C0.843977 6.31436 0.804553 6.28597 0.772163 6.25046C0.739187 6.21525 0.714024 6.17347 0.698324 6.12785C0.682624 6.08223 0.676742 6.03381 0.681064 5.98576L0.765928 5.05234L4.68629 1.1323L5.91145 2.35744L1.99212 6.27714L1.05897 6.36203C1.04849 6.363 1.03797 6.36346 1.02745 6.36342ZM6.15599 2.11248L4.93118 0.887338L5.66586 0.15246C5.69803 0.120245 5.73623 0.0946894 5.77829 0.0772532C5.82033 0.059817 5.86541 0.0508423 5.91093 0.0508423C5.95645 0.0508423 6.00152 0.059817 6.04357 0.0772532C6.08562 0.0946894 6.12383 0.120245 6.15599 0.15246L6.89067 0.887338C6.92288 0.919517 6.94843 0.957729 6.96586 0.999791C6.98329 1.04185 6.99226 1.08694 6.99226 1.13247C6.99226 1.178 6.98329 1.22309 6.96586 1.26515C6.94843 1.30721 6.92288 1.34543 6.89067 1.3776L6.15634 2.11214L6.15599 2.11248Z" fill="#205a42"/>
+                                    </svg>
+                                </button> 
+                                <a href="{% url 'add_store_location' store.slug %}" class="block">
+                                    <svg width="2rem" height="2rem" viewBox="0 0 17 17" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M7.60294 11.8518C7.64617 11.9166 7.71895 11.9556 7.79687 11.9556C7.8748 11.9556 7.94758 11.9166 7.99081 11.8518C8.5424 11.0244 9.35484 10.0026 9.92099 8.96338C10.3737 8.13246 10.5937 7.42378 10.5937 6.79688C10.5937 5.25468 9.33907 4 7.79687 4C6.25468 4 5 5.25468 5 6.79688C5 7.42378 5.22007 8.13246 5.67276 8.96338C6.23849 10.0018 7.05249 11.0261 7.60294 11.8518ZM7.79687 4.46615C9.08204 4.46615 10.1276 5.51171 10.1276 6.79688C10.1276 7.34388 9.92612 7.97961 9.51165 8.74038C9.02365 9.63614 8.32726 10.5448 7.79687 11.3087C7.26657 10.5449 6.57013 9.63619 6.0821 8.74038C5.66763 7.97961 5.46615 7.34388 5.46615 6.79688C5.46615 5.51171 6.51171 4.46615 7.79687 4.46615V4.46615Z" fill="#205a42"/>
+                                        <path d="M7.79688 8.19531C8.56797 8.19531 9.19531 7.56797 9.19531 6.79688C9.19531 6.02578 8.56797 5.39844 7.79688 5.39844C7.02578 5.39844 6.39844 6.02578 6.39844 6.79688C6.39844 7.56797 7.02578 8.19531 7.79688 8.19531ZM7.79688 5.86458C8.31094 5.86458 8.72917 6.28281 8.72917 6.79688C8.72917 7.31094 8.31094 7.72917 7.79688 7.72917C7.28281 7.72917 6.86458 7.31094 6.86458 6.79688C6.86458 6.28281 7.28281 5.86458 7.79688 5.86458Z" fill="#205a42"/>
+                                        <circle cx="8.20635" cy="8.20635" r="8.04222" stroke="#D8D1D1" stroke-width="0.328254"/>
+                                    </svg>
+                                </a>
+                                </div>
+                                <h2 class="font-semibold capitalize">{{store.name}}</h2>
+                                
+                            </div>
+                            <div class="border-t p-2 flex items-center gap-3">
+                                <svg width="1rem" height="1rem" viewBox="0 0 8 9" fill="none"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <path
+                                        d="M3.86826 8.35614L3.86825 8.35613C3.80841 8.29195 3.08019 7.50653 2.36661 6.55434C2.00987 6.07832 1.65592 5.55945 1.39091 5.0674C1.12692 4.57723 0.947056 4.1063 0.947056 3.72828C0.947056 2.18913 2.34867 0.947056 4.05851 0.947056C5.76838 0.947056 7.16997 2.18913 7.16997 3.72828C7.16997 4.1063 6.99011 4.57723 6.72612 5.0674C6.46111 5.55944 6.10716 6.07831 5.75042 6.55433C5.03686 7.5065 4.30866 8.2919 4.24878 8.35613L3.86826 8.35614ZM3.86826 8.35614C3.91643 8.40779 3.98634 8.43638 4.05851 8.43638M3.86826 8.35614L4.05851 8.43638M4.05851 8.43638C4.13064 8.43638 4.20059 8.40783 4.24878 8.35613L4.05851 8.43638ZM5.28555 6.36381C4.80406 6.99912 4.31764 7.55907 4.05851 7.84929C3.79938 7.55907 3.31294 6.99912 2.83147 6.36381C2.37616 5.76302 2.02923 5.23392 1.79637 4.78869C1.56268 4.34187 1.44709 3.98547 1.44709 3.72828C1.44709 2.45253 2.61278 1.40454 4.05851 1.40454C5.50424 1.40454 6.66993 2.45253 6.66993 3.72828C6.66993 3.98546 6.55435 4.34185 6.32066 4.78867C6.08781 5.2339 5.74088 5.76301 5.28555 6.36381Z"
+                                        fill="#6C6C6C" stroke="#6C6C6C" stroke-width="0.105889" />
+                                    <path
+                                        d="M5.0591 6.0149C4.96892 5.96054 4.84639 5.98173 4.78548 6.06217C4.51954 6.41334 4.22161 6.78139 3.89999 7.15609C3.83382 7.23319 3.85022 7.34352 3.93664 7.40254C3.97238 7.42696 4.0145 7.43877 4.05631 7.43877C4.11554 7.43877 4.17413 7.41503 4.21292 7.36984C4.53927 6.98965 4.84179 6.61591 5.11207 6.25899C5.17301 6.17855 5.14931 6.06925 5.0591 6.0149Z"
+                                        fill="#6C6C6C" />
+                                    <path
+                                        d="M4.06132 2.29523C3.14687 2.29523 2.39237 2.96008 2.39237 3.7897C2.39237 4.61932 3.14687 5.28417 4.06132 5.28417C4.97578 5.28417 5.73027 4.61932 5.73027 3.7897C5.73027 2.96008 4.97578 2.29523 4.06132 2.29523ZM4.06132 4.82669C3.41098 4.82669 2.89241 4.35592 2.89241 3.7897C2.89241 3.22348 3.41098 2.75271 4.06132 2.75271C4.71169 2.75271 5.23024 3.22348 5.23024 3.7897C5.23024 4.35593 4.71169 4.82669 4.06132 4.82669Z"
+                                        fill="#6C6C6C" stroke="#6C6C6C" stroke-width="0.105889" />
+                                </svg>
+                                <p class="text-[#555555] text-xs line-clamp-1">{{store.country}}, {{store.city}}</p>
+                            </div>
+                        </div>
+
+
+
+
+
+                          <div class="modal fade fixed top-0 left-0 hidden w-full h-full outline-none overflow-x-hidden overflow-y-auto"
+                        id="exampleModal-allcats-active-{{store.id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog relative w-auto pointer-events-none">
+                            <div
+                                class="modal-content border-none shadow-lg relative flex flex-col w-full pointer-events-auto bg-white bg-clip-padding rounded-md outline-none text-current">
+                                <div
+                                    class="modal-header flex flex-shrink-0 items-center justify-between p-4 border-b border-gray-200 rounded-t-md">
+                                    <h5 class="text-xl font-medium leading-normal text-gray-800"
+                                        id="exampleModalLabel">Confirm Delete
+                                        
+                                       </h5> 
+                                    <button type="button"
+                                        class="btn-close box-content w-4 h-4 p-1 text-black border-none rounded-none opacity-50 focus:shadow-none focus:outline-none focus:opacity-100 hover:text-black hover:opacity-75 hover:no-underline"
+                                        data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body relative p-4">
+                                    Do you want to delete this Store?
+                                </div>
+                                <div
+                                    class="modal-footer flex flex-shrink-0 flex-wrap items-center justify-end p-4 border-t border-gray-200 rounded-b-md">
+                                    <button type="button" class="px-6
+       py-2.5
+       bg-purple-600
+       text-white
+       font-medium
+       text-xs
+       leading-tight
+       uppercase
+       rounded
+       shadow-md
+       hover:bg-purple-700 hover:shadow-lg
+       focus:bg-purple-700 focus:shadow-lg focus:outline-none focus:ring-0
+       active:bg-purple-800 active:shadow-lg
+       transition
+       duration-150
+       ease-in-out" data-bs-dismiss="modal">Close</button>
+       <a href="{% url 'delete_store' store.id %}">
+       
+                                    <button type="button" class="px-6
+       py-2.5
+       bg-blue-600
+       text-white
+       font-medium
+       text-xs
+       leading-tight
+       uppercase
+       rounded
+       shadow-md
+       hover:bg-blue-700 hover:shadow-lg
+       focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0
+       active:bg-blue-800 active:shadow-lg
+       transition
+       duration-150
+       ease-in-out
+       ml-1">Delete</button>
+       </a>
+       
+       
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+                    {% if store.account_officer_business_store.all%}
+                    {% for i in store.account_officer_business_store.all %}
+                    <div class="modal fade fixed top-0 left-0 hidden w-full h-full outline-none overflow-x-hidden overflow-y-auto"
+                    id="account_officer-3-{{store.id}}" tabindex="-1" aria-labelledby="BusinessDeatailsLabel"
+                    aria-modal="true" role="dialog">
+                    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg relative w-auto pointer-events-none">
+                    <div
+                        class="modal-content border-none rounded-lg shadow-lg relative flex flex-col w-full pointer-events-auto bg-white bg-clip-padding outline-none text-current">
+                        <div class="modal-body relative">
+                            <div class="absolute top-2 right-2" data-bs-dismiss="modal" aria-label="Close">
+                                <svg class="cursor-pointer" width="27" height="27" viewBox="0 0 27 27" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M13.5 0C5.97857 0 0 5.97857 0 13.5C0 21.0214 5.97857 27 13.5 27C21.0214 27 27 21.0214 27 13.5C27 5.97857 21.0214 0 13.5 0ZM18.7071 20.25L13.5 15.0429L8.29286 20.25L6.75 18.7071L11.9571 13.5L6.75 8.29286L8.29286 6.75L13.5 11.9571L18.7071 6.75L20.25 8.29286L15.0429 13.5L20.25 18.7071L18.7071 20.25Z" fill="#205a42"></path>
+                                </svg>
+                            </div>
+                            <div class="bg-[#FCFCFC] p-[3rem] flex flex-col items-center gap-3">
+                                
+                                <h1 class="font-semibold text-xl">Account Officer Details</h1>
+                                <div class="h-[6rem] w-[6rem] rounded-full overflow-hidden">
+                                    <img src="{{i.image_logo.url}}" class="rounded-lg w-full h-full object-cover">
+                                </div>
+                                <h1 class="text-[#1E1E1E] font-semibold">{{store.name}}</h1>
+                                {% comment %} <div class="flex items-center gap-1">
+                                    <svg width="12" height="16" viewBox="0 0 12 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M5.97617 14.7884L5.97618 14.7884L6.6502 14.7884C6.65021 14.7884 6.65021 14.7884 6.65021 14.7884C6.75421 14.6633 8.01911 13.134 9.25851 11.2799C9.87815 10.353 10.4928 9.34295 10.9528 8.38537C11.4114 7.43071 11.7223 6.51651 11.7223 5.78487C11.7223 2.80216 9.2959 0.375736 6.31319 0.375736C3.33052 0.375736 0.904057 2.80216 0.904057 5.78487C0.904057 6.51651 1.21493 7.43072 1.67358 8.38538C2.13362 9.34296 2.74824 10.353 3.36789 11.28C4.60732 13.134 5.87224 14.6634 5.97617 14.7884ZM8.4386 10.926C7.60601 12.1575 6.76495 13.2436 6.31319 13.8111C5.86142 13.2436 5.02033 12.1575 4.18778 10.926C3.39672 9.75581 2.79374 8.72495 2.38888 7.85717C1.98287 6.98691 1.78065 6.29004 1.78065 5.78487C1.78065 3.28568 3.81404 1.25233 6.31319 1.25233C8.81233 1.25233 10.8457 3.28568 10.8457 5.78487C10.8457 6.29002 10.6435 6.98688 10.2375 7.85713C9.83266 8.72492 9.22968 9.75579 8.4386 10.926Z" fill="#6C6C6C" stroke="#6C6C6C" stroke-width="0.191886"></path>
+                                        <path d="M8.05289 10.2364C7.89623 10.1306 7.68338 10.1718 7.57757 10.3285C7.11557 11.0124 6.59802 11.7291 6.0393 12.4589C5.92436 12.609 5.95285 12.8238 6.10298 12.9388C6.16506 12.9863 6.23823 13.0094 6.31086 13.0094C6.41375 13.0094 6.51554 12.9631 6.58291 12.8751C7.14985 12.1347 7.67539 11.4069 8.14491 10.7118C8.25077 10.5551 8.2096 10.3423 8.05289 10.2364Z" fill="#6C6C6C"></path>
+                                        <path d="M6.3073 3.00171C4.70637 3.00171 3.40406 4.30403 3.40406 5.90495C3.40406 7.50588 4.70637 8.8082 6.3073 8.8082C7.90823 8.8082 9.21054 7.50588 9.21054 5.90495C9.21054 4.30403 7.90823 3.00171 6.3073 3.00171ZM6.3073 7.9316C5.18989 7.9316 4.28065 7.02236 4.28065 5.90495C4.28065 4.78755 5.18989 3.87831 6.3073 3.87831C7.42475 3.87831 8.33395 4.78755 8.33395 5.90495C8.33395 7.02236 7.42475 7.9316 6.3073 7.9316Z" fill="#6C6C6C" stroke="#6C6C6C" stroke-width="0.191886"></path>
+                                    </svg>
+                                    <p class="text-[#6C6C6C] text-sm">....</p>
+                                </div> {% endcomment %}
+                            </div>
+                            <div class="grid lg:grid-cols-3 grid-cols-2 gap-4 p-[2.2rem]">
+                                <div class="flex flex-col gap-2">
+                                    <h1 class="font-semibold">Name</h1>
+                                    <div class="flex items-center gap-2">
+                                        
+                                        <p class="text-[#555555] font-semibold text-sm">{{i.user.username}}</p>
+                                    </div>
+                                </div>
+                                <div class="flex flex-col gap-2">
+                                    <h1 class="font-semibold">Email Address</h1>
+                                    <p class="text-[#555555] font-semibold text-sm">{{i.user.email}}</p>
+                                </div>
+                                <div class="flex flex-col gap-2">
+                                    <h1 class="font-semibold">Contact</h1>
+                                    <p class="text-[#555555] font-semibold text-sm">{{i.user.phone}}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+            {% endif %}
+
+
+                        {% endif %}
+                        {% endfor %}
+                    </div>
+                </div>
+                {% for category in parent_category_filter_by_status %}
+                <div class="tab-pane fade " id="tabs-active-{{category.id}}" role="tabpanel" aria-labelledby="tabs-active-{{category.id}}">
+                    <div class="flex items-center gap-4 flex-wrap">
+                        {% for store in store_list  %}
+                        {% if store.category.name == category.name %}
+                        {% if store.store_status == 'Active' %}
+                        <div class="text-center rounded-lg admin-card-hover w-[13rem] md:w-[16rem] bg-white shadow">
+                            <div class="flex flex-col gap-3 p-3 pb-4">
+                                <div class="flex items-center justify-between">
+                                    {% if store.store_status == 'Active' %}
+                                    <div
+                                        class="rounded-full py-1 px-3 border border-[#05D672] bg-[#E7FFF3] text-sm text-[#05D672]">
+                                        {{store.store_status}}
+                                    </div>
+                                    {% else %}
+                                    <div
+                                        class="rounded-full py-1 px-3 border border-[#FF0000] bg-[#ffa590] text-sm text-[#FF0000]">
+                                        {{store.store_status}}
+                                    </div>
+                                    {% endif %}
+                                    {% if store.account_officer_business_store.all%}
+                                        <div class="flex items-center">
+                                            <div data-bs-toggle="modal" data-bs-target="#account_officer-4-{{store.id}}" class="cursor-pointer border flex items-center gap-1 rounded-md border-[#205a42] py-1 px-1 text-[#205a42]">
+                                                <svg width="11" height="11" viewBox="0 0 7 8" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                    <path d="M2.96042 3.4676C3.43681 3.4676 3.84926 3.29675 4.18637 2.95964C4.52336 2.62259 4.69428 2.21019 4.69428 1.73375C4.69428 1.25747 4.52342 0.845015 4.18631 0.507855C3.84921 0.170859 3.43675 0 2.96042 0C2.48398 0 2.07158 0.170859 1.73453 0.50791C1.39748 0.84496 1.22656 1.25742 1.22656 1.73375C1.22656 2.21019 1.39748 2.62264 1.73453 2.9597C2.07169 3.29669 2.48414 3.4676 2.96042 3.4676ZM2.03286 0.806186C2.29148 0.547563 2.59487 0.421849 2.96042 0.421849C3.32592 0.421849 3.62936 0.547563 3.88804 0.806186C4.14666 1.06486 4.27243 1.3683 4.27243 1.73375C4.27243 2.0993 4.14666 2.40269 3.88804 2.66136C3.62936 2.92004 3.32592 3.04576 2.96042 3.04576C2.59498 3.04576 2.29159 2.91999 2.03286 2.66136C1.77418 2.40274 1.64841 2.0993 1.64841 1.73375C1.64841 1.3683 1.77418 1.06486 2.03286 0.806186Z" fill="#205a42"/>
+                                                    <path d="M5.99128 5.5354C5.98156 5.39513 5.9619 5.24212 5.93296 5.08054C5.90374 4.91776 5.86612 4.76387 5.82108 4.62322C5.77451 4.47784 5.71129 4.33428 5.63303 4.1967C5.55191 4.0539 5.45657 3.92956 5.34958 3.82725C5.23771 3.7202 5.10074 3.63414 4.94234 3.57137C4.7845 3.50892 4.60958 3.47729 4.42246 3.47729C4.34898 3.47729 4.27791 3.50744 4.14066 3.5968C4.05619 3.65188 3.95739 3.71559 3.84711 3.78605C3.75281 3.84614 3.62506 3.90243 3.46728 3.9534C3.31333 4.00321 3.15703 4.02848 3.0027 4.02848C2.84848 4.02848 2.69217 4.00321 2.53812 3.9534C2.3805 3.90249 2.2527 3.84619 2.15856 3.78611C2.04932 3.71631 1.95047 3.6526 1.86473 3.59674C1.7276 3.50739 1.65653 3.47723 1.58304 3.47723C1.39587 3.47723 1.221 3.50892 1.06322 3.57142C0.904934 3.63409 0.767906 3.72015 0.655922 3.8273C0.548936 3.92967 0.453593 4.05396 0.372529 4.1967C0.294377 4.33428 0.231108 4.47779 0.184535 4.62327C0.139554 4.76392 0.101933 4.91776 0.0727155 5.08054C0.0437172 5.2419 0.0241103 5.39497 0.0143893 5.53556C0.00483305 5.67303 0 5.8161 0 5.96065C0 6.33642 0.119453 6.64063 0.35501 6.86498C0.587655 7.08637 0.895433 7.19863 1.26983 7.19863H4.73601C5.11029 7.19863 5.41807 7.08637 5.65077 6.86498C5.88638 6.6408 6.00584 6.33648 6.00584 5.9606C6.00578 5.81555 6.00089 5.67248 5.99128 5.5354ZM5.35991 6.55935C5.20619 6.70566 5.0021 6.77678 4.73595 6.77678H1.26983C1.00363 6.77678 0.799541 6.70566 0.645872 6.5594C0.495113 6.41589 0.421849 6.21999 0.421849 5.96065C0.421849 5.82577 0.426297 5.69258 0.435194 5.56473C0.443872 5.43929 0.461611 5.30149 0.487919 5.15507C0.513896 5.01046 0.546959 4.87475 0.586282 4.7519C0.624013 4.63409 0.675474 4.51744 0.739292 4.40507C0.8002 4.29797 0.870279 4.20609 0.947608 4.13206C1.01994 4.0628 1.11111 4.00612 1.21853 3.96361C1.31789 3.92429 1.42954 3.90276 1.55075 3.89952C1.56552 3.90738 1.59183 3.92237 1.63445 3.95016C1.72117 4.00667 1.82113 4.07115 1.93163 4.14172C2.05619 4.22114 2.21667 4.29287 2.4084 4.35476C2.60441 4.41814 2.80432 4.45033 3.00275 4.45033C3.20118 4.45033 3.40115 4.41814 3.59705 4.35482C3.78895 4.29281 3.94937 4.22114 4.0741 4.14161C4.18718 4.06934 4.28434 4.00673 4.37106 3.95016C4.41367 3.92242 4.43998 3.90738 4.45476 3.89952C4.57602 3.90276 4.68768 3.92429 4.78708 3.96361C4.89445 4.00612 4.98562 4.06286 5.05795 4.13206C5.13528 4.20604 5.20536 4.29792 5.26627 4.40513C5.33014 4.51744 5.38166 4.63415 5.41933 4.75184C5.45871 4.87486 5.49183 5.01052 5.51775 5.15502C5.544 5.30171 5.5618 5.43956 5.57048 5.56478V5.56489C5.57943 5.69225 5.58393 5.82538 5.58399 5.96065C5.58393 6.22005 5.51067 6.41589 5.35991 6.55935Z" fill="#205a42"/>
+                                                </svg>  
+                                                <p class="text-[0.6rem] text-[#205a42]">Officer</p>
+                                            </div>
+                                            
+                                            {% comment %} <button type="button" class="cursor-pointer h-[2rem] w-[2rem] rounded-full border flex items-center justify-center" data-bs-toggle="modal" data-bs-target="#exampleModal-all-{{store.id}}">
+                                                <svg width="1.25rem" height="1.25rem" viewBox="0 0 9 9" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                    <path d="M3.51298 1.45849H4.99012C4.99012 1.26261 4.91231 1.07475 4.7738 0.936243C4.63529 0.797733 4.44743 0.71992 4.25155 0.71992C4.05567 0.71992 3.86781 0.797733 3.7293 0.936243C3.59079 1.07475 3.51298 1.26261 3.51298 1.45849ZM3.0206 1.45849C3.0206 1.13202 3.15028 0.818925 3.38113 0.588077C3.61198 0.357228 3.92508 0.227539 4.25155 0.227539C4.57802 0.227539 4.89111 0.357228 5.12196 0.588077C5.35281 0.818925 5.4825 1.13202 5.4825 1.45849H7.94441C8.0097 1.45849 8.07232 1.48443 8.11849 1.5306C8.16466 1.57677 8.1906 1.63939 8.1906 1.70468C8.1906 1.76998 8.16466 1.83259 8.11849 1.87876C8.07232 1.92493 8.0097 1.95087 7.94441 1.95087H7.42544L6.83753 7.04406C6.79598 7.40408 6.62351 7.73627 6.35296 7.9774C6.08241 8.21854 5.73265 8.3518 5.37024 8.35182H3.13286C2.77044 8.3518 2.42068 8.21854 2.15013 7.9774C1.87958 7.73627 1.70712 7.40408 1.66556 7.04406L1.07766 1.95087H0.55869C0.493397 1.95087 0.430777 1.92493 0.384608 1.87876C0.338438 1.83259 0.3125 1.76998 0.3125 1.70468C0.3125 1.63939 0.338438 1.57677 0.384608 1.5306C0.430777 1.48443 0.493397 1.45849 0.55869 1.45849H3.0206ZM3.75917 3.42801C3.75917 3.36272 3.73323 3.3001 3.68706 3.25393C3.64089 3.20776 3.57827 3.18182 3.51298 3.18182C3.44768 3.18182 3.38506 3.20776 3.33889 3.25393C3.29272 3.3001 3.26679 3.36272 3.26679 3.42801V6.3823C3.26679 6.44759 3.29272 6.51021 3.33889 6.55638C3.38506 6.60255 3.44768 6.62849 3.51298 6.62849C3.57827 6.62849 3.64089 6.60255 3.68706 6.55638C3.73323 6.51021 3.75917 6.44759 3.75917 6.3823V3.42801ZM4.99012 3.18182C4.92483 3.18182 4.86221 3.20776 4.81604 3.25393C4.76987 3.3001 4.74393 3.36272 4.74393 3.42801V6.3823C4.74393 6.44759 4.76987 6.51021 4.81604 6.55638C4.86221 6.60255 4.92483 6.62849 4.99012 6.62849C5.05541 6.62849 5.11803 6.60255 5.1642 6.55638C5.21037 6.51021 5.23631 6.44759 5.23631 6.3823V3.42801C5.23631 3.36272 5.21037 3.3001 5.1642 3.25393C5.11803 3.20776 5.05541 3.18182 4.99012 3.18182Z" fill="#555555"></path>
+                                                </svg>
+                                            </button> {% endcomment %}
+                                        </div>
+                                        
+                                    {% endif %}
+                                </div>
+
+
+
+
+
+                                
+                                <div class="p-2 w-fit h-fit mx-auto rounded-full border border-[#205a42]">
+                                    <div class="h-[6rem] w-[6rem] overflow-hidden rounded-full">
+                                        {% if store.business_logo %}
+                                        <img class="object-cover w-full h-full"
+                                            src="/media/{{store.business_logo}}">
+                                            {% else %}
+                                            <img class="object-cover w-full h-full"
+                                            src="/static/assets/images/dummy.png">
+                                            {% endif %}
+                                    </div>
+                                </div>
+                                <div class="flex items-center justify-center gap-3">
+                                    <button class="outline-none border flex items-center justify-center h-[2rem] w-[2rem] text-xs rounded-full edit_store_btns" data-url="{% url 'retrieve_store'  store.id %}"
+                                    data-bs-target="#EditStore" 
+                                    data-bs-toggle="modal"
+                                    >
+                                    <svg width="14" height="14" viewBox="0 0 7 7" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M1.02745 6.36342C0.97939 6.36333 0.931876 6.35325 0.887926 6.3338C0.843977 6.31436 0.804553 6.28597 0.772163 6.25046C0.739187 6.21525 0.714024 6.17347 0.698324 6.12785C0.682624 6.08223 0.676742 6.03381 0.681064 5.98576L0.765928 5.05234L4.68629 1.1323L5.91145 2.35744L1.99212 6.27714L1.05897 6.36203C1.04849 6.363 1.03797 6.36346 1.02745 6.36342ZM6.15599 2.11248L4.93118 0.887338L5.66586 0.15246C5.69803 0.120245 5.73623 0.0946894 5.77829 0.0772532C5.82033 0.059817 5.86541 0.0508423 5.91093 0.0508423C5.95645 0.0508423 6.00152 0.059817 6.04357 0.0772532C6.08562 0.0946894 6.12383 0.120245 6.15599 0.15246L6.89067 0.887338C6.92288 0.919517 6.94843 0.957729 6.96586 0.999791C6.98329 1.04185 6.99226 1.08694 6.99226 1.13247C6.99226 1.178 6.98329 1.22309 6.96586 1.26515C6.94843 1.30721 6.92288 1.34543 6.89067 1.3776L6.15634 2.11214L6.15599 2.11248Z" fill="#205a42"/>
+                                    </svg>
+                                </button> 
+                                <a href="{% url 'add_store_location' store.slug %}" class="block">
+                                    <svg width="2rem" height="2rem" viewBox="0 0 17 17" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M7.60294 11.8518C7.64617 11.9166 7.71895 11.9556 7.79687 11.9556C7.8748 11.9556 7.94758 11.9166 7.99081 11.8518C8.5424 11.0244 9.35484 10.0026 9.92099 8.96338C10.3737 8.13246 10.5937 7.42378 10.5937 6.79688C10.5937 5.25468 9.33907 4 7.79687 4C6.25468 4 5 5.25468 5 6.79688C5 7.42378 5.22007 8.13246 5.67276 8.96338C6.23849 10.0018 7.05249 11.0261 7.60294 11.8518ZM7.79687 4.46615C9.08204 4.46615 10.1276 5.51171 10.1276 6.79688C10.1276 7.34388 9.92612 7.97961 9.51165 8.74038C9.02365 9.63614 8.32726 10.5448 7.79687 11.3087C7.26657 10.5449 6.57013 9.63619 6.0821 8.74038C5.66763 7.97961 5.46615 7.34388 5.46615 6.79688C5.46615 5.51171 6.51171 4.46615 7.79687 4.46615V4.46615Z" fill="#205a42"/>
+                                        <path d="M7.79688 8.19531C8.56797 8.19531 9.19531 7.56797 9.19531 6.79688C9.19531 6.02578 8.56797 5.39844 7.79688 5.39844C7.02578 5.39844 6.39844 6.02578 6.39844 6.79688C6.39844 7.56797 7.02578 8.19531 7.79688 8.19531ZM7.79688 5.86458C8.31094 5.86458 8.72917 6.28281 8.72917 6.79688C8.72917 7.31094 8.31094 7.72917 7.79688 7.72917C7.28281 7.72917 6.86458 7.31094 6.86458 6.79688C6.86458 6.28281 7.28281 5.86458 7.79688 5.86458Z" fill="#205a42"/>
+                                        <circle cx="8.20635" cy="8.20635" r="8.04222" stroke="#D8D1D1" stroke-width="0.328254"/>
+                                    </svg>
+                                </a>
+                                </div>
+                                <h2 class="font-semibold capitalize">{{store.name}}</h2>
+                                
+                            </div>
+                            <div class="border-t p-2 flex items-center gap-3">
+                                <svg width="1rem" height="1rem" viewBox="0 0 8 9" fill="none"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <path
+                                        d="M3.86826 8.35614L3.86825 8.35613C3.80841 8.29195 3.08019 7.50653 2.36661 6.55434C2.00987 6.07832 1.65592 5.55945 1.39091 5.0674C1.12692 4.57723 0.947056 4.1063 0.947056 3.72828C0.947056 2.18913 2.34867 0.947056 4.05851 0.947056C5.76838 0.947056 7.16997 2.18913 7.16997 3.72828C7.16997 4.1063 6.99011 4.57723 6.72612 5.0674C6.46111 5.55944 6.10716 6.07831 5.75042 6.55433C5.03686 7.5065 4.30866 8.2919 4.24878 8.35613L3.86826 8.35614ZM3.86826 8.35614C3.91643 8.40779 3.98634 8.43638 4.05851 8.43638M3.86826 8.35614L4.05851 8.43638M4.05851 8.43638C4.13064 8.43638 4.20059 8.40783 4.24878 8.35613L4.05851 8.43638ZM5.28555 6.36381C4.80406 6.99912 4.31764 7.55907 4.05851 7.84929C3.79938 7.55907 3.31294 6.99912 2.83147 6.36381C2.37616 5.76302 2.02923 5.23392 1.79637 4.78869C1.56268 4.34187 1.44709 3.98547 1.44709 3.72828C1.44709 2.45253 2.61278 1.40454 4.05851 1.40454C5.50424 1.40454 6.66993 2.45253 6.66993 3.72828C6.66993 3.98546 6.55435 4.34185 6.32066 4.78867C6.08781 5.2339 5.74088 5.76301 5.28555 6.36381Z"
+                                        fill="#6C6C6C" stroke="#6C6C6C" stroke-width="0.105889" />
+                                    <path
+                                        d="M5.0591 6.0149C4.96892 5.96054 4.84639 5.98173 4.78548 6.06217C4.51954 6.41334 4.22161 6.78139 3.89999 7.15609C3.83382 7.23319 3.85022 7.34352 3.93664 7.40254C3.97238 7.42696 4.0145 7.43877 4.05631 7.43877C4.11554 7.43877 4.17413 7.41503 4.21292 7.36984C4.53927 6.98965 4.84179 6.61591 5.11207 6.25899C5.17301 6.17855 5.14931 6.06925 5.0591 6.0149Z"
+                                        fill="#6C6C6C" />
+                                    <path
+                                        d="M4.06132 2.29523C3.14687 2.29523 2.39237 2.96008 2.39237 3.7897C2.39237 4.61932 3.14687 5.28417 4.06132 5.28417C4.97578 5.28417 5.73027 4.61932 5.73027 3.7897C5.73027 2.96008 4.97578 2.29523 4.06132 2.29523ZM4.06132 4.82669C3.41098 4.82669 2.89241 4.35592 2.89241 3.7897C2.89241 3.22348 3.41098 2.75271 4.06132 2.75271C4.71169 2.75271 5.23024 3.22348 5.23024 3.7897C5.23024 4.35593 4.71169 4.82669 4.06132 4.82669Z"
+                                        fill="#6C6C6C" stroke="#6C6C6C" stroke-width="0.105889" />
+                                </svg>
+                                <p class="text-[#555555] text-xs line-clamp-1">{{store.country}}, {{store.city}}</p>
+                            </div>
+                        </div>
+
+
+
+
+
+
+                          <div class="modal fade fixed top-0 left-0 hidden w-full h-full outline-none overflow-x-hidden overflow-y-auto"
+                        id="exampleModal-allcats-inactive-{{store.id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog relative w-auto pointer-events-none">
+                            <div
+                                class="modal-content border-none shadow-lg relative flex flex-col w-full pointer-events-auto bg-white bg-clip-padding rounded-md outline-none text-current">
+                                <div
+                                    class="modal-header flex flex-shrink-0 items-center justify-between p-4 border-b border-gray-200 rounded-t-md">
+                                    <h5 class="text-xl font-medium leading-normal text-gray-800"
+                                        id="exampleModalLabel">Confirm Delete
+                                        
+                                       </h5> 
+                                    <button type="button"
+                                        class="btn-close box-content w-4 h-4 p-1 text-black border-none rounded-none opacity-50 focus:shadow-none focus:outline-none focus:opacity-100 hover:text-black hover:opacity-75 hover:no-underline"
+                                        data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body relative p-4">
+                                    Do you want to delete this Store?
+                                </div>
+                                <div
+                                    class="modal-footer flex flex-shrink-0 flex-wrap items-center justify-end p-4 border-t border-gray-200 rounded-b-md">
+                                    <button type="button" class="px-6
+       py-2.5
+       bg-purple-600
+       text-white
+       font-medium
+       text-xs
+       leading-tight
+       uppercase
+       rounded
+       shadow-md
+       hover:bg-purple-700 hover:shadow-lg
+       focus:bg-purple-700 focus:shadow-lg focus:outline-none focus:ring-0
+       active:bg-purple-800 active:shadow-lg
+       transition
+       duration-150
+       ease-in-out" data-bs-dismiss="modal">Close</button>
+       <a href="{% url 'delete_store' store.id %}">
+       
+                                    <button type="button" class="px-6
+       py-2.5
+       bg-blue-600
+       text-white
+       font-medium
+       text-xs
+       leading-tight
+       uppercase
+       rounded
+       shadow-md
+       hover:bg-blue-700 hover:shadow-lg
+       focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0
+       active:bg-blue-800 active:shadow-lg
+       transition
+       duration-150
+       ease-in-out
+       ml-1">Delete</button>
+       </a>
+       
+       
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                        {% endif %}
+                        {% endif %}
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        <div class="rounded-2xl shadow bg-white business_tab_data hidden" tab-name="3">
+            <div class="flex items-start justify-between gap-4 lg:flex-row flex-col flex-wrap">
+
+                <ul class="business-tabss nav nav-tabs flex flex-wrap list-none border-b-0 pl-0 text-center"
+                    id="tabs-tab" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <a href="#tabs-inactive-cats"
+                            class="nav-link block font-medium text-xs leading-tight uppercase border-x-0 border-t-0 border-b-2 border-transparent px-6 py-3 my-2 hover:border-transparent hover:bg-gray-100 focus:border-transparent active"
+                            id="tabs-home-tab" data-bs-toggle="pill" data-bs-target="#tabs-inactive-cats"
+                            role="tab" aria-controls="tabs-home" aria-selected="true">All</a>
+                    </li>
+                    {% for category in parent_category_filter_by_status %}
+                            <li class="nav-item" role="presentation">
+                                <a href="#tabs-inactive-{{ category.id }}"
+                                    class="nav-link block font-medium text-xs leading-tight uppercase border-x-0 border-t-0 border-b-2 border-transparent px-6 py-3 my-2 hover:border-transparent hover:bg-gray-100 focus:border-transparent "
+                                    id="tabs-home-tab" data-bs-toggle="pill" data-bs-target="#tabs-inactive-{{ category.id }}"
+                                    role="tab" aria-controls="tabs-home" aria-selected="true">{{category.name}}</a>
+                            </li>
+                            {% endfor %}
+                </ul>
+            </div>
+            <div class="tab-content p-[1.2rem]" id="tabs-tabContent">
+                <div class="tab-pane fade active show" id="tabs-inactive-cats" role="tabpanel" aria-labelledby="tabs-inactive-cats">
+                    <div class="flex items-center gap-4 flex-wrap">
+                        {% for store in store_list %}
+                        {% if store.store_status == 'Inactive' %}
+                        <div class="text-center rounded-lg admin-card-hover w-[13rem] md:w-[16rem] bg-white shadow">
+                            <div class="flex flex-col gap-3 p-3 pb-4">
+                                <div class="flex items-center justify-between">
+                                    {% if store.store_status == 'Active' %}
+                                    <div
+                                        class="rounded-full py-1 px-3 border border-[#05D672] bg-[#E7FFF3] text-sm text-[#05D672]">
+                                        {{store.store_status}}
+                                    </div>
+                                    {% else %}
+                                    <div
+                                        class="rounded-full py-1 px-3 border border-[#FF0000] bg-[#ffa590] text-sm text-[#FF0000]">
+                                        {{store.store_status}}
+                                    </div>
+                                    {% endif %}
+                                    {% if store.account_officer_business_store.all%}
+                                        <div class="flex items-center">
+                                            <div data-bs-toggle="modal" data-bs-target="#account_officer-5-{{store.id}}" class="cursor-pointer border flex items-center gap-1 rounded-md border-[#205a42] py-1 px-1 text-[#205a42]">
+                                                <svg width="11" height="11" viewBox="0 0 7 8" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                    <path d="M2.96042 3.4676C3.43681 3.4676 3.84926 3.29675 4.18637 2.95964C4.52336 2.62259 4.69428 2.21019 4.69428 1.73375C4.69428 1.25747 4.52342 0.845015 4.18631 0.507855C3.84921 0.170859 3.43675 0 2.96042 0C2.48398 0 2.07158 0.170859 1.73453 0.50791C1.39748 0.84496 1.22656 1.25742 1.22656 1.73375C1.22656 2.21019 1.39748 2.62264 1.73453 2.9597C2.07169 3.29669 2.48414 3.4676 2.96042 3.4676ZM2.03286 0.806186C2.29148 0.547563 2.59487 0.421849 2.96042 0.421849C3.32592 0.421849 3.62936 0.547563 3.88804 0.806186C4.14666 1.06486 4.27243 1.3683 4.27243 1.73375C4.27243 2.0993 4.14666 2.40269 3.88804 2.66136C3.62936 2.92004 3.32592 3.04576 2.96042 3.04576C2.59498 3.04576 2.29159 2.91999 2.03286 2.66136C1.77418 2.40274 1.64841 2.0993 1.64841 1.73375C1.64841 1.3683 1.77418 1.06486 2.03286 0.806186Z" fill="#205a42"/>
+                                                    <path d="M5.99128 5.5354C5.98156 5.39513 5.9619 5.24212 5.93296 5.08054C5.90374 4.91776 5.86612 4.76387 5.82108 4.62322C5.77451 4.47784 5.71129 4.33428 5.63303 4.1967C5.55191 4.0539 5.45657 3.92956 5.34958 3.82725C5.23771 3.7202 5.10074 3.63414 4.94234 3.57137C4.7845 3.50892 4.60958 3.47729 4.42246 3.47729C4.34898 3.47729 4.27791 3.50744 4.14066 3.5968C4.05619 3.65188 3.95739 3.71559 3.84711 3.78605C3.75281 3.84614 3.62506 3.90243 3.46728 3.9534C3.31333 4.00321 3.15703 4.02848 3.0027 4.02848C2.84848 4.02848 2.69217 4.00321 2.53812 3.9534C2.3805 3.90249 2.2527 3.84619 2.15856 3.78611C2.04932 3.71631 1.95047 3.6526 1.86473 3.59674C1.7276 3.50739 1.65653 3.47723 1.58304 3.47723C1.39587 3.47723 1.221 3.50892 1.06322 3.57142C0.904934 3.63409 0.767906 3.72015 0.655922 3.8273C0.548936 3.92967 0.453593 4.05396 0.372529 4.1967C0.294377 4.33428 0.231108 4.47779 0.184535 4.62327C0.139554 4.76392 0.101933 4.91776 0.0727155 5.08054C0.0437172 5.2419 0.0241103 5.39497 0.0143893 5.53556C0.00483305 5.67303 0 5.8161 0 5.96065C0 6.33642 0.119453 6.64063 0.35501 6.86498C0.587655 7.08637 0.895433 7.19863 1.26983 7.19863H4.73601C5.11029 7.19863 5.41807 7.08637 5.65077 6.86498C5.88638 6.6408 6.00584 6.33648 6.00584 5.9606C6.00578 5.81555 6.00089 5.67248 5.99128 5.5354ZM5.35991 6.55935C5.20619 6.70566 5.0021 6.77678 4.73595 6.77678H1.26983C1.00363 6.77678 0.799541 6.70566 0.645872 6.5594C0.495113 6.41589 0.421849 6.21999 0.421849 5.96065C0.421849 5.82577 0.426297 5.69258 0.435194 5.56473C0.443872 5.43929 0.461611 5.30149 0.487919 5.15507C0.513896 5.01046 0.546959 4.87475 0.586282 4.7519C0.624013 4.63409 0.675474 4.51744 0.739292 4.40507C0.8002 4.29797 0.870279 4.20609 0.947608 4.13206C1.01994 4.0628 1.11111 4.00612 1.21853 3.96361C1.31789 3.92429 1.42954 3.90276 1.55075 3.89952C1.56552 3.90738 1.59183 3.92237 1.63445 3.95016C1.72117 4.00667 1.82113 4.07115 1.93163 4.14172C2.05619 4.22114 2.21667 4.29287 2.4084 4.35476C2.60441 4.41814 2.80432 4.45033 3.00275 4.45033C3.20118 4.45033 3.40115 4.41814 3.59705 4.35482C3.78895 4.29281 3.94937 4.22114 4.0741 4.14161C4.18718 4.06934 4.28434 4.00673 4.37106 3.95016C4.41367 3.92242 4.43998 3.90738 4.45476 3.89952C4.57602 3.90276 4.68768 3.92429 4.78708 3.96361C4.89445 4.00612 4.98562 4.06286 5.05795 4.13206C5.13528 4.20604 5.20536 4.29792 5.26627 4.40513C5.33014 4.51744 5.38166 4.63415 5.41933 4.75184C5.45871 4.87486 5.49183 5.01052 5.51775 5.15502C5.544 5.30171 5.5618 5.43956 5.57048 5.56478V5.56489C5.57943 5.69225 5.58393 5.82538 5.58399 5.96065C5.58393 6.22005 5.51067 6.41589 5.35991 6.55935Z" fill="#205a42"/>
+                                                </svg>  
+                                                <p class="text-[0.6rem] text-[#205a42]">Officer</p>
+                                            </div>
+                                            
+                                            {% comment %} <button type="button" class="cursor-pointer h-[2rem] w-[2rem] rounded-full border flex items-center justify-center" data-bs-toggle="modal" data-bs-target="#exampleModal-all-{{store.id}}">
+                                                <svg width="1.25rem" height="1.25rem" viewBox="0 0 9 9" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                    <path d="M3.51298 1.45849H4.99012C4.99012 1.26261 4.91231 1.07475 4.7738 0.936243C4.63529 0.797733 4.44743 0.71992 4.25155 0.71992C4.05567 0.71992 3.86781 0.797733 3.7293 0.936243C3.59079 1.07475 3.51298 1.26261 3.51298 1.45849ZM3.0206 1.45849C3.0206 1.13202 3.15028 0.818925 3.38113 0.588077C3.61198 0.357228 3.92508 0.227539 4.25155 0.227539C4.57802 0.227539 4.89111 0.357228 5.12196 0.588077C5.35281 0.818925 5.4825 1.13202 5.4825 1.45849H7.94441C8.0097 1.45849 8.07232 1.48443 8.11849 1.5306C8.16466 1.57677 8.1906 1.63939 8.1906 1.70468C8.1906 1.76998 8.16466 1.83259 8.11849 1.87876C8.07232 1.92493 8.0097 1.95087 7.94441 1.95087H7.42544L6.83753 7.04406C6.79598 7.40408 6.62351 7.73627 6.35296 7.9774C6.08241 8.21854 5.73265 8.3518 5.37024 8.35182H3.13286C2.77044 8.3518 2.42068 8.21854 2.15013 7.9774C1.87958 7.73627 1.70712 7.40408 1.66556 7.04406L1.07766 1.95087H0.55869C0.493397 1.95087 0.430777 1.92493 0.384608 1.87876C0.338438 1.83259 0.3125 1.76998 0.3125 1.70468C0.3125 1.63939 0.338438 1.57677 0.384608 1.5306C0.430777 1.48443 0.493397 1.45849 0.55869 1.45849H3.0206ZM3.75917 3.42801C3.75917 3.36272 3.73323 3.3001 3.68706 3.25393C3.64089 3.20776 3.57827 3.18182 3.51298 3.18182C3.44768 3.18182 3.38506 3.20776 3.33889 3.25393C3.29272 3.3001 3.26679 3.36272 3.26679 3.42801V6.3823C3.26679 6.44759 3.29272 6.51021 3.33889 6.55638C3.38506 6.60255 3.44768 6.62849 3.51298 6.62849C3.57827 6.62849 3.64089 6.60255 3.68706 6.55638C3.73323 6.51021 3.75917 6.44759 3.75917 6.3823V3.42801ZM4.99012 3.18182C4.92483 3.18182 4.86221 3.20776 4.81604 3.25393C4.76987 3.3001 4.74393 3.36272 4.74393 3.42801V6.3823C4.74393 6.44759 4.76987 6.51021 4.81604 6.55638C4.86221 6.60255 4.92483 6.62849 4.99012 6.62849C5.05541 6.62849 5.11803 6.60255 5.1642 6.55638C5.21037 6.51021 5.23631 6.44759 5.23631 6.3823V3.42801C5.23631 3.36272 5.21037 3.3001 5.1642 3.25393C5.11803 3.20776 5.05541 3.18182 4.99012 3.18182Z" fill="#555555"></path>
+                                                </svg>
+                                            </button> {% endcomment %}
+                                        </div>
+                                        
+                                    {% endif %}
+                                </div>
+
+
+
+
+
+                                
+                                <div class="p-2 w-fit h-fit mx-auto rounded-full border border-[#205a42]">
+                                    <div class="h-[6rem] w-[6rem] overflow-hidden rounded-full">
+                                        {% if store.business_logo %}
+                                        <img class="object-cover w-full h-full"
+                                            src="/media/{{store.business_logo}}">
+                                            {% else %}
+                                            <img class="object-cover w-full h-full"
+                                            src="/static/assets/images/dummy.png">
+                                            {% endif %}
+                                    </div>
+                                </div>
+                                <div class="flex items-center justify-center gap-3">
+                                    <button class="outline-none border flex items-center justify-center h-[2rem] w-[2rem] text-xs rounded-full edit_store_btns" data-url="{% url 'retrieve_store'  store.id %}"
+                                    data-bs-target="#EditStore" 
+                                    data-bs-toggle="modal"
+                                    >
+                                    <svg width="14" height="14" viewBox="0 0 7 7" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M1.02745 6.36342C0.97939 6.36333 0.931876 6.35325 0.887926 6.3338C0.843977 6.31436 0.804553 6.28597 0.772163 6.25046C0.739187 6.21525 0.714024 6.17347 0.698324 6.12785C0.682624 6.08223 0.676742 6.03381 0.681064 5.98576L0.765928 5.05234L4.68629 1.1323L5.91145 2.35744L1.99212 6.27714L1.05897 6.36203C1.04849 6.363 1.03797 6.36346 1.02745 6.36342ZM6.15599 2.11248L4.93118 0.887338L5.66586 0.15246C5.69803 0.120245 5.73623 0.0946894 5.77829 0.0772532C5.82033 0.059817 5.86541 0.0508423 5.91093 0.0508423C5.95645 0.0508423 6.00152 0.059817 6.04357 0.0772532C6.08562 0.0946894 6.12383 0.120245 6.15599 0.15246L6.89067 0.887338C6.92288 0.919517 6.94843 0.957729 6.96586 0.999791C6.98329 1.04185 6.99226 1.08694 6.99226 1.13247C6.99226 1.178 6.98329 1.22309 6.96586 1.26515C6.94843 1.30721 6.92288 1.34543 6.89067 1.3776L6.15634 2.11214L6.15599 2.11248Z" fill="#205a42"/>
+                                    </svg>
+                                </button> 
+                                <a href="{% url 'add_store_location' store.slug %}" class="block">
+                                    <svg width="2rem" height="2rem" viewBox="0 0 17 17" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M7.60294 11.8518C7.64617 11.9166 7.71895 11.9556 7.79687 11.9556C7.8748 11.9556 7.94758 11.9166 7.99081 11.8518C8.5424 11.0244 9.35484 10.0026 9.92099 8.96338C10.3737 8.13246 10.5937 7.42378 10.5937 6.79688C10.5937 5.25468 9.33907 4 7.79687 4C6.25468 4 5 5.25468 5 6.79688C5 7.42378 5.22007 8.13246 5.67276 8.96338C6.23849 10.0018 7.05249 11.0261 7.60294 11.8518ZM7.79687 4.46615C9.08204 4.46615 10.1276 5.51171 10.1276 6.79688C10.1276 7.34388 9.92612 7.97961 9.51165 8.74038C9.02365 9.63614 8.32726 10.5448 7.79687 11.3087C7.26657 10.5449 6.57013 9.63619 6.0821 8.74038C5.66763 7.97961 5.46615 7.34388 5.46615 6.79688C5.46615 5.51171 6.51171 4.46615 7.79687 4.46615V4.46615Z" fill="#205a42"/>
+                                        <path d="M7.79688 8.19531C8.56797 8.19531 9.19531 7.56797 9.19531 6.79688C9.19531 6.02578 8.56797 5.39844 7.79688 5.39844C7.02578 5.39844 6.39844 6.02578 6.39844 6.79688C6.39844 7.56797 7.02578 8.19531 7.79688 8.19531ZM7.79688 5.86458C8.31094 5.86458 8.72917 6.28281 8.72917 6.79688C8.72917 7.31094 8.31094 7.72917 7.79688 7.72917C7.28281 7.72917 6.86458 7.31094 6.86458 6.79688C6.86458 6.28281 7.28281 5.86458 7.79688 5.86458Z" fill="#205a42"/>
+                                        <circle cx="8.20635" cy="8.20635" r="8.04222" stroke="#D8D1D1" stroke-width="0.328254"/>
+                                    </svg>
+                                </a>
+                                </div>
+                                <h2 class="font-semibold capitalize">{{store.name}}</h2>
+                                
+                            </div>
+                            <div class="border-t p-2 flex items-center gap-3">
+                                <svg width="1rem" height="1rem" viewBox="0 0 8 9" fill="none"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <path
+                                        d="M3.86826 8.35614L3.86825 8.35613C3.80841 8.29195 3.08019 7.50653 2.36661 6.55434C2.00987 6.07832 1.65592 5.55945 1.39091 5.0674C1.12692 4.57723 0.947056 4.1063 0.947056 3.72828C0.947056 2.18913 2.34867 0.947056 4.05851 0.947056C5.76838 0.947056 7.16997 2.18913 7.16997 3.72828C7.16997 4.1063 6.99011 4.57723 6.72612 5.0674C6.46111 5.55944 6.10716 6.07831 5.75042 6.55433C5.03686 7.5065 4.30866 8.2919 4.24878 8.35613L3.86826 8.35614ZM3.86826 8.35614C3.91643 8.40779 3.98634 8.43638 4.05851 8.43638M3.86826 8.35614L4.05851 8.43638M4.05851 8.43638C4.13064 8.43638 4.20059 8.40783 4.24878 8.35613L4.05851 8.43638ZM5.28555 6.36381C4.80406 6.99912 4.31764 7.55907 4.05851 7.84929C3.79938 7.55907 3.31294 6.99912 2.83147 6.36381C2.37616 5.76302 2.02923 5.23392 1.79637 4.78869C1.56268 4.34187 1.44709 3.98547 1.44709 3.72828C1.44709 2.45253 2.61278 1.40454 4.05851 1.40454C5.50424 1.40454 6.66993 2.45253 6.66993 3.72828C6.66993 3.98546 6.55435 4.34185 6.32066 4.78867C6.08781 5.2339 5.74088 5.76301 5.28555 6.36381Z"
+                                        fill="#6C6C6C" stroke="#6C6C6C" stroke-width="0.105889" />
+                                    <path
+                                        d="M5.0591 6.0149C4.96892 5.96054 4.84639 5.98173 4.78548 6.06217C4.51954 6.41334 4.22161 6.78139 3.89999 7.15609C3.83382 7.23319 3.85022 7.34352 3.93664 7.40254C3.97238 7.42696 4.0145 7.43877 4.05631 7.43877C4.11554 7.43877 4.17413 7.41503 4.21292 7.36984C4.53927 6.98965 4.84179 6.61591 5.11207 6.25899C5.17301 6.17855 5.14931 6.06925 5.0591 6.0149Z"
+                                        fill="#6C6C6C" />
+                                    <path
+                                        d="M4.06132 2.29523C3.14687 2.29523 2.39237 2.96008 2.39237 3.7897C2.39237 4.61932 3.14687 5.28417 4.06132 5.28417C4.97578 5.28417 5.73027 4.61932 5.73027 3.7897C5.73027 2.96008 4.97578 2.29523 4.06132 2.29523ZM4.06132 4.82669C3.41098 4.82669 2.89241 4.35592 2.89241 3.7897C2.89241 3.22348 3.41098 2.75271 4.06132 2.75271C4.71169 2.75271 5.23024 3.22348 5.23024 3.7897C5.23024 4.35593 4.71169 4.82669 4.06132 4.82669Z"
+                                        fill="#6C6C6C" stroke="#6C6C6C" stroke-width="0.105889" />
+                                </svg>
+                                <p class="text-[#555555] text-xs line-clamp-1">{{store.country}}, {{store.city}}</p>
+                            </div>
+                        </div>
+
+
+
+
+
+
+                          <div class="modal fade fixed top-0 left-0 hidden w-full h-full outline-none overflow-x-hidden overflow-y-auto"
+                        id="exampleModal-alls-{{store.id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog relative w-auto pointer-events-none">
+                            <div
+                                class="modal-content border-none shadow-lg relative flex flex-col w-full pointer-events-auto bg-white bg-clip-padding rounded-md outline-none text-current">
+                                <div
+                                    class="modal-header flex flex-shrink-0 items-center justify-between p-4 border-b border-gray-200 rounded-t-md">
+                                    <h5 class="text-xl font-medium leading-normal text-gray-800"
+                                        id="exampleModalLabel">Confirm Delete
+                                        
+                                       </h5> 
+                                    <button type="button"
+                                        class="btn-close box-content w-4 h-4 p-1 text-black border-none rounded-none opacity-50 focus:shadow-none focus:outline-none focus:opacity-100 hover:text-black hover:opacity-75 hover:no-underline"
+                                        data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body relative p-4">
+                                    Do you want to delete this Store?
+                                </div>
+                                <div
+                                    class="modal-footer flex flex-shrink-0 flex-wrap items-center justify-end p-4 border-t border-gray-200 rounded-b-md">
+                                    <button type="button" class="px-6
+       py-2.5
+       bg-purple-600
+       text-white
+       font-medium
+       text-xs
+       leading-tight
+       uppercase
+       rounded
+       shadow-md
+       hover:bg-purple-700 hover:shadow-lg
+       focus:bg-purple-700 focus:shadow-lg focus:outline-none focus:ring-0
+       active:bg-purple-800 active:shadow-lg
+       transition
+       duration-150
+       ease-in-out" data-bs-dismiss="modal">Close</button>
+       <a href="{% url 'delete_store' store.id %}">
+       
+                                    <button type="button" class="px-6
+       py-2.5
+       bg-blue-600
+       text-white
+       font-medium
+       text-xs
+       leading-tight
+       uppercase
+       rounded
+       shadow-md
+       hover:bg-blue-700 hover:shadow-lg
+       focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0
+       active:bg-blue-800 active:shadow-lg
+       transition
+       duration-150
+       ease-in-out
+       ml-1">Delete</button>
+       </a>
+       
+       
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                        {% endif %}
+
+
+
+
+
+                        {% if store.account_officer_business_store.all%}
+                        {% for i in store.account_officer_business_store.all %}
+                        <div class="modal fade fixed top-0 left-0 hidden w-full h-full outline-none overflow-x-hidden overflow-y-auto"
+                        id="account_officer-5-{{store.id}}" tabindex="-1" aria-labelledby="BusinessDeatailsLabel"
+                        aria-modal="true" role="dialog">
+                        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg relative w-auto pointer-events-none">
+                        <div
+                            class="modal-content border-none rounded-lg shadow-lg relative flex flex-col w-full pointer-events-auto bg-white bg-clip-padding outline-none text-current">
+                            <div class="modal-body relative">
+                                <div class="absolute top-2 right-2" data-bs-dismiss="modal" aria-label="Close">
+                                    <svg class="cursor-pointer" width="27" height="27" viewBox="0 0 27 27" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M13.5 0C5.97857 0 0 5.97857 0 13.5C0 21.0214 5.97857 27 13.5 27C21.0214 27 27 21.0214 27 13.5C27 5.97857 21.0214 0 13.5 0ZM18.7071 20.25L13.5 15.0429L8.29286 20.25L6.75 18.7071L11.9571 13.5L6.75 8.29286L8.29286 6.75L13.5 11.9571L18.7071 6.75L20.25 8.29286L15.0429 13.5L20.25 18.7071L18.7071 20.25Z" fill="#205a42"></path>
+                                    </svg>
+                                </div>
+                                <div class="bg-[#FCFCFC] p-[3rem] flex flex-col items-center gap-3">
+                                    
+                                    <h1 class="font-semibold text-xl">Account Officer Details</h1>
+                                    <div class="h-[6rem] w-[6rem] rounded-full overflow-hidden">
+                                        <img src="{{i.image_logo.url}}" class="rounded-lg w-full h-full object-cover">
+                                    </div>
+                                    <h1 class="text-[#1E1E1E] font-semibold">{{store.name}}</h1>
+                                    {% comment %} <div class="flex items-center gap-1">
+                                        <svg width="12" height="16" viewBox="0 0 12 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <path d="M5.97617 14.7884L5.97618 14.7884L6.6502 14.7884C6.65021 14.7884 6.65021 14.7884 6.65021 14.7884C6.75421 14.6633 8.01911 13.134 9.25851 11.2799C9.87815 10.353 10.4928 9.34295 10.9528 8.38537C11.4114 7.43071 11.7223 6.51651 11.7223 5.78487C11.7223 2.80216 9.2959 0.375736 6.31319 0.375736C3.33052 0.375736 0.904057 2.80216 0.904057 5.78487C0.904057 6.51651 1.21493 7.43072 1.67358 8.38538C2.13362 9.34296 2.74824 10.353 3.36789 11.28C4.60732 13.134 5.87224 14.6634 5.97617 14.7884ZM8.4386 10.926C7.60601 12.1575 6.76495 13.2436 6.31319 13.8111C5.86142 13.2436 5.02033 12.1575 4.18778 10.926C3.39672 9.75581 2.79374 8.72495 2.38888 7.85717C1.98287 6.98691 1.78065 6.29004 1.78065 5.78487C1.78065 3.28568 3.81404 1.25233 6.31319 1.25233C8.81233 1.25233 10.8457 3.28568 10.8457 5.78487C10.8457 6.29002 10.6435 6.98688 10.2375 7.85713C9.83266 8.72492 9.22968 9.75579 8.4386 10.926Z" fill="#6C6C6C" stroke="#6C6C6C" stroke-width="0.191886"></path>
+                                            <path d="M8.05289 10.2364C7.89623 10.1306 7.68338 10.1718 7.57757 10.3285C7.11557 11.0124 6.59802 11.7291 6.0393 12.4589C5.92436 12.609 5.95285 12.8238 6.10298 12.9388C6.16506 12.9863 6.23823 13.0094 6.31086 13.0094C6.41375 13.0094 6.51554 12.9631 6.58291 12.8751C7.14985 12.1347 7.67539 11.4069 8.14491 10.7118C8.25077 10.5551 8.2096 10.3423 8.05289 10.2364Z" fill="#6C6C6C"></path>
+                                            <path d="M6.3073 3.00171C4.70637 3.00171 3.40406 4.30403 3.40406 5.90495C3.40406 7.50588 4.70637 8.8082 6.3073 8.8082C7.90823 8.8082 9.21054 7.50588 9.21054 5.90495C9.21054 4.30403 7.90823 3.00171 6.3073 3.00171ZM6.3073 7.9316C5.18989 7.9316 4.28065 7.02236 4.28065 5.90495C4.28065 4.78755 5.18989 3.87831 6.3073 3.87831C7.42475 3.87831 8.33395 4.78755 8.33395 5.90495C8.33395 7.02236 7.42475 7.9316 6.3073 7.9316Z" fill="#6C6C6C" stroke="#6C6C6C" stroke-width="0.191886"></path>
+                                        </svg>
+                                        <p class="text-[#6C6C6C] text-sm">....</p>
+                                    </div> {% endcomment %}
+                                </div>
+                                <div class="grid lg:grid-cols-3 grid-cols-2 gap-4 p-[2.2rem]">
+                                    <div class="flex flex-col gap-2">
+                                        <h1 class="font-semibold">Name</h1>
+                                        <div class="flex items-center gap-2">
+                                            
+                                            <p class="text-[#555555] font-semibold text-sm">{{i.user.username}}</p>
+                                        </div>
+                                    </div>
+                                    <div class="flex flex-col gap-2">
+                                        <h1 class="font-semibold">Email Address</h1>
+                                        <p class="text-[#555555] font-semibold text-sm">{{i.user.email}}</p>
+                                    </div>
+                                    <div class="flex flex-col gap-2">
+                                        <h1 class="font-semibold">Contact</h1>
+                                        <p class="text-[#555555] font-semibold text-sm">{{i.user.phone}}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+                {% endif %}
+    
+
+
+
+
+                        {% endfor %}
+                    </div>
+                </div>
+                {% for category in parent_category_filter_by_status %}
+                <div class="tab-pane fade " id="tabs-inactive-{{category.id}}" role="tabpanel" aria-labelledby="tabs-inactive-{{category.id}}">
+                    <div class="flex items-center gap-4 flex-wrap">
+                        {% for store in store_list  %}
+                        {% if store.category.name == category.name %}
+                        {% if store.store_status == 'Inactive' %} 
+                        <div class="text-center rounded-lg admin-card-hover w-[13rem] md:w-[16rem] bg-white shadow">
+                            <div class="flex flex-col gap-3 p-3 pb-4">
+                                <div class="flex items-center justify-between">
+                                    {% if store.store_status == 'Active' %}
+                                    <div
+                                        class="rounded-full py-1 px-3 border border-[#05D672] bg-[#E7FFF3] text-sm text-[#05D672]">
+                                        {{store.store_status}}
+                                    </div>
+                                    {% else %}
+                                    <div
+                                        class="rounded-full py-1 px-3 border border-[#FF0000] bg-[#ffa590] text-sm text-[#FF0000]">
+                                        {{store.store_status}}
+                                    </div>
+                                    {% endif %}
+                                    {% if store.account_officer_business_store.all%}
+                                        <div class="flex items-center">
+                                            <div data-bs-toggle="modal" data-bs-target="#account_officer-6-{{store.id}}" class="cursor-pointer border flex items-center gap-1 rounded-md border-[#205a42] py-1 px-1 text-[#205a42]">
+                                                <svg width="11" height="11" viewBox="0 0 7 8" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                    <path d="M2.96042 3.4676C3.43681 3.4676 3.84926 3.29675 4.18637 2.95964C4.52336 2.62259 4.69428 2.21019 4.69428 1.73375C4.69428 1.25747 4.52342 0.845015 4.18631 0.507855C3.84921 0.170859 3.43675 0 2.96042 0C2.48398 0 2.07158 0.170859 1.73453 0.50791C1.39748 0.84496 1.22656 1.25742 1.22656 1.73375C1.22656 2.21019 1.39748 2.62264 1.73453 2.9597C2.07169 3.29669 2.48414 3.4676 2.96042 3.4676ZM2.03286 0.806186C2.29148 0.547563 2.59487 0.421849 2.96042 0.421849C3.32592 0.421849 3.62936 0.547563 3.88804 0.806186C4.14666 1.06486 4.27243 1.3683 4.27243 1.73375C4.27243 2.0993 4.14666 2.40269 3.88804 2.66136C3.62936 2.92004 3.32592 3.04576 2.96042 3.04576C2.59498 3.04576 2.29159 2.91999 2.03286 2.66136C1.77418 2.40274 1.64841 2.0993 1.64841 1.73375C1.64841 1.3683 1.77418 1.06486 2.03286 0.806186Z" fill="#205a42"/>
+                                                    <path d="M5.99128 5.5354C5.98156 5.39513 5.9619 5.24212 5.93296 5.08054C5.90374 4.91776 5.86612 4.76387 5.82108 4.62322C5.77451 4.47784 5.71129 4.33428 5.63303 4.1967C5.55191 4.0539 5.45657 3.92956 5.34958 3.82725C5.23771 3.7202 5.10074 3.63414 4.94234 3.57137C4.7845 3.50892 4.60958 3.47729 4.42246 3.47729C4.34898 3.47729 4.27791 3.50744 4.14066 3.5968C4.05619 3.65188 3.95739 3.71559 3.84711 3.78605C3.75281 3.84614 3.62506 3.90243 3.46728 3.9534C3.31333 4.00321 3.15703 4.02848 3.0027 4.02848C2.84848 4.02848 2.69217 4.00321 2.53812 3.9534C2.3805 3.90249 2.2527 3.84619 2.15856 3.78611C2.04932 3.71631 1.95047 3.6526 1.86473 3.59674C1.7276 3.50739 1.65653 3.47723 1.58304 3.47723C1.39587 3.47723 1.221 3.50892 1.06322 3.57142C0.904934 3.63409 0.767906 3.72015 0.655922 3.8273C0.548936 3.92967 0.453593 4.05396 0.372529 4.1967C0.294377 4.33428 0.231108 4.47779 0.184535 4.62327C0.139554 4.76392 0.101933 4.91776 0.0727155 5.08054C0.0437172 5.2419 0.0241103 5.39497 0.0143893 5.53556C0.00483305 5.67303 0 5.8161 0 5.96065C0 6.33642 0.119453 6.64063 0.35501 6.86498C0.587655 7.08637 0.895433 7.19863 1.26983 7.19863H4.73601C5.11029 7.19863 5.41807 7.08637 5.65077 6.86498C5.88638 6.6408 6.00584 6.33648 6.00584 5.9606C6.00578 5.81555 6.00089 5.67248 5.99128 5.5354ZM5.35991 6.55935C5.20619 6.70566 5.0021 6.77678 4.73595 6.77678H1.26983C1.00363 6.77678 0.799541 6.70566 0.645872 6.5594C0.495113 6.41589 0.421849 6.21999 0.421849 5.96065C0.421849 5.82577 0.426297 5.69258 0.435194 5.56473C0.443872 5.43929 0.461611 5.30149 0.487919 5.15507C0.513896 5.01046 0.546959 4.87475 0.586282 4.7519C0.624013 4.63409 0.675474 4.51744 0.739292 4.40507C0.8002 4.29797 0.870279 4.20609 0.947608 4.13206C1.01994 4.0628 1.11111 4.00612 1.21853 3.96361C1.31789 3.92429 1.42954 3.90276 1.55075 3.89952C1.56552 3.90738 1.59183 3.92237 1.63445 3.95016C1.72117 4.00667 1.82113 4.07115 1.93163 4.14172C2.05619 4.22114 2.21667 4.29287 2.4084 4.35476C2.60441 4.41814 2.80432 4.45033 3.00275 4.45033C3.20118 4.45033 3.40115 4.41814 3.59705 4.35482C3.78895 4.29281 3.94937 4.22114 4.0741 4.14161C4.18718 4.06934 4.28434 4.00673 4.37106 3.95016C4.41367 3.92242 4.43998 3.90738 4.45476 3.89952C4.57602 3.90276 4.68768 3.92429 4.78708 3.96361C4.89445 4.00612 4.98562 4.06286 5.05795 4.13206C5.13528 4.20604 5.20536 4.29792 5.26627 4.40513C5.33014 4.51744 5.38166 4.63415 5.41933 4.75184C5.45871 4.87486 5.49183 5.01052 5.51775 5.15502C5.544 5.30171 5.5618 5.43956 5.57048 5.56478V5.56489C5.57943 5.69225 5.58393 5.82538 5.58399 5.96065C5.58393 6.22005 5.51067 6.41589 5.35991 6.55935Z" fill="#205a42"/>
+                                                </svg>  
+                                                <p class="text-[0.6rem] text-[#205a42]">Officer</p>
+                                            </div>
+                                            
+                                            {% comment %} <button type="button" class="cursor-pointer h-[2rem] w-[2rem] rounded-full border flex items-center justify-center" data-bs-toggle="modal" data-bs-target="#exampleModal-all-{{store.id}}">
+                                                <svg width="1.25rem" height="1.25rem" viewBox="0 0 9 9" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                    <path d="M3.51298 1.45849H4.99012C4.99012 1.26261 4.91231 1.07475 4.7738 0.936243C4.63529 0.797733 4.44743 0.71992 4.25155 0.71992C4.05567 0.71992 3.86781 0.797733 3.7293 0.936243C3.59079 1.07475 3.51298 1.26261 3.51298 1.45849ZM3.0206 1.45849C3.0206 1.13202 3.15028 0.818925 3.38113 0.588077C3.61198 0.357228 3.92508 0.227539 4.25155 0.227539C4.57802 0.227539 4.89111 0.357228 5.12196 0.588077C5.35281 0.818925 5.4825 1.13202 5.4825 1.45849H7.94441C8.0097 1.45849 8.07232 1.48443 8.11849 1.5306C8.16466 1.57677 8.1906 1.63939 8.1906 1.70468C8.1906 1.76998 8.16466 1.83259 8.11849 1.87876C8.07232 1.92493 8.0097 1.95087 7.94441 1.95087H7.42544L6.83753 7.04406C6.79598 7.40408 6.62351 7.73627 6.35296 7.9774C6.08241 8.21854 5.73265 8.3518 5.37024 8.35182H3.13286C2.77044 8.3518 2.42068 8.21854 2.15013 7.9774C1.87958 7.73627 1.70712 7.40408 1.66556 7.04406L1.07766 1.95087H0.55869C0.493397 1.95087 0.430777 1.92493 0.384608 1.87876C0.338438 1.83259 0.3125 1.76998 0.3125 1.70468C0.3125 1.63939 0.338438 1.57677 0.384608 1.5306C0.430777 1.48443 0.493397 1.45849 0.55869 1.45849H3.0206ZM3.75917 3.42801C3.75917 3.36272 3.73323 3.3001 3.68706 3.25393C3.64089 3.20776 3.57827 3.18182 3.51298 3.18182C3.44768 3.18182 3.38506 3.20776 3.33889 3.25393C3.29272 3.3001 3.26679 3.36272 3.26679 3.42801V6.3823C3.26679 6.44759 3.29272 6.51021 3.33889 6.55638C3.38506 6.60255 3.44768 6.62849 3.51298 6.62849C3.57827 6.62849 3.64089 6.60255 3.68706 6.55638C3.73323 6.51021 3.75917 6.44759 3.75917 6.3823V3.42801ZM4.99012 3.18182C4.92483 3.18182 4.86221 3.20776 4.81604 3.25393C4.76987 3.3001 4.74393 3.36272 4.74393 3.42801V6.3823C4.74393 6.44759 4.76987 6.51021 4.81604 6.55638C4.86221 6.60255 4.92483 6.62849 4.99012 6.62849C5.05541 6.62849 5.11803 6.60255 5.1642 6.55638C5.21037 6.51021 5.23631 6.44759 5.23631 6.3823V3.42801C5.23631 3.36272 5.21037 3.3001 5.1642 3.25393C5.11803 3.20776 5.05541 3.18182 4.99012 3.18182Z" fill="#555555"></path>
+                                                </svg>
+                                            </button> {% endcomment %}
+                                        </div>
+                                        
+                                    {% endif %}
+                                </div>
+
+
+
+
+
+                                
+                                <div class="p-2 w-fit h-fit mx-auto rounded-full border border-[#205a42]">
+                                    <div class="h-[6rem] w-[6rem] overflow-hidden rounded-full">
+                                        {% if store.business_logo %}
+                                        <img class="object-cover w-full h-full"
+                                            src="/media/{{store.business_logo}}">
+                                            {% else %}
+                                            <img class="object-cover w-full h-full"
+                                            src="/static/assets/images/dummy.png">
+                                            {% endif %}
+                                    </div>
+                                </div>
+                                <div class="flex items-center justify-center gap-3">
+                                    <button class="outline-none border flex items-center justify-center h-[2rem] w-[2rem] text-xs rounded-full edit_store_btns" data-url="{% url 'retrieve_store'  store.id %}"
+                                    data-bs-target="#EditStore" 
+                                    data-bs-toggle="modal"
+                                    >
+                                    <svg width="14" height="14" viewBox="0 0 7 7" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M1.02745 6.36342C0.97939 6.36333 0.931876 6.35325 0.887926 6.3338C0.843977 6.31436 0.804553 6.28597 0.772163 6.25046C0.739187 6.21525 0.714024 6.17347 0.698324 6.12785C0.682624 6.08223 0.676742 6.03381 0.681064 5.98576L0.765928 5.05234L4.68629 1.1323L5.91145 2.35744L1.99212 6.27714L1.05897 6.36203C1.04849 6.363 1.03797 6.36346 1.02745 6.36342ZM6.15599 2.11248L4.93118 0.887338L5.66586 0.15246C5.69803 0.120245 5.73623 0.0946894 5.77829 0.0772532C5.82033 0.059817 5.86541 0.0508423 5.91093 0.0508423C5.95645 0.0508423 6.00152 0.059817 6.04357 0.0772532C6.08562 0.0946894 6.12383 0.120245 6.15599 0.15246L6.89067 0.887338C6.92288 0.919517 6.94843 0.957729 6.96586 0.999791C6.98329 1.04185 6.99226 1.08694 6.99226 1.13247C6.99226 1.178 6.98329 1.22309 6.96586 1.26515C6.94843 1.30721 6.92288 1.34543 6.89067 1.3776L6.15634 2.11214L6.15599 2.11248Z" fill="#205a42"/>
+                                    </svg>
+                                </button> 
+                                <a href="{% url 'add_store_location' store.slug %}" class="block">
+                                    <svg width="2rem" height="2rem" viewBox="0 0 17 17" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M7.60294 11.8518C7.64617 11.9166 7.71895 11.9556 7.79687 11.9556C7.8748 11.9556 7.94758 11.9166 7.99081 11.8518C8.5424 11.0244 9.35484 10.0026 9.92099 8.96338C10.3737 8.13246 10.5937 7.42378 10.5937 6.79688C10.5937 5.25468 9.33907 4 7.79687 4C6.25468 4 5 5.25468 5 6.79688C5 7.42378 5.22007 8.13246 5.67276 8.96338C6.23849 10.0018 7.05249 11.0261 7.60294 11.8518ZM7.79687 4.46615C9.08204 4.46615 10.1276 5.51171 10.1276 6.79688C10.1276 7.34388 9.92612 7.97961 9.51165 8.74038C9.02365 9.63614 8.32726 10.5448 7.79687 11.3087C7.26657 10.5449 6.57013 9.63619 6.0821 8.74038C5.66763 7.97961 5.46615 7.34388 5.46615 6.79688C5.46615 5.51171 6.51171 4.46615 7.79687 4.46615V4.46615Z" fill="#205a42"/>
+                                        <path d="M7.79688 8.19531C8.56797 8.19531 9.19531 7.56797 9.19531 6.79688C9.19531 6.02578 8.56797 5.39844 7.79688 5.39844C7.02578 5.39844 6.39844 6.02578 6.39844 6.79688C6.39844 7.56797 7.02578 8.19531 7.79688 8.19531ZM7.79688 5.86458C8.31094 5.86458 8.72917 6.28281 8.72917 6.79688C8.72917 7.31094 8.31094 7.72917 7.79688 7.72917C7.28281 7.72917 6.86458 7.31094 6.86458 6.79688C6.86458 6.28281 7.28281 5.86458 7.79688 5.86458Z" fill="#205a42"/>
+                                        <circle cx="8.20635" cy="8.20635" r="8.04222" stroke="#D8D1D1" stroke-width="0.328254"/>
+                                    </svg>
+                                </a>
+                                </div>
+                                <h2 class="font-semibold capitalize">{{store.name}}</h2>
+                                
+                            </div>
+                            <div class="border-t p-2 flex items-center gap-3">
+                                <svg width="1rem" height="1rem" viewBox="0 0 8 9" fill="none"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <path
+                                        d="M3.86826 8.35614L3.86825 8.35613C3.80841 8.29195 3.08019 7.50653 2.36661 6.55434C2.00987 6.07832 1.65592 5.55945 1.39091 5.0674C1.12692 4.57723 0.947056 4.1063 0.947056 3.72828C0.947056 2.18913 2.34867 0.947056 4.05851 0.947056C5.76838 0.947056 7.16997 2.18913 7.16997 3.72828C7.16997 4.1063 6.99011 4.57723 6.72612 5.0674C6.46111 5.55944 6.10716 6.07831 5.75042 6.55433C5.03686 7.5065 4.30866 8.2919 4.24878 8.35613L3.86826 8.35614ZM3.86826 8.35614C3.91643 8.40779 3.98634 8.43638 4.05851 8.43638M3.86826 8.35614L4.05851 8.43638M4.05851 8.43638C4.13064 8.43638 4.20059 8.40783 4.24878 8.35613L4.05851 8.43638ZM5.28555 6.36381C4.80406 6.99912 4.31764 7.55907 4.05851 7.84929C3.79938 7.55907 3.31294 6.99912 2.83147 6.36381C2.37616 5.76302 2.02923 5.23392 1.79637 4.78869C1.56268 4.34187 1.44709 3.98547 1.44709 3.72828C1.44709 2.45253 2.61278 1.40454 4.05851 1.40454C5.50424 1.40454 6.66993 2.45253 6.66993 3.72828C6.66993 3.98546 6.55435 4.34185 6.32066 4.78867C6.08781 5.2339 5.74088 5.76301 5.28555 6.36381Z"
+                                        fill="#6C6C6C" stroke="#6C6C6C" stroke-width="0.105889" />
+                                    <path
+                                        d="M5.0591 6.0149C4.96892 5.96054 4.84639 5.98173 4.78548 6.06217C4.51954 6.41334 4.22161 6.78139 3.89999 7.15609C3.83382 7.23319 3.85022 7.34352 3.93664 7.40254C3.97238 7.42696 4.0145 7.43877 4.05631 7.43877C4.11554 7.43877 4.17413 7.41503 4.21292 7.36984C4.53927 6.98965 4.84179 6.61591 5.11207 6.25899C5.17301 6.17855 5.14931 6.06925 5.0591 6.0149Z"
+                                        fill="#6C6C6C" />
+                                    <path
+                                        d="M4.06132 2.29523C3.14687 2.29523 2.39237 2.96008 2.39237 3.7897C2.39237 4.61932 3.14687 5.28417 4.06132 5.28417C4.97578 5.28417 5.73027 4.61932 5.73027 3.7897C5.73027 2.96008 4.97578 2.29523 4.06132 2.29523ZM4.06132 4.82669C3.41098 4.82669 2.89241 4.35592 2.89241 3.7897C2.89241 3.22348 3.41098 2.75271 4.06132 2.75271C4.71169 2.75271 5.23024 3.22348 5.23024 3.7897C5.23024 4.35593 4.71169 4.82669 4.06132 4.82669Z"
+                                        fill="#6C6C6C" stroke="#6C6C6C" stroke-width="0.105889" />
+                                </svg>
+                                <p class="text-[#555555] text-xs line-clamp-1">{{store.country}}, {{store.city}}</p>
+                            </div>
+                        </div>
+
+
+
+
+
+
+
+
+                          <div class="modal fade fixed top-0 left-0 hidden w-full h-full outline-none overflow-x-hidden overflow-y-auto"
+                        id="exampleModal-allscative-{{store.id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog relative w-auto pointer-events-none">
+                            <div
+                                class="modal-content border-none shadow-lg relative flex flex-col w-full pointer-events-auto bg-white bg-clip-padding rounded-md outline-none text-current">
+                                <div
+                                    class="modal-header flex flex-shrink-0 items-center justify-between p-4 border-b border-gray-200 rounded-t-md">
+                                    <h5 class="text-xl font-medium leading-normal text-gray-800"
+                                        id="exampleModalLabel">Confirm Delete
+                                        
+                                       </h5> 
+                                    <button type="button"
+                                        class="btn-close box-content w-4 h-4 p-1 text-black border-none rounded-none opacity-50 focus:shadow-none focus:outline-none focus:opacity-100 hover:text-black hover:opacity-75 hover:no-underline"
+                                        data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body relative p-4">
+                                    Do you want to delete this Store?
+                                </div>
+                                <div
+                                    class="modal-footer flex flex-shrink-0 flex-wrap items-center justify-end p-4 border-t border-gray-200 rounded-b-md">
+                                    <button type="button" class="px-6
+       py-2.5
+       bg-purple-600
+       text-white
+       font-medium
+       text-xs
+       leading-tight
+       uppercase
+       rounded
+       shadow-md
+       hover:bg-purple-700 hover:shadow-lg
+       focus:bg-purple-700 focus:shadow-lg focus:outline-none focus:ring-0
+       active:bg-purple-800 active:shadow-lg
+       transition
+       duration-150
+       ease-in-out" data-bs-dismiss="modal">Close</button>
+       <a href="{% url 'delete_store' store.id %}">
+       
+                                    <button type="button" class="px-6
+       py-2.5
+       bg-blue-600
+       text-white
+       font-medium
+       text-xs
+       leading-tight
+       uppercase
+       rounded
+       shadow-md
+       hover:bg-blue-700 hover:shadow-lg
+       focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0
+       active:bg-blue-800 active:shadow-lg
+       transition
+       duration-150
+       ease-in-out
+       ml-1">Delete</button>
+       </a>
+       
+       
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                        {% endif %}
+                        {% endif %}
+                        {% endfor %}
+                    </div>
+                </div>
+
+
+
+                                        {% if store.account_officer_business_store.all%}
+                        {% for i in store.account_officer_business_store.all %}
+                        <div class="modal fade fixed top-0 left-0 hidden w-full h-full outline-none overflow-x-hidden overflow-y-auto"
+                        id="account_officer-6-{{store.id}}" tabindex="-1" aria-labelledby="BusinessDeatailsLabel"
+                        aria-modal="true" role="dialog">
+                        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg relative w-auto pointer-events-none">
+                        <div
+                            class="modal-content border-none rounded-lg shadow-lg relative flex flex-col w-full pointer-events-auto bg-white bg-clip-padding outline-none text-current">
+                            <div class="modal-body relative">
+                                <div class="absolute top-2 right-2" data-bs-dismiss="modal" aria-label="Close">
+                                    <svg class="cursor-pointer" width="27" height="27" viewBox="0 0 27 27" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M13.5 0C5.97857 0 0 5.97857 0 13.5C0 21.0214 5.97857 27 13.5 27C21.0214 27 27 21.0214 27 13.5C27 5.97857 21.0214 0 13.5 0ZM18.7071 20.25L13.5 15.0429L8.29286 20.25L6.75 18.7071L11.9571 13.5L6.75 8.29286L8.29286 6.75L13.5 11.9571L18.7071 6.75L20.25 8.29286L15.0429 13.5L20.25 18.7071L18.7071 20.25Z" fill="#205a42"></path>
+                                    </svg>
+                                </div>
+                                <div class="bg-[#FCFCFC] p-[3rem] flex flex-col items-center gap-3">
+                                    
+                                    <h1 class="font-semibold text-xl">Account Officer Details</h1>
+                                    <div class="h-[6rem] w-[6rem] rounded-full overflow-hidden">
+                                        <img src="{{i.image_logo.url}}" class="rounded-lg w-full h-full object-cover">
+                                    </div>
+                                    <h1 class="text-[#1E1E1E] font-semibold">{{store.name}}</h1>
+                                    {% comment %} <div class="flex items-center gap-1">
+                                        <svg width="12" height="16" viewBox="0 0 12 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <path d="M5.97617 14.7884L5.97618 14.7884L6.6502 14.7884C6.65021 14.7884 6.65021 14.7884 6.65021 14.7884C6.75421 14.6633 8.01911 13.134 9.25851 11.2799C9.87815 10.353 10.4928 9.34295 10.9528 8.38537C11.4114 7.43071 11.7223 6.51651 11.7223 5.78487C11.7223 2.80216 9.2959 0.375736 6.31319 0.375736C3.33052 0.375736 0.904057 2.80216 0.904057 5.78487C0.904057 6.51651 1.21493 7.43072 1.67358 8.38538C2.13362 9.34296 2.74824 10.353 3.36789 11.28C4.60732 13.134 5.87224 14.6634 5.97617 14.7884ZM8.4386 10.926C7.60601 12.1575 6.76495 13.2436 6.31319 13.8111C5.86142 13.2436 5.02033 12.1575 4.18778 10.926C3.39672 9.75581 2.79374 8.72495 2.38888 7.85717C1.98287 6.98691 1.78065 6.29004 1.78065 5.78487C1.78065 3.28568 3.81404 1.25233 6.31319 1.25233C8.81233 1.25233 10.8457 3.28568 10.8457 5.78487C10.8457 6.29002 10.6435 6.98688 10.2375 7.85713C9.83266 8.72492 9.22968 9.75579 8.4386 10.926Z" fill="#6C6C6C" stroke="#6C6C6C" stroke-width="0.191886"></path>
+                                            <path d="M8.05289 10.2364C7.89623 10.1306 7.68338 10.1718 7.57757 10.3285C7.11557 11.0124 6.59802 11.7291 6.0393 12.4589C5.92436 12.609 5.95285 12.8238 6.10298 12.9388C6.16506 12.9863 6.23823 13.0094 6.31086 13.0094C6.41375 13.0094 6.51554 12.9631 6.58291 12.8751C7.14985 12.1347 7.67539 11.4069 8.14491 10.7118C8.25077 10.5551 8.2096 10.3423 8.05289 10.2364Z" fill="#6C6C6C"></path>
+                                            <path d="M6.3073 3.00171C4.70637 3.00171 3.40406 4.30403 3.40406 5.90495C3.40406 7.50588 4.70637 8.8082 6.3073 8.8082C7.90823 8.8082 9.21054 7.50588 9.21054 5.90495C9.21054 4.30403 7.90823 3.00171 6.3073 3.00171ZM6.3073 7.9316C5.18989 7.9316 4.28065 7.02236 4.28065 5.90495C4.28065 4.78755 5.18989 3.87831 6.3073 3.87831C7.42475 3.87831 8.33395 4.78755 8.33395 5.90495C8.33395 7.02236 7.42475 7.9316 6.3073 7.9316Z" fill="#6C6C6C" stroke="#6C6C6C" stroke-width="0.191886"></path>
+                                        </svg>
+                                        <p class="text-[#6C6C6C] text-sm">....</p>
+                                    </div> {% endcomment %}
+                                </div>
+                                <div class="grid lg:grid-cols-3 grid-cols-2 gap-4 p-[2.2rem]">
+                                    <div class="flex flex-col gap-2">
+                                        <h1 class="font-semibold">Name</h1>
+                                        <div class="flex items-center gap-2">
+                                            
+                                            <p class="text-[#555555] font-semibold text-sm">{{i.user.username}}</p>
+                                        </div>
+                                    </div>
+                                    <div class="flex flex-col gap-2">
+                                        <h1 class="font-semibold">Email Address</h1>
+                                        <p class="text-[#555555] font-semibold text-sm">{{i.user.email}}</p>
+                                    </div>
+                                    <div class="flex flex-col gap-2">
+                                        <h1 class="font-semibold">Contact</h1>
+                                        <p class="text-[#555555] font-semibold text-sm">{{i.user.phone}}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+                {% endif %}
+
+
+
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+
+
+{% else %}
+{% include 'common/not-found.html'%}
+{% endif %}
+
+
+<div class="modal fade fixed top-0 left-0 hidden w-full h-full outline-none overflow-x-hidden overflow-y-auto"
+    id="EditStore" tabindex="-1" aria-labelledby="AddStoreLabel" aria-modal="true" role="dialog">
+    <div
+        class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg relative w-auto pointer-events-none">
+        <div
+            class="modal-content border-none rounded-lg shadow-lg relative flex flex-col w-full pointer-events-auto bg-white bg-clip-padding outline-none text-current">
+            <div
+                class="modal-header flex flex-shrink-0 items-center justify-between p-4 border-b border-gray-200 rounded-t-md">
+                <h5 class="text-xl font-medium leading-normal text-gray-800" id="exampleModalLabel">Edit Store</h5>
+                <button type="button" class="" data-bs-dismiss="modal" aria-label="Close">
+                    <svg width="22" height="22" viewBox="0 0 27 27" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path
+                            d="M13.5 0C5.97857 0 0 5.97857 0 13.5C0 21.0214 5.97857 27 13.5 27C21.0214 27 27 21.0214 27 13.5C27 5.97857 21.0214 0 13.5 0ZM18.7071 20.25L13.5 15.0429L8.29286 20.25L6.75 18.7071L11.9571 13.5L6.75 8.29286L8.29286 6.75L13.5 11.9571L18.7071 6.75L20.25 8.29286L15.0429 13.5L20.25 18.7071L18.7071 20.25Z"
+                            fill="#205a42" />
+                    </svg>
+
+                </button>
+            </div>
+            <div class="modal-body relative p-[1rem]">
+                <form action="" class="action_edit_store personForm edit_store" method="POST" enctype="multipart/form-data" data-cities-url="{% url 'ajax_load_cities' %}" data-categories-url="{% url 'ajax_load_categories' %}" >
+                    {% csrf_token %}
+                    <div class="mt-4">
+                        <div class="flex flex-col gap-3">
+                            <div class='grid lg:grid-cols-2 gap-5'>
+
+                                <div class="flex flex-col gap-2">
+                                    <p class="text-sm">Store Name*</p>
+                                    <input type="text" placeholder="Enter Store Name" name="name"
+                                        class="name border rounded-md text-sm outline-none lg:px-4 px-2 lg:py-3 py-[0.6rem] placeholder:text-[#A1A1A1] text-[#101928] focus:border-[#205a42] ease-in transition-all focus:border-l-[7px]  bg-transparent"
+                                        value="" required>
+                                </div>
+
+                                <div class="flex flex-col gap-2">
+                                    <p class="text-sm">Phone Number *</p>
+                                    <input type="number" placeholder="Enter phone number" name="phone"
+                                        class="phone border rounded-md text-sm outline-none lg:px-4 px-2 lg:py-3 py-[0.6rem] placeholder:text-[#A1A1A1] text-[#101928] focus:border-[#205a42] ease-in transition-all focus:border-l-[7px]  bg-transparent"
+                                        value="" required>
+                                </div>
+                            </div>
+
+
+
+                            <div class="grid lg:grid-cols-2 gap-5">
+                                <div class="flex flex-col gap-2">
+                                    <p class="text-sm">Country *</p>
+                                    <div class="lg:px-4 px-2 py-[0.6rem] border rounded-md select_parent">
+                                        <select type="text" placeholder="Select Country" name="country"
+                                            class="id_country w-full outline-none text-sm text-[#A1A1A1] bg-white country" required>
+                                            <option value="">Select Country</option>
+                                            {% for country in all_countries %}
+                                            <option value="{{country.id}}">{{country.name}}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="flex flex-col gap-2">
+                                    <p class="text-sm">City *</p>
+                                    <div class="lg:px-4 px-2 py-[0.6rem] border rounded-md select_parent">
+                                        <select id='' type="text" placeholder="Select City" name="city" 
+                                            class="cities_dropdown w-full outline-none text-sm text-[#A1A1A1] bg-white city" required>
+                                            {% if cities %}
+                                            {% for city in cities %}
+                                            <option value="{{city.id}}">{{city.name}}</option>
+                                            {% endfor %}
+                                            {% else %}
+                                            {% for city in all_cities %}
+                                            <option value="{{city.pk}}">{{city.name}}</option>
+                                            {% endfor %}
+                                            {% endif %}
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="flex flex-col gap-2">
+                                <p class="text-sm">Store Address *</p>
+                                <input type="text" placeholder="Enter your store address" name="address"
+                                    class="store_address border rounded-md text-sm outline-none lg:px-4 px-2 lg:py-3 py-[0.6rem] placeholder:text-[#A1A1A1] text-[#101928] focus:border-[#205a42] ease-in transition-all focus:border-l-[7px]  bg-transparent"
+                                    value="" required>
+                            </div>
+                            <div class="grid lg:grid-cols-2 gap-5">
+                                <div class="flex flex-col gap-2">
+                                    <p class="text-sm">Store Category *</p>
+                                    <div class="lg:px-4 px-2 py-[0.6rem] border rounded-md select_parent">
+                                        <select type="text" placeholder="Select Category" name="category"
+                                            class="id_category category w-full outline-none text-sm text-[#A1A1A1] bg-white" required>
+                                            <option value="" disabled>Select Category</option>
+                                            {% for category in parent_category_filter_by_status %}
+                                            <option value="{{category.id}}">{{category.name}}</option>
+                                            {% endfor %}
+
+                                        </select>
+                                    </div>
+                                    
+                                </div>
+                                <div class="flex flex-col gap-2">
+                                    <p class="text-sm">Store Subcategory *</p>
+                                    <div class="select_parent">
+                                        <select type="text" placeholder="Select Subcategory" name="sub_category"
+                                            class="w-full outline-none  subcategory categories_dropdown" multiple required>
+                                            <option value="" disabled>Select Subcategory</option>
+                                            {% for category in parent_category_filter_by_status %}
+                                            {% for subcategory in category.subcategory_category.all %}
+                                            <option value="{{subcategory.pk}}">{{subcategory.name}}</option>
+                                            {% endfor %}
+                                            {% endfor %}
+
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
+
+
+
+                            <div class="flex flex-col gap-2">
+                                <p class="text-sm">Status *</p>
+                                <div class="lg:px-4 px-2 py-[0.6rem] border rounded-md select_parent">
+                                    <select type="text" placeholder="Select Country" name="status"
+                                        class="w-full outline-none text-sm text-[#A1A1A1] bg-white store_status" required>
+                                        <option>Select Status</option>
+                                        <option value="Active">Active</option>
+                                        <option value="Inactive">Inactive</option>
+                                    </select>
+                                </div>
+                            </div>
+                            
+                            <div class="flex flex-col gap-2 img_render">
+                                <p class="text-sm">Upload Logo *</p>
+                                <label class="bg-[#205a42] px-5 py-2 text-sm text-white rounded-md w-fit"
+                                    for="Liscense_Picture_1_0">Upload Picture</label>
+                                <input type="file" id="Liscense_Picture_1_0" accept="image/*" hidden name="image" class="img_render_inp">
+                                <div class="rounded-md h-[7rem] w-[7rem] img_rendered overflow-hidden relative">
+                                    <div class="absolute top-2 right-2 img_del z-1 cursor-pointer">
+                                    <!-- <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M12 0.625C5.6625 0.625 0.625 5.6625 0.625 12C0.625 18.3375 5.6625 23.375 12 23.375C18.3375 23.375 23.375 18.3375 23.375 12C23.375 5.6625 18.3375 0.625 12 0.625ZM16.3875 17.6875L12 13.3L7.6125 17.6875L6.3125 16.3875L10.7 12L6.3125 7.6125L7.6125 6.3125L12 10.7L16.3875 6.3125L17.6875 7.6125L13.3 12L17.6875 16.3875L16.3875 17.6875Z" fill="#205a42"></path>
+                                    </svg> -->
+                                </div>
+                                <img src="" class="h-full w-full object-cover img_render_logo" />
+                            </div>
+                        </div>
+                        </div>
+                           <div class="flex justify-end">
+                               <button
+                                    class="w-fit mt-[1rem] bg-[#205a42] font-semibold px-5 py-2 text-sm text-white rounded-md ml-auto">
+                                    Save Changes
+                                </button>
+                           </div>
+                        </div>
+                    </div>
+            </div>
+            </form>
+        </div>
+    </div>
+</div>
+</div>
+
+
+
+
+
+<script>
+    let dashboard_tabs = document.querySelectorAll('.dashboard-tab');
+    document.addEventListener('DOMContentLoaded', () => {
+        if (dashboard_tabs) {
+            dashboard_tabs.forEach(tab => {
+                dashboard_tabs.forEach(all => {
+                    all.classList.remove('dashboard-tab-active')
+                })
+                dashboard_tabs[1].classList.add('dashboard-tab-active')
+            })
+        }
+    })
+</script>
+{% include 'common/footer-com.html' %}
+
+
+<script>
+    $(".id_country").change(function () {
+      var url = $(".personForm").attr("data-cities-url");  // get the url of the `load_cities` view
+      var countryId = $(this).val();  // get the selected country ID from the HTML input
+  
+      $.ajax({                       // initialize an AJAX request
+        url: url,                    // set the url of the request (= localhost:8000/hr/ajax/load-cities/)
+        data: {
+          'country': countryId       // add the country id to the GET parameters
+        },
+        success: function (data) {   // `data` is the return of the `load_cities` view function
+          let cities = data.cities
+          let c_dds =  document.querySelectorAll('.cities_dropdown')
+          c_dds.forEach(c_dd=>{
+              c_dd.innerHTML = '' 
+              cities.map(city =>{
+                  let drp_opt = document.createElement('option')
+                  drp_opt.innerText = city.name
+                  drp_opt.value = city.id
+                  c_dd.append(drp_opt)
+                  // <option value="{{ city.pk }}">{{ city.name }}</option>
+                //   console.log(city)
+              })
+          })
+          // html(data);  // replace the contents of the city input with the data that came from the server
+        }
+      });
+  
+    });
+
+    $(".id_category").change(function () {
+        var url = $(".personForm").attr("data-categories-url");  // get the url of the `load_cities` view
+        var categoryID = $(this).val();  // get the selected country ID from the HTML input
+    
+        $.ajax({                       // initialize an AJAX request
+            url: url,                    // set the url of the request (= localhost:8000/hr/ajax/load-cities/)
+            data: {
+            'category': categoryID       // add the country id to the GET parameters
+            },
+            success: function (data) {   // `data` is the return of the `load_cities` view function
+                let categories = data.categories
+                let c_dddd =  document.querySelectorAll('.categories_dropdown')
+                c_dddd.forEach(c_ddd=>{
+                    c_ddd.innerHTML = '' 
+                    categories.map(category =>{
+                        let drp_optt = document.createElement('option')
+                        drp_optt.innerText = category.name
+                        drp_optt.value = category.id
+                        c_ddd.append(drp_optt)
+                        // <option value="{{ city.pk }}">{{ city.name }}</option>
+                        console.log(category)
+                    })
+                })
+            // html(data);  // replace the contents of the city input with the data that came from the server
+            }
+        });
+  
+    });
+  </script>
+
+{% if messages %}
+{% for msg in messages %}
+<script>
+setTimeout(() => {
+    Toast.fire({
+icon: '{{msg.tags}}', // success
+title: '{{msg}}'
+});
+}, 1000);
+</script>
+{% endfor %}
+{% endif %}
+<script>
+    $(".create_store").validate();
+    $(".edit_store").validate();
+</script>
+{% endblock body %}

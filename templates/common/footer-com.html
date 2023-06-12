@@ -1,0 +1,23 @@
+<script src="/static/assets/js/swiper.js"></script>
+<script src="/static/assets/js/alert.js"></script>
+<script>
+    Toast = Swal.mixin({
+        toast: true,
+        position: 'top-end',
+        showConfirmButton: false,
+        timer: 6100,
+        showCloseButton: true,
+        timerProgressBar: true,
+        didOpen: (toast) => {
+            toast.addEventListener('mouseenter', Swal.stopTimer)
+            toast.addEventListener('mouseleave', Swal.resumeTimer)
+        }
+    })
+</script>
+<link href="https://cdn.jsdelivr.net/npm/tom-select@2.2.2/dist/css/tom-select.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/tom-select@2.2.2/dist/js/tom-select.complete.min.js"></script>
+<script src="/static/assets/js/script.js"></script>
+<script src="/static/assets/js/jquery.js"></script>
+<script src="/static/assets/js/tailwind-element.js"></script>
+<script src="/static/assets/js/validate.js"></script>
+<script src="/static/assets/js/jquery.formset.js"></script>

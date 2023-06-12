@@ -1,0 +1,159 @@
+{% extends 'Store/base.html' %}
+{% block title %} Top Deals {% endblock title %}
+{% block body %}
+<style>
+    .footer {
+        display: none;
+    }
+
+    .newsletter {
+        display: none;
+    }
+
+    .back_button {
+        visibility: hidden;
+    }
+</style>
+<div class="grid grid-cols-2 gap-[1rem] pt-[2.4rem] container pb-[2rem]  mx-auto">
+    <div class="">
+        <img src="/static/assets/images/signup_page.png" class="w-[20vw]  mx-auto">
+    </div>
+    <div class="flex flex-col gap-3">
+        <!-- <h1 class="font-bold text-2xl">Sell on TopDeals</h1>
+        <p class="text-sm text-[#7E7E7E]">Start selling on TopDeals by simply creating your<br class="md:block hidden">
+            business account.</p>
+        <div class="flex items-center gap-6 flex-col">
+            <div data-link="register"
+                class="signup-card-btn_ border transition-all cursor-pointer px-6 py-4 flex items-center flex-col justify-center gap-5 dark-shadow rounded-lg">
+                <svg class="h-[3.938rem] w-[4.125rem]" width="66" height="63" viewBox="0 0 66 63" fill="none"
+                    xmlns="http://www.w3.org/2000/svg">
+                    <path
+                        d="M0.515625 17.027C0.515625 20.4023 2.99707 23.2708 6.1875 24.3255V57.4971H0.515625V61.9389H65.4844V57.4971H59.8125V24.32C63.1357 23.3465 65.4068 20.5208 65.4844 17.027V15.0529H0.515625V17.027ZM16.8326 16.8656C16.8326 18.464 18.5741 24.6314 25.0122 24.6314C30.6039 24.6314 33.0565 19.7911 33.0565 16.8656C33.0565 19.5929 34.9669 24.6258 41.1683 24.6258C46.7713 24.6258 49.254 19.4439 49.254 16.8656C49.254 20.4253 51.7615 23.3843 55.1719 24.3067V57.4971H10.8281V24.3299C14.2833 23.4346 16.8326 20.4559 16.8326 16.8656ZM57.4489 5.42891H57.4922V0.493538H8.76563V5.42891L0.515625 13.3255H65.4844L57.4489 5.42891Z"
+                        fill="#373737"></path>
+                    <path
+                        d="M24.1895 44.0595C24.1895 39.6263 27.7833 36.0324 32.2165 36.0324C36.6497 36.0324 40.2435 39.6263 40.2435 44.0595V57.4379H24.1895V44.0595Z"
+                        fill="#373737"></path>
+                </svg>
+                <p>Register Your Business</p>
+            </div>
+            <p class="text-[#7E7E7E]">Already have a business account? </p>
+            <div data-link="login"
+                class="signup-card-btn_ border transition-all cursor-pointer px-6 py-4 flex items-center flex-col justify-center gap-5 dark-shadow rounded-lg">
+                <svg class="h-[3.938rem] w-[4.125rem]" width="66" height="63" viewBox="0 0 66 63" fill="none"
+                    xmlns="http://www.w3.org/2000/svg">
+                    <path
+                        d="M0.515625 17.027C0.515625 20.4023 2.99707 23.2708 6.1875 24.3255V57.4971H0.515625V61.9389H65.4844V57.4971H59.8125V24.32C63.1357 23.3465 65.4068 20.5208 65.4844 17.027V15.0529H0.515625V17.027ZM16.8326 16.8656C16.8326 18.464 18.5741 24.6314 25.0122 24.6314C30.6039 24.6314 33.0565 19.7911 33.0565 16.8656C33.0565 19.5929 34.9669 24.6258 41.1683 24.6258C46.7713 24.6258 49.254 19.4439 49.254 16.8656C49.254 20.4253 51.7615 23.3843 55.1719 24.3067V57.4971H10.8281V24.3299C14.2833 23.4346 16.8326 20.4559 16.8326 16.8656ZM57.4489 5.42891H57.4922V0.493538H8.76563V5.42891L0.515625 13.3255H65.4844L57.4489 5.42891Z"
+                        fill="#373737"></path>
+                    <path
+                        d="M24.1895 44.0595C24.1895 39.6263 27.7833 36.0324 32.2165 36.0324C36.6497 36.0324 40.2435 39.6263 40.2435 44.0595V57.4379H24.1895V44.0595Z"
+                        fill="#373737"></path>
+                </svg>
+                <p>Sign-in to Your Business</p>
+            </div>
+            <button disabled
+                class="mt-[1rem] w-fit next transition-all px-5 py-2 rounded-md text-white flex items-center gap-2 mx-auto bg-[#555555] cursor-pointer">
+                <p>Next</p>
+                <svg width="18" height="16" viewBox="0 0 18 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M1 8H17M10 1L17 8L10 15" stroke="white" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round"></path>
+                </svg>
+            </button>
+            <button type="button" data-bs-target="#Signup" data-bs-toggle="modal" class="signup"> </button>
+            <button type="button" data-bs-target="#SignIn" data-bs-toggle="modal" class="sigin"> </button>
+        </div> -->
+       
+        <div class="h-full py-[3rem] px-[2rem]">
+            <div class="flex flex-col gap-7 h-full justify-start">
+                <p class="text-sm text-[#7B7B7B] text-right">
+                    Don't have an account?
+                    <button type="button" data-bs-target="#Signup" data-bs-toggle="modal"
+                        class="text-[#205a42] cursor-pointer signun-popup-btn new_signup_"> Sign Up Now</button>
+                </p>
+                <div class="flex flex-col gap-1">
+                    <h2 class="font-semibold text-3xl text-[#373737] mt-[2rem]">Sign in to Your Business</h2>
+                    <p class="text-sm text-[#7E7E7E]">Start selling on TopDeals by simply creating your<br class="md:block hidden">
+                        business account.</p>
+                </div>
+                <form method='post' action="{% url 'home' %}" class="sigin_form flex flex-col gap-3">
+                    {% csrf_token %}
+                    <div class="flex flex-col gap-2">
+                        <p class="text-sm">Email Address *</p>
+                        <input type="text" value="login" name="user_type" hidden>
+                        <input type="email" required placeholder="Enter your email address" name="email"
+                            class="login_email border rounded-md text-sm outline-none lg:px-4 px-2 lg:py-3 py-[0.6rem] placeholder:text-[#A1A1A1] text-[#101928] focus:border-[#205a42] ease-in transition-all focus:border-l-[7px]  bg-transparent"
+                            value="">
+                    </div>
+                    <div class="flex flex-col gap-2 relative">
+                        <p class="text-sm">Password *</p>
+                        <div class="flex flex-col gap-2 relative password-show-p">
+                            <input type="password" required name="password"
+                                class="login_pass border password-show rounded-md text-sm outline-none px-4 py-3 placeholder:text-[#A1A1A1] text-[#101928] focus:border-[#205a42] ease-in transition-all focus:border-l-[7px]"
+                                placeholder="Enter password" value="">
+                            <div
+                                class="absolute password-show-icon right-4 top-1/2 -translate-y-1/2 cursor-pointer">
+                                <svg width="13" height="9" viewBox="0 0 13 9" fill="none"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <path
+                                        d="M8.53125 4.5C8.53125 5.03872 8.31724 5.55538 7.93631 5.93631C7.55538 6.31724 7.03872 6.53125 6.5 6.53125C5.96128 6.53125 5.44462 6.31724 5.06369 5.93631C4.68276 5.55538 4.46875 5.03872 4.46875 4.5C4.46875 3.96128 4.68276 3.44462 5.06369 3.06369C5.44462 2.68276 5.96128 2.46875 6.5 2.46875C7.03872 2.46875 7.55538 2.68276 7.93631 3.06369C8.31724 3.44462 8.53125 3.96128 8.53125 4.5Z"
+                                        fill="#A1A1A1"></path>
+                                    <path
+                                        d="M0 4.5C0 4.5 2.4375 0.03125 6.5 0.03125C10.5625 0.03125 13 4.5 13 4.5C13 4.5 10.5625 8.96875 6.5 8.96875C2.4375 8.96875 0 4.5 0 4.5ZM6.5 7.34375C7.25421 7.34375 7.97753 7.04414 8.51083 6.51083C9.04414 5.97753 9.34375 5.25421 9.34375 4.5C9.34375 3.74579 9.04414 3.02247 8.51083 2.48917C7.97753 1.95586 7.25421 1.65625 6.5 1.65625C5.74579 1.65625 5.02247 1.95586 4.48917 2.48917C3.95586 3.02247 3.65625 3.74579 3.65625 4.5C3.65625 5.25421 3.95586 5.97753 4.48917 6.51083C5.02247 7.04414 5.74579 7.34375 6.5 7.34375V7.34375Z"
+                                        fill="#A1A1A1"></path>
+                                </svg>
+                            </div>
+                        </div>
+                        <button data-bs-target="#forgotPassword" data-bs-toggle="modal" type="button"
+                            class="text-xs text-right cursor-pointer">Forgot Password ?</button>
+                    </div>
+                    <div class="text-center w-full">
+                        <button type="submit"
+                            class="login_button_submit text-center w-full transition-all bg-[#205a42] px-5 py-2 rounded-md text-white mx-auto">
+                            Sign In Now
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<!-- {% include 'common/footer-com.html' %} -->
+<script>
+//     let sigin = document.querySelector('.sigin');
+//     let signup = document.querySelector('.signup');
+//     let btns = document.querySelectorAll('.signup-card-btn_');
+//     let next = document.querySelector('.next');
+//     let active = ''
+// if(sigin){
+//     btns.forEach(btn => {
+//         btn.addEventListener('click', () => {
+//             btns.forEach(btn => btn.classList.remove('signup-card-active'))
+//             btn.classList.add('signup-card-active');
+//             next.style.cssText = 'background-color:#205a42';
+//             active = btn.getAttribute('data-link');
+//             next.disabled = false;
+//         })
+//     })
+
+//     next.addEventListener('click', () => {
+//         console.log(active);
+//         if (active == 'register') {
+    // business_account_section.classList.remove('hidden');
+    //         choose_section.classList.add('hidden');
+//             signup.click();
+//         } else if (active == 'login') {
+//             sigin.click();
+//         }
+//     })
+// }
+
+var btn = document.querySelector('.new_signup_');
+btn.addEventListener('click',()=>{
+    business_account_section.classList.remove('hidden');
+    choose_section.classList.add('hidden');
+})
+</script>
+
+
+{% endblock body %}

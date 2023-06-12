@@ -1,0 +1,725 @@
+{% extends 'Admin/admin/base.html' %}
+{% load pagination_tags %}
+
+
+{% block title %} Top Deals - Account Officer {% endblock title %}
+{% block body %}
+<div class="col-span-1 lg:col-span-4 m-4 lg:ml-0">
+
+    <div class="flex flex-col gap-6 py-[1rem]">
+
+        <div class="flex items-center justify-between gap-4 flex-wrap flex-wrap">
+            <h1 class="font-bold text-2xl text-[#205a42]">Account Officers</h1>
+            <div class="flex items-center gap-3">
+                <div class="flex items-center gap-4">
+                    <div class="rounded-xl bg-white py-2 px-5 flex items-center gap-2">
+                        <div>
+                            <svg width="15" height="15" viewBox="0 0 15 15" fill="none"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <path
+                                    d="M5.4344 0.665436C6.79903 0.665436 8.10777 1.20753 9.0727 2.17247C10.0376 3.13741 10.5797 4.44615 10.5797 5.81077C10.5797 7.08523 10.1127 8.25679 9.34486 9.1592L9.55859 9.37293H10.1839L14.1419 13.3309L12.9545 14.5183L8.99656 10.5603V9.93496L8.78283 9.72123C7.88041 10.4891 6.70886 10.9561 5.4344 10.9561C4.06977 10.9561 2.76104 10.414 1.7961 9.44908C0.831159 8.48414 0.289063 7.1754 0.289062 5.81077C0.289062 4.44615 0.831159 3.13741 1.7961 2.17247C2.76104 1.20753 4.06977 0.665436 5.4344 0.665436ZM5.4344 2.24862C3.45542 2.24862 1.87224 3.8318 1.87224 5.81077C1.87224 7.78975 3.45542 9.37293 5.4344 9.37293C7.41338 9.37293 8.99656 7.78975 8.99656 5.81077C8.99656 3.8318 7.41338 2.24862 5.4344 2.24862Z"
+                                    fill="#868686"></path>
+                            </svg>
+                        </div>
+                        <form action="{% url 'account_officer' %}" method="GET">
+                            <input type="text" class="text-[#373737] outline-none w-full min-w-[120px]"
+                                placeholder="Search..." name="item">
+                        </form>
+                    </div>
+                </div>
+
+                <div data-bs-target="#addSubCategory" data-bs-toggle="modal"
+                    class="bg-[#205a42] px-3 py-2 rounded-md text-white cursor-pointer ">
+                    Add account officer
+                </div>
+
+            </div>
+        </div>
+        {% if searched_officer_records %}
+        <div class="flex items-center gap-3">
+            <div data-category-id="cats-all"
+                class="cursor-pointer category_tab category_tab_active rounded-full py-1 px-3 border flex items-center gap-2"
+                tab-name="business">
+                <h1 class="text-sm">All</h1>
+            </div>
+            {% for store in all_stores %}
+            <div data-category-id="cats-{{store.id}}"
+                class="cursor-pointer category_tab rounded-full py-1 px-3 border flex items-center gap-2"
+                tab-name="business-req">
+                <h1 class="text-sm">{{ store.name }}</h1>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    <div class="flex items-center gap-6 flex-wrap lg:justify-start justify-center">
+        {% for officer in searched_officer_records %}
+        <div
+            class="text-center rounded-lg admin-card-hover p-4 min-w-[18rem] w-fit bg-[#F8F9FD] lg:bg-white flex flex-col gap-3">
+            <div class="flex items-center justify-between">
+                <!--  <div class="flex items-center gap-2">
+                    <div class="h-[3rem] w-[3rem] rounded-full overflow-hidden">
+                        <img class="object-cover w-full h-full" src="/media/{{officer.business_store.business_logo}}">
+                    </div>
+                    <div class="text-left">
+                        <h1 class="font-semibold text-[#205a42]">{{officer.business_store.name}}</h1>
+                        <p class="text-xs">{{officer.business_store.country}}, {{officer.business_store.city}}</p>
+                    </div> 
+
+                    
+                </div> -->
+                <div class="flex items-center gap-2">
+                    {% comment %} <div data-bs-target="#delete-officer-{{officer.id}}" data-bs-toggle="modal"
+                        class="delete_btn cursor-pointer h-[2rem] w-[2rem] rounded-full border flex items-center justify-center">
+
+                        <svg width="1.25rem" height="1.25rem" viewBox="0 0 9 9" fill="none"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <path
+                                d="M3.51298 1.45849H4.99012C4.99012 1.26261 4.91231 1.07475 4.7738 0.936243C4.63529 0.797733 4.44743 0.71992 4.25155 0.71992C4.05567 0.71992 3.86781 0.797733 3.7293 0.936243C3.59079 1.07475 3.51298 1.26261 3.51298 1.45849ZM3.0206 1.45849C3.0206 1.13202 3.15028 0.818925 3.38113 0.588077C3.61198 0.357228 3.92508 0.227539 4.25155 0.227539C4.57802 0.227539 4.89111 0.357228 5.12196 0.588077C5.35281 0.818925 5.4825 1.13202 5.4825 1.45849H7.94441C8.0097 1.45849 8.07232 1.48443 8.11849 1.5306C8.16466 1.57677 8.1906 1.63939 8.1906 1.70468C8.1906 1.76998 8.16466 1.83259 8.11849 1.87876C8.07232 1.92493 8.0097 1.95087 7.94441 1.95087H7.42544L6.83753 7.04406C6.79598 7.40408 6.62351 7.73627 6.35296 7.9774C6.08241 8.21854 5.73265 8.3518 5.37024 8.35182H3.13286C2.77044 8.3518 2.42068 8.21854 2.15013 7.9774C1.87958 7.73627 1.70712 7.40408 1.66556 7.04406L1.07766 1.95087H0.55869C0.493397 1.95087 0.430777 1.92493 0.384608 1.87876C0.338438 1.83259 0.3125 1.76998 0.3125 1.70468C0.3125 1.63939 0.338438 1.57677 0.384608 1.5306C0.430777 1.48443 0.493397 1.45849 0.55869 1.45849H3.0206ZM3.75917 3.42801C3.75917 3.36272 3.73323 3.3001 3.68706 3.25393C3.64089 3.20776 3.57827 3.18182 3.51298 3.18182C3.44768 3.18182 3.38506 3.20776 3.33889 3.25393C3.29272 3.3001 3.26679 3.36272 3.26679 3.42801V6.3823C3.26679 6.44759 3.29272 6.51021 3.33889 6.55638C3.38506 6.60255 3.44768 6.62849 3.51298 6.62849C3.57827 6.62849 3.64089 6.60255 3.68706 6.55638C3.73323 6.51021 3.75917 6.44759 3.75917 6.3823V3.42801ZM4.99012 3.18182C4.92483 3.18182 4.86221 3.20776 4.81604 3.25393C4.76987 3.3001 4.74393 3.36272 4.74393 3.42801V6.3823C4.74393 6.44759 4.76987 6.51021 4.81604 6.55638C4.86221 6.60255 4.92483 6.62849 4.99012 6.62849C5.05541 6.62849 5.11803 6.60255 5.1642 6.55638C5.21037 6.51021 5.23631 6.44759 5.23631 6.3823V3.42801C5.23631 3.36272 5.21037 3.3001 5.1642 3.25393C5.11803 3.20776 5.05541 3.18182 4.99012 3.18182Z"
+                                fill="#555555"></path>
+                        </svg>
+                    </div> {% endcomment %}
+
+                    <div class="w-fit mx-auto rounded-full py-1 px-3 border border-[#05D672] bg-[#E7FFF3] text-sm text-[#05D672]">
+                        {{officer.account_officer_status}}
+                    </div>
+
+
+                    
+                </div>
+                
+                {% if officer_store %}                       
+
+                <div data-bs-toggle="modal" data-bs-target="#View_Store" class="cursor-pointer border flex items-center gap-1 rounded-md border-[#205a42] py-1 px-1 text-[#205a42]">
+                    <svg width="12" height="12" viewBox="0 0 5 5" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M4.61229 2.36842V4.86842C4.61229 4.94105 4.55663 5 4.48804 5H2.25148V3.02632C2.25148 2.95368 2.19582 2.89474 2.12723 2.89474H1.13321C1.06462 2.89474 1.00895 2.95368 1.00895 3.02632V5H0.511941C0.443353 5 0.387687 4.94105 0.387687 4.86842V2.36842H0.429933C0.611343 2.36842 0.777842 2.27434 0.880972 2.125C0.883457 2.12763 0.885321 2.13158 0.887185 2.13487C0.994043 2.28289 1.15619 2.36842 1.33263 2.36842H1.48919C1.67743 2.36842 1.84456 2.26974 1.94644 2.11711C1.95452 2.12763 1.9626 2.13882 1.97129 2.14934C2.08871 2.28882 2.2577 2.36842 2.43414 2.36842H2.56585C2.74228 2.36842 2.91127 2.28882 3.02869 2.14934C3.03739 2.13882 3.04546 2.12763 3.05354 2.11711C3.15543 2.26974 3.32255 2.36842 3.51079 2.36842H3.66735C3.84379 2.36842 4.00594 2.28289 4.1128 2.13487C4.11466 2.13158 4.11652 2.12763 4.11901 2.125C4.22214 2.27434 4.38864 2.36842 4.57005 2.36842H4.61229ZM3.99103 4.07895V3.02632C3.99103 2.95368 3.93536 2.89474 3.86678 2.89474H2.997C2.92842 2.89474 2.87275 2.95368 2.87275 3.02632V4.07895C2.87275 4.15158 2.92842 4.21053 2.997 4.21053H3.86678C3.93536 4.21053 3.99103 4.15158 3.99103 4.07895ZM0.878425 0C0.780203 0 0.691238 0.06125 0.651353 0.15625L0.0273532 1.64276C-0.0176264 1.75033 -0.00675422 1.86842 0.057174 1.965C0.117313 2.05579 0.219262 2.10526 0.323945 2.10526H0.429933C0.569097 2.10526 0.692108 2.00592 0.729384 1.86447L1.01703 0.766447L1.21832 0H0.878425ZM1.47614 0L1.03318 1.68816C1.00709 1.78816 1.02635 1.89276 1.08537 1.97566C1.14439 2.05789 1.23447 2.10526 1.33263 2.10526H1.48919C1.64824 2.10526 1.78057 1.97961 1.79796 1.8125L1.98869 0H1.47614ZM2.76154 0H2.23844L2.06324 1.66711C2.05206 1.77829 2.08561 1.89013 2.15643 1.97368C2.22788 2.05855 2.32666 2.10526 2.43414 2.10526H2.56585C2.67332 2.10526 2.77211 2.05855 2.84355 1.97368C2.91438 1.89013 2.94792 1.77829 2.93674 1.66711L2.76154 0ZM3.52384 0H3.01129L3.20202 1.8125C3.21942 1.97961 3.35175 2.10526 3.51079 2.10526H3.66735C3.76551 2.10526 3.85559 2.05789 3.91461 1.97566C3.97363 1.89276 3.99289 1.78816 3.9668 1.68816L3.52384 0ZM4.34863 0.15625C4.30874 0.06125 4.21972 0 4.12156 0H3.78166L3.98295 0.766447L4.2706 1.86447C4.30787 2.00592 4.43088 2.10526 4.57005 2.10526H4.67604C4.78078 2.10526 4.88273 2.05579 4.94281 1.965C5.0068 1.86842 5.01761 1.75026 4.97263 1.64276L4.34863 0.15625Z" fill="#205a42"/>
+                    </svg> 
+                    <p class="text-[0.6rem] text-[#205a42]">View Store</p>
+                </div>    
+                {% endif %}
+
+
+            </div>
+            <div class="p-2 w-fit h-fit mx-auto rounded-full border-2 border-[#205a42]">
+                <div class="h-[6rem] w-[6rem] overflow-hidden rounded-full">
+                    <img class="object-cover w-full h-full" src="/media/{{officer.image_logo}}">
+                </div>
+            </div>
+            <h2 class="font-semibold">{{officer.account_officer_name}}</h2>
+            
+                <button class="w-fit bg-[#205a42] mx-auto px-3 py-1 text-xs text-white rounded-md edit_acc_btn" data-bs-target="#editSubCat" data-bs-toggle="modal" data-url="{% url 'edit_account_officer' officer.id %}">
+                        Edit Profile
+                        
+                </button>
+        </div>
+        <div class="modal fade fixed top-0 left-0 hidden w-full h-full outline-none overflow-x-hidden overflow-y-auto"
+            id="delete-officer-{{officer.id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog relative w-auto pointer-events-none">
+                <div
+                    class="modal-content border-none shadow-lg relative flex flex-col w-full pointer-events-auto bg-white bg-clip-padding rounded-md outline-none text-current">
+                    <div
+                        class="modal-header flex flex-shrink-0 items-center justify-between p-4 border-b border-gray-200 rounded-t-md">
+                        <h5 class="text-xl font-medium leading-normal text-gray-800" id="exampleModalLabel">Confirm
+                            Delete
+
+                        </h5>
+                        <button type="button"
+                            class="btn-close box-content w-4 h-4 p-1 text-black border-none rounded-none opacity-50 focus:shadow-none focus:outline-none focus:opacity-100 hover:text-black hover:opacity-75 hover:no-underline"
+                            data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body relative p-4">
+                        Do you want to delete this Account Officer?
+                    </div>
+                    <div
+                        class="modal-footer flex flex-shrink-0 flex-wrap items-center justify-end p-4 border-t border-gray-200 rounded-b-md">
+                        <button type="button" class="px-6
+py-2.5
+bg-purple-600
+text-white
+font-medium
+text-xs
+leading-tight
+uppercase
+rounded
+shadow-md
+hover:bg-purple-700 hover:shadow-lg
+focus:bg-purple-700 focus:shadow-lg focus:outline-none focus:ring-0
+active:bg-purple-800 active:shadow-lg
+transition
+duration-150
+ease-in-out" data-bs-dismiss="modal">Close</button>
+                        <a href="{% url 'delete_account_officer' officer.id %}">
+
+                            <button type="button" class="px-6
+py-2.5
+bg-blue-600
+text-white
+font-medium
+text-xs
+leading-tight
+uppercase
+rounded
+shadow-md
+hover:bg-blue-700 hover:shadow-lg
+focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0
+active:bg-blue-800 active:shadow-lg
+transition
+duration-150
+ease-in-out
+ml-1">Delete</button>
+                        </a>
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+
+
+    </div>
+
+
+    <div class="modal fade fixed top-0 left-0 hidden w-full h-full outline-none overflow-x-hidden overflow-y-auto"
+        id="addSubCategory_" tabindex="-1" aria-labelledby="SignupLabel" aria-modal="true" role="dialog">
+        <div
+            class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable relative w-auto pointer-events-none">
+            <div
+                class="modal-content border-none rounded-lg shadow-lg relative flex flex-col w-full pointer-events-auto bg-white bg-clip-padding outline-none text-current">
+                <div
+                    class="modal-header flex flex-shrink-0 items-center justify-between p-4 border-b border-gray-200 rounded-t-md">
+                    <h5 class="text-xl font-medium leading-normal text-gray-800" id="exampleModalLabel">
+                        Add Account Officer
+                    </h5>
+                    <button type="button"
+                        class="subcat_close btn-close box-content text-black border-none rounded-none opacity-50 focus:shadow-none focus:outline-none focus:opacity-100 hover:text-black hover:opacity-75 hover:no-underline"
+                        data-bs-dismiss="modal" aria-label="Close">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path
+                                d="M12 0.625C5.6625 0.625 0.625 5.6625 0.625 12C0.625 18.3375 5.6625 23.375 12 23.375C18.3375 23.375 23.375 18.3375 23.375 12C23.375 5.6625 18.3375 0.625 12 0.625ZM16.3875 17.6875L12 13.3L7.6125 17.6875L6.3125 16.3875L10.7 12L6.3125 7.6125L7.6125 6.3125L12 10.7L16.3875 6.3125L17.6875 7.6125L13.3 12L17.6875 16.3875L16.3875 17.6875Z"
+                                fill="#205a42" />
+                        </svg>
+
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="flex items-center gap-3">
+            <div data-category-id="cats-all"
+                class="cursor-pointer category_tab category_tab_active rounded-full py-1 px-3 border flex items-center gap-2"
+                tab-name="business">
+                <h1 class="text-sm">All</h1>
+
+            </div>
+            {% for store in all_stores %}
+            <div data-category-id="cats-{{store.id}}"
+                class="cursor-pointer category_tab rounded-full py-1 px-3 border flex items-center gap-2"
+                tab-name="business-req">
+                <h1 class="text-sm">{{ store.name }}</h1>
+            </div>
+            {% endfor %}
+        </div>
+
+        {% for officer in searched_officer_records %}
+        <div data-category-id="cats-all"
+            class="subcategory_spawner text-center rounded-lg admin-card-hover p-4 min-w-[18rem] w-fit bg-[#F8F9FD] lg:bg-white flex flex-col gap-3">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center gap-2">
+                    <div class="h-[3rem] w-[3rem] rounded-full overflow-hidden">
+                        <img class="object-cover w-full h-full" src="/media/{{officer.business_store.business_logo}}">
+                    </div>
+                    <div class="text-left">
+                        <h1 class="font-semibold text-[#205a42]">{{officer.business_store.name}}</h1>
+                        <p class="text-xs">{{officer.business_store.country}}, {{officer.business_store.city}}</p>
+                    </div>
+                </div>
+                <div class="flex items-center gap-2">
+                    <div
+                        class="delete_btn cursor-pointer h-[2rem] w-[2rem] rounded-full border flex items-center justify-center">
+                        <a href="">
+                            <svg width="1.25rem" height="1.25rem" viewBox="0 0 9 9" fill="none"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <path
+                                    d="M3.51298 1.45849H4.99012C4.99012 1.26261 4.91231 1.07475 4.7738 0.936243C4.63529 0.797733 4.44743 0.71992 4.25155 0.71992C4.05567 0.71992 3.86781 0.797733 3.7293 0.936243C3.59079 1.07475 3.51298 1.26261 3.51298 1.45849ZM3.0206 1.45849C3.0206 1.13202 3.15028 0.818925 3.38113 0.588077C3.61198 0.357228 3.92508 0.227539 4.25155 0.227539C4.57802 0.227539 4.89111 0.357228 5.12196 0.588077C5.35281 0.818925 5.4825 1.13202 5.4825 1.45849H7.94441C8.0097 1.45849 8.07232 1.48443 8.11849 1.5306C8.16466 1.57677 8.1906 1.63939 8.1906 1.70468C8.1906 1.76998 8.16466 1.83259 8.11849 1.87876C8.07232 1.92493 8.0097 1.95087 7.94441 1.95087H7.42544L6.83753 7.04406C6.79598 7.40408 6.62351 7.73627 6.35296 7.9774C6.08241 8.21854 5.73265 8.3518 5.37024 8.35182H3.13286C2.77044 8.3518 2.42068 8.21854 2.15013 7.9774C1.87958 7.73627 1.70712 7.40408 1.66556 7.04406L1.07766 1.95087H0.55869C0.493397 1.95087 0.430777 1.92493 0.384608 1.87876C0.338438 1.83259 0.3125 1.76998 0.3125 1.70468C0.3125 1.63939 0.338438 1.57677 0.384608 1.5306C0.430777 1.48443 0.493397 1.45849 0.55869 1.45849H3.0206ZM3.75917 3.42801C3.75917 3.36272 3.73323 3.3001 3.68706 3.25393C3.64089 3.20776 3.57827 3.18182 3.51298 3.18182C3.44768 3.18182 3.38506 3.20776 3.33889 3.25393C3.29272 3.3001 3.26679 3.36272 3.26679 3.42801V6.3823C3.26679 6.44759 3.29272 6.51021 3.33889 6.55638C3.38506 6.60255 3.44768 6.62849 3.51298 6.62849C3.57827 6.62849 3.64089 6.60255 3.68706 6.55638C3.73323 6.51021 3.75917 6.44759 3.75917 6.3823V3.42801ZM4.99012 3.18182C4.92483 3.18182 4.86221 3.20776 4.81604 3.25393C4.76987 3.3001 4.74393 3.36272 4.74393 3.42801V6.3823C4.74393 6.44759 4.76987 6.51021 4.81604 6.55638C4.86221 6.60255 4.92483 6.62849 4.99012 6.62849C5.05541 6.62849 5.11803 6.60255 5.1642 6.55638C5.21037 6.51021 5.23631 6.44759 5.23631 6.3823V3.42801C5.23631 3.36272 5.21037 3.3001 5.1642 3.25393C5.11803 3.20776 5.05541 3.18182 4.99012 3.18182Z"
+                                    fill="#555555"></path>
+                            </svg>
+                        </a>
+                    </div>
+
+                    <div data-bs-target="#editSubCat" data-bs-toggle="modal"
+                        class="cursor-pointer h-[2rem] w-[2rem] rounded-full border flex items-center justify-center">
+
+                        <svg width="1.25rem" height="1.25rem" viewBox="0 0 8 7" fill="none"
+                            data-url="{% url 'edit_account_officer' officer.id %}" class="edit_acc_btn"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <path
+                                d="M1.0587 6.56892C1.01064 6.56884 0.963126 6.55875 0.919176 6.53931C0.875227 6.51986 0.835803 6.49148 0.803413 6.45597C0.770437 6.42076 0.745274 6.37898 0.729574 6.33336C0.713874 6.28774 0.707992 6.23931 0.712314 6.19126L0.797178 5.25785L4.71754 1.3378L5.9427 2.56295L2.02337 6.48265L1.09022 6.56754C1.07974 6.5685 1.06922 6.56896 1.0587 6.56892ZM6.18724 2.31799L4.96243 1.09284L5.69711 0.357965C5.72928 0.325751 5.76748 0.300195 5.80954 0.282759C5.85158 0.265322 5.89666 0.256348 5.94218 0.256348C5.9877 0.256348 6.03277 0.265322 6.07482 0.282759C6.11687 0.300195 6.15508 0.325751 6.18724 0.357965L6.92192 1.09284C6.95413 1.12502 6.97968 1.16323 6.99711 1.2053C7.01454 1.24736 7.02351 1.29244 7.02351 1.33798C7.02351 1.38351 7.01454 1.4286 6.99711 1.47066C6.97968 1.51272 6.95413 1.55093 6.92192 1.58311L6.18759 2.31764L6.18724 2.31799Z"
+                                fill="#555555"></path>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+            <div class="p-2 w-fit h-fit mx-auto rounded-full border-2 border-[#205a42]">
+                <div class="h-[6rem] w-[6rem] overflow-hidden rounded-full">
+                    <img class="object-cover w-full h-full" src="/media/{{officer.image_logo}}">
+                </div>
+            </div>
+            <h2 class="font-semibold">{{officer.account_officer_name}}</h2>
+            <div
+                class="w-fit mx-auto rounded-full py-1 px-3 border border-[#05D672] bg-[#E7FFF3] text-sm text-[#05D672]">
+                {{officer.account_officer_status}}</div>
+        </div>
+        {% endfor %}
+        {% for store in all_stores %}
+        <div class="flex items-center gap-6 flex-wrap lg:justify-start justify-center">
+            {% for officer in searched_officer_records %}
+            {% if officer.business_store.name == store.name %}
+            <div data-category-id="cats-{{store.id}}"
+                class="category_tab text-center rounded-lg admin-card-hover p-4 min-w-[18rem] w-fit bg-[#F8F9FD] lg:bg-white flex flex-col gap-3">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center gap-2">
+                        <div class="h-[3rem] w-[3rem] rounded-full overflow-hidden">
+                            <img class="object-cover w-full h-full"
+                                src="/media/{{officer.business_store.business_logo}}">
+                        </div>
+                        <div class="text-left">
+                            <h1 class="font-semibold text-[#205a42]">{{officer.business_store.name}}...</h1>
+                            <p class="text-xs">{{officer.business_store.country}}, {{officer.business_store.city}}</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <div
+                            class="delete_btn cursor-pointer h-[2rem] w-[2rem] rounded-full border flex items-center justify-center">
+                            <a href="{% url 'delete_account_officer' officer.id %}">
+                                <svg width="1.25rem" height="1.25rem" viewBox="0 0 9 9" fill="none"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <path
+                                        d="M3.51298 1.45849H4.99012C4.99012 1.26261 4.91231 1.07475 4.7738 0.936243C4.63529 0.797733 4.44743 0.71992 4.25155 0.71992C4.05567 0.71992 3.86781 0.797733 3.7293 0.936243C3.59079 1.07475 3.51298 1.26261 3.51298 1.45849ZM3.0206 1.45849C3.0206 1.13202 3.15028 0.818925 3.38113 0.588077C3.61198 0.357228 3.92508 0.227539 4.25155 0.227539C4.57802 0.227539 4.89111 0.357228 5.12196 0.588077C5.35281 0.818925 5.4825 1.13202 5.4825 1.45849H7.94441C8.0097 1.45849 8.07232 1.48443 8.11849 1.5306C8.16466 1.57677 8.1906 1.63939 8.1906 1.70468C8.1906 1.76998 8.16466 1.83259 8.11849 1.87876C8.07232 1.92493 8.0097 1.95087 7.94441 1.95087H7.42544L6.83753 7.04406C6.79598 7.40408 6.62351 7.73627 6.35296 7.9774C6.08241 8.21854 5.73265 8.3518 5.37024 8.35182H3.13286C2.77044 8.3518 2.42068 8.21854 2.15013 7.9774C1.87958 7.73627 1.70712 7.40408 1.66556 7.04406L1.07766 1.95087H0.55869C0.493397 1.95087 0.430777 1.92493 0.384608 1.87876C0.338438 1.83259 0.3125 1.76998 0.3125 1.70468C0.3125 1.63939 0.338438 1.57677 0.384608 1.5306C0.430777 1.48443 0.493397 1.45849 0.55869 1.45849H3.0206ZM3.75917 3.42801C3.75917 3.36272 3.73323 3.3001 3.68706 3.25393C3.64089 3.20776 3.57827 3.18182 3.51298 3.18182C3.44768 3.18182 3.38506 3.20776 3.33889 3.25393C3.29272 3.3001 3.26679 3.36272 3.26679 3.42801V6.3823C3.26679 6.44759 3.29272 6.51021 3.33889 6.55638C3.38506 6.60255 3.44768 6.62849 3.51298 6.62849C3.57827 6.62849 3.64089 6.60255 3.68706 6.55638C3.73323 6.51021 3.75917 6.44759 3.75917 6.3823V3.42801ZM4.99012 3.18182C4.92483 3.18182 4.86221 3.20776 4.81604 3.25393C4.76987 3.3001 4.74393 3.36272 4.74393 3.42801V6.3823C4.74393 6.44759 4.76987 6.51021 4.81604 6.55638C4.86221 6.60255 4.92483 6.62849 4.99012 6.62849C5.05541 6.62849 5.11803 6.60255 5.1642 6.55638C5.21037 6.51021 5.23631 6.44759 5.23631 6.3823V3.42801C5.23631 3.36272 5.21037 3.3001 5.1642 3.25393C5.11803 3.20776 5.05541 3.18182 4.99012 3.18182Z"
+                                        fill="#555555"></path>
+                                </svg>
+                            </a>
+                        </div>
+
+                        <div data-bs-target="#editSubCat" data-bs-toggle="modal"
+                            class="cursor-pointer h-[2rem] w-[2rem] rounded-full border flex items-center justify-center">
+
+                            <svg width="1.25rem" height="1.25rem" viewBox="0 0 8 7" fill="none"
+                                data-url="{% url 'edit_account_officer' officer.id %}" class="edit_acc_btn"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <path
+                                    d="M1.0587 6.56892C1.01064 6.56884 0.963126 6.55875 0.919176 6.53931C0.875227 6.51986 0.835803 6.49148 0.803413 6.45597C0.770437 6.42076 0.745274 6.37898 0.729574 6.33336C0.713874 6.28774 0.707992 6.23931 0.712314 6.19126L0.797178 5.25785L4.71754 1.3378L5.9427 2.56295L2.02337 6.48265L1.09022 6.56754C1.07974 6.5685 1.06922 6.56896 1.0587 6.56892ZM6.18724 2.31799L4.96243 1.09284L5.69711 0.357965C5.72928 0.325751 5.76748 0.300195 5.80954 0.282759C5.85158 0.265322 5.89666 0.256348 5.94218 0.256348C5.9877 0.256348 6.03277 0.265322 6.07482 0.282759C6.11687 0.300195 6.15508 0.325751 6.18724 0.357965L6.92192 1.09284C6.95413 1.12502 6.97968 1.16323 6.99711 1.2053C7.01454 1.24736 7.02351 1.29244 7.02351 1.33798C7.02351 1.38351 7.01454 1.4286 6.99711 1.47066C6.97968 1.51272 6.95413 1.55093 6.92192 1.58311L6.18759 2.31764L6.18724 2.31799Z"
+                                    fill="#555555"></path>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+                <div class="p-2 w-fit h-fit mx-auto rounded-full border-2 border-[#205a42]">
+                    <div class="h-[6rem] w-[6rem] overflow-hidden rounded-full">
+                        <img class="object-cover w-full h-full" src="/media/{{officer.image_logo}}">
+                    </div>
+                </div>
+                <h2 class="font-semibold">{{officer.account_officer_name}}</h2>
+                <div
+                    class="w-fit mx-auto rounded-full py-1 px-3 border border-[#05D672] bg-[#E7FFF3] text-sm text-[#05D672]">
+                    {{officer.account_officer_status}}</div>
+            </div>
+            {% endif %}
+            {% endfor %}
+        </div>
+        {% endfor %}
+    </div>
+</div>
+</div>
+
+
+<div class="modal fade fixed top-0 left-0 hidden w-full h-full outline-none overflow-x-hidden overflow-y-auto"
+    id="addSubCategory" tabindex="-1" aria-labelledby="SignupLabel" aria-modal="true" role="dialog">
+    <div
+        class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable relative w-auto pointer-events-none">
+        <div
+            class="modal-content border-none rounded-lg shadow-lg relative flex flex-col w-full pointer-events-auto bg-white bg-clip-padding outline-none text-current">
+            <div
+                class="modal-header flex flex-shrink-0 items-center justify-between p-4 border-b border-gray-200 rounded-t-md">
+                <h5 class="text-xl font-medium leading-normal text-gray-800" id="exampleModalLabel">
+                    Add Account Officer
+                </h5>
+                <button type="button"
+                    class="subcat_close btn-close box-content text-black border-none rounded-none opacity-50 focus:shadow-none focus:outline-none focus:opacity-100 hover:text-black hover:opacity-75 hover:no-underline"
+                    data-bs-dismiss="modal" aria-label="Close">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path
+                            d="M12 0.625C5.6625 0.625 0.625 5.6625 0.625 12C0.625 18.3375 5.6625 23.375 12 23.375C18.3375 23.375 23.375 18.3375 23.375 12C23.375 5.6625 18.3375 0.625 12 0.625ZM16.3875 17.6875L12 13.3L7.6125 17.6875L6.3125 16.3875L10.7 12L6.3125 7.6125L7.6125 6.3125L12 10.7L16.3875 6.3125L17.6875 7.6125L13.3 12L17.6875 16.3875L16.3875 17.6875Z"
+                            fill="#205a42" />
+                    </svg>
+
+                </button>
+            </div>
+            <div class="modal-body relative p-4">
+                <form action="{% url 'add_account_officer' %}" method="POST" enctype="multipart/form-data"
+                    class="add_account_officer">
+                    {% csrf_token %}
+                    <div class="flex flex-col gap-4">
+                        <div class="grid lg:grid-cols-2 gap-4">
+                            <div class="flex flex-col gap-2">
+                                <p class="text-sm">Account Officer Name *</p>
+                                <input type="text" required placeholder="Enter Account Officer Name" name="fullname"
+                                    class="subcategory_name border rounded-md text-sm outline-none lg:px-4 px-2 lg:py-3 py-[0.6rem] placeholder:text-[#A1A1A1] text-[#101928] focus:border-[#205a42] ease-in transition-all focus:border-l-[7px]  bg-transparent"
+                                    value="" name="name">
+                            </div>
+                            <div class="flex flex-col gap-2">
+                                <p class="text-sm">Email Address *</p>
+                                <input type="email" required placeholder="Enter Email Address" name="email"
+                                    class="border rounded-md text-sm outline-none lg:px-4 px-2 lg:py-3 py-[0.6rem] placeholder:text-[#A1A1A1] text-[#101928] focus:border-[#205a42] ease-in transition-all focus:border-l-[7px]  bg-transparent"
+                                    value="" name="name">
+                            </div>
+                            <div class="flex flex-col gap-2">
+                                <p class="text-sm">Phone Number *</p>
+                                <div class="flex border rounded-md overflow-hidden ease-in transition-all phone_num_p">
+                                    <div class="px-4 py-3 flex items-center before-plus">
+                                        <select required class="bg-transparent text-sm px-2 outline-none" id="">
+                                            {% for countriy in all_countries %}
+                                            {% if countriy.dial_code == '971' %}
+                                            <option value="{{ countriy.dial_code }}" selected>+{{ countriy.dial_code }}
+                                            </option>
+                                            {% endif %}
+                                            {% if countriy.dial_code is not None %}
+                                            <option value="{{ countriy.dial_code }}">+{{ countriy.dial_code }}</option>
+                                            {% endif %}
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                    <input type="number" required placeholder="Enter your phone number"
+                                        name="mobile_number" class="px-4 py-3 border-l w-full outline-none text-sm"
+                                        value="">
+                                </div>
+                            </div>
+                            
+                            <div class="flex flex-col gap-2">
+                                <p class="text-sm">User Name *</p>
+                                <input type="text" required placeholder="Assign Username"
+                                    class="border rounded-md text-sm outline-none lg:px-4 px-2 lg:py-3 py-[0.6rem] placeholder:text-[#A1A1A1] text-[#101928] focus:border-[#205a42] ease-in transition-all focus:border-l-[7px]  bg-transparent"
+                                    value="" name="username">
+                            </div>
+                            <div class="flex flex-col gap-2">
+                                <p class="text-sm">Password *<p>
+                                        <input type="password" required placeholder="Add Password" name="password"
+                                            class="w-full border rounded-md text-sm outline-none lg:px-4 px-2 lg:py-3 py-[0.6rem] placeholder:text-[#A1A1A1] text-[#101928] focus:border-[#205a42] ease-in transition-all focus:border-l-[7px]  bg-transparent"
+                                            value="" name="name">
+                            </div>
+                            <div class="flex flex-col gap-2">
+                                <p class="text-sm">Status *</p>
+                                <select name="status" required
+                                    class="subcategory_type bg-white border rounded-md text-sm outline-none lg:px-4 px-2 lg:py-3 py-[0.6rem] placeholder:text-[#A1A1A1] text-[#101928] focus:border-[#205a42] ease-in transition-all focus:border-l-[7px]  bg-transparent">
+                                    <option selected disabled>Choose Status</option>
+                                    <option value="Active">Active</option>
+                                    <option value="Inactive">Inactive</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="flex flex-col gap-2">
+                            <p class="text-sm">Store *</p>
+                            <select name="business_store" required
+                                class="bg-white border rounded-md text-sm outline-none lg:px-4 px-2 lg:py-3 py-[0.6rem] placeholder:text-[#A1A1A1] text-[#101928] focus:border-[#205a42] ease-in transition-all focus:border-l-[7px]  bg-transparent" multiple>
+                                <option selected disabled>Choose Store</option>
+                                {% for store in business_store %}
+                                <option value="{{store.id}}">{{store.name}}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+
+                        <div class="flex flex-col gap-2">
+                            <p class="text-sm font-semibold">Upload Profile Pic *</p>
+                            <div class="flex items-center gap-3">
+                                <div
+                                    class="h-[4.6rem] w-[4.6rem] rounded-full bg-[#F4F4F4] flex items-center justify-center overflow-hidden">
+                                    <img src="https://www.underseaproductions.com/wp-content/uploads/2013/11/dummy-image-square.jpg"
+                                        class="img_preview h-full w-full object-cover">
+                                </div>
+                                <div class="flex flex-col gap-2 items-start phone_num_p">
+                                    <label for="upload_"
+                                        class="rounded-md px-4 py-2 text-sm bg-[#205a42] text-white btn_upload">Upload
+                                        Photo</label>
+                                    <input id="upload_" required name="image" type="file" hidden accept="image/*"
+                                        class="img_upload">
+                                    <p class="text-[#A1A1A1] text-xs">Selected Format: PNG, JPEG</p>
+                                </div>
+                            </div>
+                        </div>
+                        <button
+                            class="create_btn px-4 py-2 text-sm text-white font-semibold bg-[#205a42] rounded-md w-fit ml-auto"
+                            type="submit">Create</button>
+
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade fixed top-0 left-0 hidden w-full h-full outline-none overflow-x-hidden overflow-y-auto"
+    id="editSubCat" tabindex="-1" aria-labelledby="SignupLabel" aria-modal="true" role="dialog">
+    <div
+        class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable relative w-auto pointer-events-none">
+        <div
+            class="modal-content border-none rounded-lg shadow-lg relative flex flex-col w-full pointer-events-auto bg-white bg-clip-padding outline-none text-current">
+            <div
+                class="modal-header flex flex-shrink-0 items-center justify-between p-4 border-b border-gray-200 rounded-t-md">
+                <h5 class="text-xl font-medium leading-normal text-gray-800" id="exampleModalLabel">
+                    Edit Account Officer
+                </h5>
+                <button type="button"
+                    class="subcat_close btn-close box-content text-black border-none rounded-none opacity-50 focus:shadow-none focus:outline-none focus:opacity-100 hover:text-black hover:opacity-75 hover:no-underline"
+                    data-bs-dismiss="modal" aria-label="Close">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path
+                            d="M12 0.625C5.6625 0.625 0.625 5.6625 0.625 12C0.625 18.3375 5.6625 23.375 12 23.375C18.3375 23.375 23.375 18.3375 23.375 12C23.375 5.6625 18.3375 0.625 12 0.625ZM16.3875 17.6875L12 13.3L7.6125 17.6875L6.3125 16.3875L10.7 12L6.3125 7.6125L7.6125 6.3125L12 10.7L16.3875 6.3125L17.6875 7.6125L13.3 12L17.6875 16.3875L16.3875 17.6875Z"
+                            fill="#205a42" />
+                    </svg>
+
+                </button>
+            </div>
+            <div class="modal-body relative p-4">
+                <form action="" class="action_edit_acc" method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="flex flex-col gap-4">
+                        <div class="grid lg:grid-cols-2 gap-4">
+                            <div class="flex flex-col gap-2">
+                                <p class="text-sm">Account Officer Name *</p>
+                                <input type="text" placeholder="Enter Account Officer Name" name="fullname"
+                                    class="subcategory_name fullname border rounded-md text-sm outline-none lg:px-4 px-2 lg:py-3 py-[0.6rem] placeholder:text-[#A1A1A1] text-[#101928] focus:border-[#205a42] ease-in transition-all focus:border-l-[7px]  bg-transparent"
+                                    value="" name="name">
+                            </div>
+                            <div class="flex flex-col gap-2">
+                                <p class="text-sm">Email Address *</p>
+                                <input type="text" placeholder="Enter Email Address" name="email"
+                                    class="border email rounded-md text-sm outline-none lg:px-4 px-2 lg:py-3 py-[0.6rem] placeholder:text-[#A1A1A1] text-[#101928] focus:border-[#205a42] ease-in transition-all focus:border-l-[7px] "
+                                    value="" name="name">
+                            </div>
+                            <div class="flex flex-col gap-2">
+                                <p class="text-sm">Phone Number *</p>
+                                <div class="flex border rounded-md overflow-hidden ease-in transition-all phone_num_p">
+                                    <div class="px-4 py-3 flex items-center before-plus">
+                                        <select class="bg-transparent text-sm px-2 outline-none" id="">
+                                            {% for countriy in all_countries %}
+                                            {% if countriy.dial_code == '971' %}
+                                            <option value="{{ countriy.dial_code }}" selected>+{{countriy.dial_code}}
+                                            </option>
+                                            {% endif %}
+                                            {% if countriy.dial_code is not None %}
+                                            <option value="{{ countriy.dial_code }}">+{{ countriy.dial_code }}
+                                            </option>
+                                            {% endif %}
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                    <input required type="number" placeholder="Enter your phone number"
+                                        name="mobile_number"
+                                        class="px-4 py-3 border-l w-full outline-none text-sm phone" value="">
+                                </div>
+                            </div>
+
+                            <div class="flex flex-col gap-2">
+                                <p class="text-sm">User Name *</p>
+                                <input type="text" placeholder="Assign Username"
+                                    class="border username rounded-md text-sm outline-none lg:px-4 px-2 lg:py-3 py-[0.6rem] placeholder:text-[#A1A1A1] text-[#101928] focus:border-[#205a42] ease-in transition-all focus:border-l-[7px] "
+                                    value="" name="username">
+                            </div>
+                            <div class="flex flex-col gap-2">
+                                <p class="text-sm">Password *<p>
+                                        <input type="password" placeholder="Add Password" name="password"
+                                            class="w-full border password rounded-md text-sm outline-none lg:px-4 px-2 lg:py-3 py-[0.6rem] placeholder:text-[#A1A1A1] text-[#101928] focus:border-[#205a42] ease-in transition-all focus:border-l-[7px] "
+                                            value="*****" name="name">
+                            </div>
+                            <div class="flex flex-col gap-2">
+                                <p class="text-sm">Status *</p>
+                                <select name="status"
+                                    class="subcategory_type status bg-white border rounded-md text-sm outline-none lg:px-4 px-2 lg:py-3 py-[0.6rem] placeholder:text-[#A1A1A1] text-[#101928] focus:border-[#205a42] ease-in transition-all focus:border-l-[7px]  bg-transparent">
+                                    <option selected disabled>Choose Status</option>
+                                    <option value="Active">Active</option>
+                                    <option value="Inactive">Inactive</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="flex flex-col gap-2">
+                            <p class="text-sm">Store *</p>
+                            <select name="business_store"
+                                class="bg-white bus_store border rounded-md text-sm outline-none lg:px-4 px-2 lg:py-3 py-[0.6rem] placeholder:text-[#A1A1A1] text-[#101928] focus:border-[#205a42] ease-in transition-all focus:border-l-[7px]  bg-transparent" multiple>
+                                <option selected disabled>Choose Store</option>
+                                {% for store in business_store %}
+                                <option value="{{store.id}}">{{store.name}}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        
+                        <div class="flex flex-col gap-3">
+                            <p class="text-sm font-semibold">Upload Profile Pic *</p>
+                            <div class="flex flex-col gap-3 img_render">
+                                {% comment %} <div
+                                    class="h-[4.6rem] w-[4.6rem] rounded-full bg-[#F4F4F4] flex items-center justify-center overflow-hidden">
+                                    <img src="" class="img_preview h-full w-full object-cover im_preview_update">
+                                </div> {% endcomment %}
+                                <div class="flex flex-col gap-2 items-start">
+                                    <label for="upload__"
+                                        class="rounded-md px-4 py-2 text-sm bg-[#205a42] text-white btn_upload">Upload
+                                        Photo</label>
+                                    <input id="upload__" name="image" type="file" hidden accept="image/*"
+                                        class="img_render_inp image">
+                                    <p class="text-[#A1A1A1] text-xs">Selected Format: PNG, JPEG</p>
+                                </div>
+                                <div class="mt-3 mr-3 inline-block rounded-md h-[7rem] w-[7rem] img_rendered overflow-hidden relative">
+                                    <div class="absolute top-2 right-2 img_del z-1 cursor-pointer"></div>
+                                    <img src="" class="h-full w-full object-cover im_preview_update">
+                                </div>
+                            </div>
+                        </div>
+                        <button class="px-4 py-2 text-sm text-white font-semibold bg-[#205a42] rounded-md w-fit ml-auto"
+                            type="submit">Edit</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% else %}
+
+{% include 'common/not-found.html' %}
+{% endif %}
+
+
+
+
+
+<div class="modal fade fixed top-0 left-0 hidden w-full h-full outline-none overflow-x-hidden overflow-y-auto"
+        id="View_Store" tabindex="-1" aria-labelledby="BusinessDeatailsLabel"
+        aria-modal="true" role="dialog">
+    <div
+        class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg relative w-auto pointer-events-none">
+        <div
+            class="modal-content border-none rounded-lg shadow-lg relative flex flex-col w-full pointer-events-auto bg-white bg-clip-padding outline-none text-current">
+            <div class="modal-body relative">
+                <div class="absolute top-2 right-2" data-bs-dismiss="modal" aria-label="Close">
+                    <svg class="cursor-pointer" width="27" height="27" viewBox="0 0 27 27" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M13.5 0C5.97857 0 0 5.97857 0 13.5C0 21.0214 5.97857 27 13.5 27C21.0214 27 27 21.0214 27 13.5C27 5.97857 21.0214 0 13.5 0ZM18.7071 20.25L13.5 15.0429L8.29286 20.25L6.75 18.7071L11.9571 13.5L6.75 8.29286L8.29286 6.75L13.5 11.9571L18.7071 6.75L20.25 8.29286L15.0429 13.5L20.25 18.7071L18.7071 20.25Z" fill="#205a42"></path>
+                    </svg>
+                </div>
+                <div class="bg-[#FCFCFC] p-[3rem] flex flex-col items-center gap-3 py-[1rem]">
+                    <h1 class="font-semibold text-xl">Store Details</h1>
+                </div>
+
+               
+                {% for s in officer_store %}
+
+                <div class="overflow-auto h-max-[50vh]">
+                    <div class="flex flex-col gap-4 p-[2.2rem]">
+                        <div class="border bg-[#FCFCFC] rounded-lg px-[3rem] py-[2rem] relative">
+                            <div class="absolute top-2 left-2 h-[2rem] text-xs flex items-center justify-center w-[2rem] bg-[#205a42] rounded-full text-white">
+                                {{ forloop.counter }}
+                            </div>
+                            <div class="grid md:grid-cols-2 gap-5">
+                                <div class="flex flex-col gap-2">
+                                    <h1 class="font-semibold">Store Name</h1>
+
+
+                                    <div class="flex items-center gap-2">
+                                        <p class="text-[#555555] font-semibold text-sm">{{s.name}}</p>
+                                    </div>
+                                </div>
+                                <div class="flex flex-col gap-2">
+                                    <h1 class="font-semibold">Contact Number</h1>
+                                    <div class="flex items-center gap-2">
+                                        <p class="text-[#555555] font-semibold text-sm">{{s.phone}}</p>
+                                    </div>
+                                </div>
+                                <div class="flex flex-col gap-2">
+                                    <h1 class="font-semibold">Address</h1>
+                                    <div class="flex items-center gap-2">
+                                        <p class="text-[#555555] font-semibold text-sm">{{s.store_address}}</p>
+                                    </div>
+                                </div>
+                                <div class="flex flex-col gap-2">
+                                    <h1 class="font-semibold">Category</h1>
+                                    <div class="flex items-center gap-2">
+                                        <p class="text-[#555555] font-semibold text-sm">{{s.category.name}}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                {% endfor %}
+                {% comment %} {% else %}
+                {% include 'common/not-found.html' %}
+
+                {% endif %} {% endcomment %}
+                {% comment %} <br>
+                <br>
+                <br> {% endcomment %}
+                
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+{% include 'common/footer-com.html' %}
+<script>
+    let dashboard_tabs = document.querySelectorAll('.dashboard-tab');
+    document.addEventListener('DOMContentLoaded', () => {
+        if (dashboard_tabs) {
+            dashboard_tabs.forEach(tab => {
+                dashboard_tabs.forEach(all => {
+                    all.classList.remove('dashboard-tab-active')
+                })
+                dashboard_tabs[5].classList.add('dashboard-tab-active')
+            })
+        }
+    })
+</script>
+
+<script>
+    $(".add_account_officer").validate();
+</script>
+
+<script>
+    let img_upload = document.querySelectorAll('.img_upload');
+    let create_btn = document.querySelectorAll('.create_btn');
+
+    create_btn.forEach(btn => {
+        btn.type = 'button';
+        btn.onclick = () => {
+            Toast.fire({
+                icon: 'error',
+                title: 'Add profile photo!'
+            });
+        };
+    })
+
+    img_upload.forEach((up, i) => {
+        up.addEventListener('input', () => {
+            if (up.value.trim() != '') {
+                create_btn[i].type = 'submit';
+                create_btn[i].onclick = () => {}
+            }
+        });
+    });
+</script>
+{% if messages %}
+{% for msg in messages %}
+<script>
+    setTimeout(() => {
+        Toast.fire({
+            icon: '{{msg.tags}}', // success
+            title: '{{msg}}'
+        });
+    }, 1000);
+</script>
+{% endfor %}
+{% endif %}
+{% endblock body %}

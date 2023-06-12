@@ -1,0 +1,196 @@
+{% extends 'Business/base.html' %}
+{% block title %} Top Deals - Create Store {% endblock title %}
+{% block body %}
+
+<style>
+    .delete-row {
+        display: none !important;
+    }
+</style>
+
+<div class="col-span-1 lg:col-span-4 m-4 lg:ml-0 ">
+    <form method='post' action='' class='location_form'>
+        {% csrf_token %}
+    <div class="flex flex-col gap-6 py-[1rem] h-full">
+        <div class="flex items-center gap-2">
+            <svg class="rotate-180" width="18" height="16" viewBox="0 0 18 16" fill="none"
+                xmlns="http://www.w3.org/2000/svg">
+                <path d="M1 8H17M10 1L17 8L10 15" stroke="black" stroke-width="2" stroke-linecap="round"
+                    stroke-linejoin="round"></path>
+            </svg>
+            <h1 class="font-semibold">Manage Store Locations</h1>
+        </div>
+        <h1 class="font-semibold text-center text-xl">{{businesstore.name}} Store</h1>
+        <div class="flex flex-col gap-1">
+            <h1 class="font-semibold  text-lg">Add Locations</h1>
+            <p class="text-[#555555] text-sm">Business can add multiple locations
+                <br class="hidden md:block">
+                of a business store.</p>
+        </div>
+   
+
+        <div class="bg-white row items__ flex flex-col gap-3 border rounded-md p-3 relative deal_p">
+            <div class="absolute top-0 right-0 translate-x-1/2 -translate-y-1/2 delete_deal">
+                <svg width="1.25rem" height="1.25rem" viewBox="0 0 27 27" fill="none"
+                    xmlns="http://www.w3.org/2000/svg">
+                    <path
+                        d="M13.5 0C5.97857 0 0 5.97857 0 13.5C0 21.0214 5.97857 27 13.5 27C21.0214 27 27 21.0214 27 13.5C27 5.97857 21.0214 0 13.5 0ZM18.7071 20.25L13.5 15.0429L8.29286 20.25L6.75 18.7071L11.9571 13.5L6.75 8.29286L8.29286 6.75L13.5 11.9571L18.7071 6.75L20.25 8.29286L15.0429 13.5L20.25 18.7071L18.7071 20.25Z"
+                        fill="red"></path>
+                </svg>
+            </div>
+            <input type="hidden" value="19" class="id-field">
+
+            <div class="grid grid-cols-2 gap-3">
+                <div class="flex flex-col gap-2">
+                    <p class="text-sm">Location Name *</p>
+                    <input type="text" required="" placeholder="Enter your Location Name"
+                        class="location_inps border rounded-md text-sm outline-none lg:px-4 px-2 lg:py-3 py-[0.6rem] placeholder:text-[#A1A1A1] text-[#101928] focus:border-[#205a42] ease-in transition-all focus:border-l-[7px]  bg-transparent"
+                        value="">
+                </div>
+                <div class="flex flex-col gap-2">
+                    <p class="text-sm">City *</p>
+                    <select  class='location_city cities_dropdown border rounded-md text-sm outline-none lg:px-4 px-2 lg:py-3 py-[0.6rem] placeholder:text-[#A1A1A1] text-[#101928] focus:border-[#205a42] ease-in transition-all focus:border-l-[7px]  bg-transparent' required>
+                        {% if cities %}
+                        {% for city in cities %}
+                        <option value="{{ city.pk }}">{{ city.name }}</option>
+                        {% endfor %}
+                        {% endif %}
+                    </select>
+                </div>
+                <div class="flex flex-col gap-2 w-full col-span-2 relative">
+                    <p class="text-sm">Address *</p>
+                    <input type="text" name="adress[]" required="" placeholder="Enter your Address"
+                        class="location_address border rounded-md text-sm outline-none lg:px-4 px-2 lg:py-3 py-[0.6rem] placeholder:text-[#A1A1A1] text-[#101928] focus:border-[#205a42] ease-in transition-all focus:border-l-[7px]  bg-transparent"
+                        value="">
+                    {% comment %} <div class='z-[3] absolute top-full left-0 right-0 h-[200px] p-1 bg-white rounded border tranform translate-y-[10px] overflow-y-auto'>
+                        <p class='mb-1 cursor-pointer text-gray-500 text-sm py-2 px-3 transition-all hover:bg-[#205a4220] rounded'>Multan Road Lahore Punjab Pakistan</p>
+                        <p class='mb-1 cursor-pointer text-gray-500 text-sm py-2 px-3 transition-all hover:bg-[#205a4220] rounded'>Multan Road Lahore Punjab Pakistan</p>
+                        <p class='mb-1 cursor-pointer text-gray-500 text-sm py-2 px-3 transition-all hover:bg-[#205a4220] rounded'>Multan Road Lahore Punjab Pakistan</p>
+                        <p class='mb-1 cursor-pointer text-gray-500 text-sm py-2 px-3 transition-all hover:bg-[#205a4220] rounded'>Multan Road Lahore Punjab Pakistan</p>
+                        <p class='mb-1 cursor-pointer text-gray-500 text-sm py-2 px-3 transition-all hover:bg-[#205a4220] rounded'>Multan Road Lahore Punjab Pakistan</p>
+                        <p class='mb-1 cursor-pointer text-gray-500 text-sm py-2 px-3 transition-all hover:bg-[#205a4220] rounded'>Multan Road Lahore Punjab Pakistan</p>
+                        <p class='mb-1 cursor-pointer text-gray-500 text-sm py-2 px-3 transition-all hover:bg-[#205a4220] rounded'>Multan Road Lahore Punjab Pakistan</p>
+                        <p class='mb-1 cursor-pointer text-gray-500 text-sm py-2 px-3 transition-all hover:bg-[#205a4220] rounded'>Multan Road Lahore Punjab Pakistan</p>
+                        <p class='mb-1 cursor-pointer text-gray-500 text-sm py-2 px-3 transition-all hover:bg-[#205a4220] rounded'>Multan Road Lahore Punjab Pakistan</p>
+                    </div> {% endcomment %}
+                </div>
+
+                {% comment %} <div class="flex flex-col gap-2">
+                    <p class="text-sm">Seat Number *</p>
+                    <input type="number" required="" placeholder="Enter Seat Number" name='quantity'
+                        class="location_quantity location_inps border rounded-md text-sm outline-none lg:px-4 px-2 lg:py-3 py-[0.6rem] placeholder:text-[#A1A1A1] text-[#101928] focus:border-[#205a42] ease-in transition-all focus:border-l-[7px]  bg-transparent"
+                        value="">
+                </div> {% endcomment %}
+
+            </div>
+        </div>
+            <input type='hidden' class='location_data'  name='location_data' value='' />   
+    
+            <button type="button" class='location_btn'>
+                Save Changes
+            </button>
+        </div>
+    
+    </div>
+</div>
+</form>
+
+<script>
+    let dashboard_tabs = document.querySelectorAll('.dashboard-tab');
+    document.addEventListener('DOMContentLoaded', () => {
+        if (dashboard_tabs) {
+            dashboard_tabs.forEach(tab => {
+                dashboard_tabs.forEach(all => {
+                    all.classList.remove('dashboard-tab-active')
+                })
+                dashboard_tabs[1].classList.add('dashboard-tab-active')
+            })
+        }
+    })
+
+</script>
+{% include 'common/footer-com.html' %}
+
+<script>
+    let location_btn = document.querySelector('.location_btn');
+    let location_form = document.querySelector('.location_form');
+
+
+    location_btn.addEventListener('click',()=>{
+        let location_data = document.querySelector('.location_data');
+        let location_inp = document.querySelectorAll('.location_inps');
+        let location_city = document.querySelectorAll('.location_city');
+        let location_address = document.querySelectorAll('.location_address');
+        let location_quantity = document.querySelectorAll('.location_quantity');
+
+        let arr = []
+
+        
+        location_inp.forEach(inp=>{
+            if(inp.value.trim() != ''){
+                inp.classList.remove('error')
+            }else{
+                inp.classList.add('error')
+            }
+        })
+
+        location_city.forEach(inp=>{
+            if(inp.value.trim() != ''){
+                inp.classList.remove('error')
+            }else{
+                inp.classList.add('error')
+            }
+        })
+
+        location_address.forEach(inp=>{
+            if(inp.value.trim() != ''){
+                inp.classList.remove('error')
+            }else{
+                inp.classList.add('error')
+            }
+        })
+
+        let errors = document.querySelectorAll('.location_form .error')
+        if(errors.length > 0){
+            toast.fire({
+                icon:'error',
+                title:'Fill all the Fields!'
+            })
+        }else{
+            location_inp.forEach((name,i)=>{
+                let city = document.querySelectorAll('.location_city')[i];
+                let address = document.querySelectorAll('.location_address')[i];
+                let quantity = document.querySelectorAll('.location_quantity')[i];
+                
+                if(city){
+                    console.log({
+                        'name':name.value,
+                        'city':city.value,
+                        'address':address.value,
+                        'quantity':quantity.value
+                    })
+                    arr.push({'name':name.value,'city':city.value,'address':address.value, 'quantity':quantity.value})
+                    location_data.value = JSON.stringify(arr);
+                    location_form.submit();
+                }
+                
+            })
+        }
+        
+    })
+
+   
+        
+</script>
+
+
+<script>
+    $(".items__").formset({
+        prefix: '{{ items.prefix }}',
+        deleteText: "<div class='btn btn-danger btn-circle mt-n2'>DELETE</div>",
+        addText: `<div class="border-2 rounded-lg text-center cursor-pointer mt-[0.75rem] border-dashed py-4 deal_add_btn_border">
+                                    <h1 class="font-semibold text-[#555555]">Add Another Location</h1>
+                                </div>`
+    });
+</script>
+{% endblock body %}

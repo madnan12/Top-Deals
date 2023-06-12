@@ -1,0 +1,302 @@
+{% extends 'Admin/admin/base.html' %}
+{% block title %} Top Deals - Admin Profile Setting {% endblock title %}
+{% block body %}
+<div class="top-dynamic-min grid grid-cols-1 lg:grid-cols-5 lg:bg-[#F8F9FD] col-span-4">
+    <div class="col-span-1 lg:col-span-4 m-4 lg:ml-0">
+        <div class="flex flex-col gap-6 py-[1rem]">
+            <div class="flex flex-col gap-5">
+                <h1 class="font-bold text-2xl text-[#205a42]">Admin Settings</h1>
+            </div>
+            <div class="rounded-2xl shadow bg-white px-4 py-4">
+                <div class="flex flex-col gap-3">
+                    <div class="flex items-center gap-5 justify-between pb-[1rem]">
+                        <div>
+                            <h2 class="text-[#205a42] text-lg font-bold">Top Deals Settings</h2>
+                            <p class="text-[#555555] text-sm">This section contains Business basic information like
+                                name, Logo
+                                etc.
+                            </p>
+                        </div>
+                        
+                    </div>
+                </div>
+
+                <form method="POST" action="{% url 'site_settings' %}" enctype="multipart/form-data">
+                <div class="flex flex-col gap-3 w-full lg:w-[70%]">
+                    <div class="flex flex-col gap-2">
+                        <p class="text-sm">Website Logo</p>
+                        <div class="border rounded-lg p-5">
+                            <div class="flex items-center gap-4">
+                                <div>
+                                    <div class="h-[6rem] w-[6rem] rounded-full overflow-hidden">
+                                        <img src='/media/{{ user.logo }}' class="h-full w-full object-cover img_preview">
+                                    </div>
+                                </div>
+                                <div class="flex flex-col gap-2">
+                                    <div class="flex items-center gap-3">           
+                                        <label for="img_upload" class="bg-[#205a42] rounded-md px-4 py-2 text-sm text-white font-bold cursor-pointer">Upload
+                                            New Logo</label>
+                                        <input type="file" hidden="" name="site_logo" accept="image/*" id="img_upload" class="img_upload" max-size="3">
+                                        <!-- <form action=""></form> -->
+                                        <a href="{% url 'remove-logo' %}" class="text-[#A1A1A1] px-3 py-2 text-sm rounded-md border remove_img" type="button">Remove</a>
+                                    </div>
+                                    <div class="text-sm text-[#A1A1A1]">
+                                        <p>You can upload png image file</p>
+                                        <p>Max size of 3mb</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="grid lg:grid-cols-2 gap-5">
+                        <div class="flex flex-col gap-2">
+                            <p class="text-sm">Admin Name *</p>
+                            <input type="text" placeholder="Enter Business Name" name="username" class="border rounded-md text-sm outline-none lg:px-4 px-2 lg:py-3 py-[0.6rem] placeholder:text-[#A1A1A1] text-[#101928] focus:border-[#205a42] ease-in transition-all focus:border-l-[7px]  bg-transparent" value="{{ user.username }}">
+                        </div>
+                        <div class="flex flex-col gap-2">
+                            <p class="text-sm">Email Address *</p>
+                            <input type="email" placeholder="Enter Email Address" name="emal" class="border rounded-md text-sm outline-none lg:px-4 px-2 lg:py-3 py-[0.6rem] placeholder:text-[#A1A1A1] text-[#101928] focus:border-[#205a42] ease-in transition-all focus:border-l-[7px]  bg-transparent" value="{{ user.email }}" disabled>
+                        </div>
+                    </div>
+                    <div class="grid lg:grid-cols-2 gap-5">
+                        <div class="flex flex-col gap-2">
+                            <p class="text-sm">Phone Number *</p>
+                             <div class="flex border rounded-md overflow-hidden ease-in transition-all ">
+                                    <div class="px-2 py-3 flex items-center before-plus">
+                                        <select class="bg-transparent text-sm pl-2 pr-5 outline-none" id="">
+                                            {% for countriy in all_countries %}
+                                                {% if countriy.dial_code == '971' %}
+                                                    <option value="{{ countriy.dial_code }}" selected>{{ countriy.dial_code }}</option>
+                                                {% endif %}
+                                                {% if countriy.dial_code is not None %}
+                                                    <option value="{{ countriy.dial_code }}">{{ countriy.dial_code }}</option>
+                                                {% endif %}
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                    <input type="number" placeholder="Enter your phone number" name="mobile_number" class="px-4 py-3 border-l w-full outline-none text-sm" value="{{user.phone}}">
+                                </div>
+                        </div><div class="flex flex-col gap-2">
+                            <p class="text-sm">Country *</p>
+                            <select type="text" name="country" class="border bg-transparent rounded-md text-sm outline-none lg:px-4 px-2 lg:py-3 py-[0.6rem] placeholder:text-[#A1A1A1] text-[#101928] focus:border-[#205a42] ease-in transition-all focus:border-l-[7px]">
+                                {% for country in all_countries %}
+                                {% if country.name == 'United Arab Emirates' %}
+                                <option value="229" selected>United Arab Emirates</option>
+                                {% else %}
+                                <option value="{{ country.id }}">{{ country.name }}</option>
+                                {% endif %}
+                                {% endfor %}
+                            </select>
+                        </div>
+
+                    </div><div class="flex flex-col gap-2">
+                        <p class="text-sm">Business Location *</p>
+                        <input type="text" placeholder="Enter Business Location" name="location_business" class="border rounded-md text-sm outline-none lg:px-4 px-2 lg:py-3 py-[0.6rem] placeholder:text-[#A1A1A1] text-[#101928] focus:border-[#205a42] ease-in transition-all focus:border-l-[7px]  bg-transparent" value="{{ user.location_business }}">
+                    </div>
+                    <button type="submit" class="bg-[#205a42] rounded-md px-4 py-2 text-sm text-white font-bold w-fit" type="submit">Save
+                        Changes</button>
+                </div>
+                </form>
+
+            </div>
+
+            {% comment %}
+            <form method="POST" action="{% url 'admin_password_chnage' %}" class="password">
+            <div class="rounded-2xl shadow bg-white px-4 py-4">
+                <div class="flex flex-col gap-3">
+                    <div class="flex items-center gap-5 justify-between pb-[1rem]">
+                        <div>
+                            <h2 class="text-[#205a42] text-lg font-bold">Change Password</h2>
+                            <p class="text-[#555555] text-sm">
+                                It is not a bad idea to change your password often for a more secure account.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex flex-col gap-3 w-full lg:w-[70%] password_p">
+
+                    <div class="grid lg:grid-cols-2 gap-5">
+                        <div class="flex flex-col gap-2">
+                            <p class="text-sm">New Password *</p>
+                            <input type="password" required placeholder="Enter New Password" name="new_password" class="password_ border rounded-md text-sm outline-none lg:px-4 px-2 lg:py-3 py-[0.6rem] placeholder:text-[#A1A1A1] text-[#101928] focus:border-[#205a42] ease-in transition-all focus:border-l-[7px]  bg-transparent" value="">
+                        </div>
+                        <div class="flex flex-col gap-2">
+                            <p class="text-sm">Confirm Password *</p>
+                            <input type="password" required placeholder="Enter Confirm Password" name="con_password" class="password_confirm border rounded-md text-sm outline-none lg:px-4 px-2 lg:py-3 py-[0.6rem] placeholder:text-[#A1A1A1] text-[#101928] focus:border-[#205a42] ease-in transition-all focus:border-l-[7px]  bg-transparent" value="">
+                        </div>
+                    </div>
+                    <button class="password_btn bg-[#205a42] rounded-md px-4 py-2 text-sm text-white font-bold w-fit" type="submit">Change
+                        Password</button>
+                </div>
+            </div>
+            </form>
+            {% endcomment %}
+
+
+            <form method="POST" action="{% url 'social_url' %}" class="Social">
+            <div class="rounded-2xl shadow bg-white px-4 py-4">
+                <div class="flex flex-col gap-3">
+                    <div class="flex items-center gap-5 justify-between pb-[1rem]">
+                        <div>
+                            <h2 class="text-[#205a42] text-lg font-bold">Social Networks</h2>
+                            <p class="text-[#555555] text-sm">
+                                Connect company’s Facebook, twitter, instagram accounts.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex flex-col gap-3 w-full lg:w-[70%]">
+
+                    <div class="flex flex-col gap-2">
+                            <p class="text-sm">Facebook</p>
+                            {% if user.facebook_link %}
+                            <input type="url" placeholder="https://web.facebook.com/" name="facebook_link" class="border rounded-md text-sm outline-none lg:px-4 px-2 lg:py-3 py-[0.6rem] placeholder:text-[#A1A1A1] text-[#101928] focus:border-[#205a42] ease-in transition-all focus:border-l-[7px]  bg-transparent" value="{{ user.facebook_link }}" required>
+                            {% else %}
+                            <input type="url" placeholder="https://web.facebook.com/" name="facebook_link" class="border rounded-md text-sm outline-none lg:px-4 px-2 lg:py-3 py-[0.6rem] placeholder:text-[#A1A1A1] text-[#101928] focus:border-[#205a42] ease-in transition-all focus:border-l-[7px]  bg-transparent" value="" required>
+                            {% endif %}
+                        </div><div class="flex flex-col gap-2">
+                            <p class="text-sm">Instagram</p>
+                            {% if user.instagram_link %}
+                            <input type="url" placeholder="https://instagram.com/" name="instagram_link" class="border rounded-md text-sm outline-none lg:px-4 px-2 lg:py-3 py-[0.6rem] placeholder:text-[#A1A1A1] text-[#101928] focus:border-[#205a42] ease-in transition-all focus:border-l-[7px]  bg-transparent" value="{{ user.instagram_link }}" required>
+                            {% else %}
+                            <input type="url" placeholder="https://instagram.com/" name="instagram_link" class="border rounded-md text-sm outline-none lg:px-4 px-2 lg:py-3 py-[0.6rem] placeholder:text-[#A1A1A1] text-[#101928] focus:border-[#205a42] ease-in transition-all focus:border-l-[7px]  bg-transparent" value="" required>
+                            {% endif %}
+                        </div>
+                    <div class="flex flex-col gap-2">
+                            <p class="text-sm">Twitter</p>
+                            {% if user.twitter_link %}
+                            <input type="url" placeholder="https://twitter.com/" name="twitter_link" class="border rounded-md text-sm outline-none lg:px-4 px-2 lg:py-3 py-[0.6rem] placeholder:text-[#A1A1A1] text-[#101928] focus:border-[#205a42] ease-in transition-all focus:border-l-[7px]  bg-transparent" value="{{ user.twitter_link }}" required>
+                            {% else %}
+                            <input type="url" placeholder="https://twitter.com/" name="twitter_link" class="border rounded-md text-sm outline-none lg:px-4 px-2 lg:py-3 py-[0.6rem] placeholder:text-[#A1A1A1] text-[#101928] focus:border-[#205a42] ease-in transition-all focus:border-l-[7px]  bg-transparent" value="" required>
+                            {% endif %}
+                        </div><button class="bg-[#205a42] rounded-md px-4 py-2 text-sm text-white font-bold w-fit" type="submit">Save Changes</button>
+                </div>
+            </div>
+            </form>
+            <form method="POST" action="{% url 'update_business_len_cur' %}" class="General">
+            <div class="rounded-2xl shadow bg-white px-4 py-4">
+                <div class="flex flex-col gap-3">
+                    <div class="flex items-center gap-5 justify-between pb-[1rem]">
+                        <div>
+                            <h2 class="text-[#205a42] text-lg font-bold">General Settings</h2>
+                            <p class="text-[#555555] text-sm">
+                                Change language and currency
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex flex-col gap-3 w-full lg:w-[70%]">
+
+                    <div class="grid lg:grid-cols-2 gap-5">
+
+                        <div class="flex flex-col gap-2">
+                        <p class="text-sm">Select Language</p>
+                        <select type="text" name="language" required
+                            class="border bg-transparent rounded-md text-sm outline-none lg:px-4 px-2 lg:py-3 py-[0.6rem] placeholder:text-[#A1A1A1] text-[#101928] focus:border-[#205a42] ease-in transition-all focus:border-l-[7px]"
+                            value="">
+                            <option value="{{ user.language }}" selected>{{ user.language }}</option>
+                            <option value="English">English</option>
+                            <option value="Arabic">Arabic</option>
+                        </select>
+                    </div>
+                        <div class="flex flex-col gap-2">
+                        <p class="text-sm">Currency</p>
+
+                        <select type="text" name="currency" required
+                            class="border bg-transparent rounded-md text-sm outline-none lg:px-4 px-2 lg:py-3 py-[0.6rem] placeholder:text-[#A1A1A1] text-[#101928] focus:border-[#205a42] ease-in transition-all focus:border-l-[7px]"
+                            value="">
+                            {% if user.currency.name %}
+                            <option value="{{user.currency.id}}" selected>{{user.currency.name}}</option>
+                            {% for currency in currencies %}
+                            {% if currency.name == user.currency.name %}
+                            {% else %}
+                            <option value="{{currency.id}}">{{currency.name}}</option>
+                            {% endif %}
+                            {% endfor %}
+
+                            {% else %}
+                            {% for currency in currencies %}
+                            {% if currency.name == 'AED' %}
+                            <option selected value="{{currency.id}}">{{currency.name}}</option>
+                            {% endif %}
+                            {% if currency.name == 'AED' %}
+                            {% else %}
+                            <option value="{{currency.id}}">{{currency.name}}</option>
+                            {% endif %}
+                            {% endfor %}
+                            {% endif %}
+                        </select>
+
+                    </div>
+                    </div>
+                    <button class="bg-[#205a42] rounded-md px-4 py-2 text-sm text-white font-bold w-fit" type="submit">
+                        Save Changes
+                    </button>
+                </div>
+            </div>
+            </form>
+        </div>
+    </div>
+</div>
+ {% include 'common/footer-com.html' %}
+ {% if messages %}
+{% for msg in messages %}
+<script>
+    setTimeout(() => {
+        Toast.fire({
+            icon: '{{msg.tags}}', // success
+            title: '{{msg}}'
+        });
+    }, 1000);
+</script>
+{% endfor %}
+{% endif %}
+
+<script>
+    let dashboard_tabs = document.querySelectorAll('.dashboard-tab');
+    document.addEventListener('DOMContentLoaded', () => {
+        if (dashboard_tabs) {
+            dashboard_tabs.forEach(tab => {
+                dashboard_tabs.forEach(all => {
+                    all.classList.remove('dashboard-tab-active')
+                })
+                dashboard_tabs[8].classList.add('dashboard-tab-active')
+            })
+        }
+    })
+
+    $(".id_country").change(function () {
+      var url = $(".personForm").attr("data-cities-url");  // get the url of the `load_cities` view
+      var countryId = $(this).val();  // get the selected country ID from the HTML input
+  
+      $.ajax({                       // initialize an AJAX request
+        url: url,                    // set the url of the request (= localhost:8000/hr/ajax/load-cities/)
+        data: {
+          'country': countryId       // add the country id to the GET parameters
+        },
+        success: function (data) {   // `data` is the return of the `load_cities` view function
+          let cities = data.cities
+          let c_dds =  document.querySelectorAll('.cities_dropdown')
+          c_dds.forEach(c_dd=>{
+              c_dd.innerHTML = '' 
+              cities.map(city =>{
+                  let drp_opt = document.createElement('option')
+                  drp_opt.innerText = city.name
+                  drp_opt.value = city.id
+                  c_dd.append(drp_opt)
+                  // <option value="{{ city.pk }}">{{ city.name }}</option>
+                //   console.log(city)
+              })
+          })
+          // html(data);  // replace the contents of the city input with the data that came from the server
+        }
+      });
+  
+    });
+</script>
+<script>
+    $(".password").validate();
+    $(".Social").validate();
+    $(".General").validate();
+</script>
+{% endblock body %}

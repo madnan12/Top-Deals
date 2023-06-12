@@ -1,0 +1,179 @@
+{% extends 'Admin/admin/base.html' %}
+{% block title %} Top Deals - Featured Deals {% endblock title %}
+{% block body %}
+<div class="col-span-1 lg:col-span-4 m-4 lg:ml-0">
+    <div class="flex flex-col gap-6 py-[1rem]">
+        <div class="flex items-center justify-between gap-4 flex-wrap">
+            <h1 class="font-bold text-2xl text-[#205a42]">Featured Deals</h1>
+            <div class="flex items-center gap-4">
+                <div class="rounded-xl bg-white py-2 px-5 flex items-center gap-2">
+                    <div>
+                        <svg width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path
+                                d="M5.4344 0.665436C6.79903 0.665436 8.10777 1.20753 9.0727 2.17247C10.0376 3.13741 10.5797 4.44615 10.5797 5.81077C10.5797 7.08523 10.1127 8.25679 9.34486 9.1592L9.55859 9.37293H10.1839L14.1419 13.3309L12.9545 14.5183L8.99656 10.5603V9.93496L8.78283 9.72123C7.88041 10.4891 6.70886 10.9561 5.4344 10.9561C4.06977 10.9561 2.76104 10.414 1.7961 9.44908C0.831159 8.48414 0.289063 7.1754 0.289062 5.81077C0.289062 4.44615 0.831159 3.13741 1.7961 2.17247C2.76104 1.20753 4.06977 0.665436 5.4344 0.665436ZM5.4344 2.24862C3.45542 2.24862 1.87224 3.8318 1.87224 5.81077C1.87224 7.78975 3.45542 9.37293 5.4344 9.37293C7.41338 9.37293 8.99656 7.78975 8.99656 5.81077C8.99656 3.8318 7.41338 2.24862 5.4344 2.24862Z"
+                                fill="#868686"></path>
+                        </svg>
+                    </div>
+                    <form action="{% url 'featured_deals' %}" method="GET">
+                    <input type="text" class="text-[#373737] outline-none w-full min-w-[120px]"
+                        placeholder="Search amazing deals... " name="item">
+                        </form>
+                </div>
+            </div>
+        </div>
+
+        {% if searched_deals %}
+        
+        <div class="rounded-2xl shadow bg-white px-4 py-4">
+            <div class="flex items-start justify-between gap-4 lg:flex-row flex-col flex-wrap">
+                <div class="flex flex-col gap-1">
+                    <h1 class="font-bold text-lg">Featured Deals</h1>
+                    <p class="text-xs text-[#656565]">Lorem ipsum dolor sit amet, <br class="lg:block hidden">
+                        consectetuer
+                        adipiscing elit. Aenean commod</p>
+                </div>
+                <div class="lg:w-fit w-full overflow-auto">
+                    <ul class="business-tabss nav nav-tabs flex list-none border-b-0 pl-0 mb-4 text-center whitespace-nowrap w-[52vw] overflow-auto"
+                        id="tabs-tab" role="tablist">
+                        <li class="nav-item" role="presentation">
+                            <a href="#tabs-featured-deal-all"
+                                class="nav-link block font-medium text-xs leading-tight uppercase border-x-0 border-t-0 border-b-2 border-transparent px-6 py-3 my-2 hover:border-transparent hover:bg-gray-100 focus:border-transparent active"
+                                id="tabs-home-tab" data-bs-toggle="pill" data-bs-target="#tabs-featured-deal-all"
+                                role="tab" aria-controls="tabs-home" aria-selected="true">ALL</a>
+                        </li>
+                        {% for category in parent_category_filter_by_status %}
+                        <li class="nav-item" role="presentation">
+                            <a href="#tabs-featured-deal-{{ category.id }}"
+                                class="nav-link block font-medium text-xs leading-tight uppercase border-x-0 border-t-0 border-b-2 border-transparent px-6 py-3 my-2 hover:border-transparent hover:bg-gray-100 focus:border-transparent"
+                                id="tabs-home-tab" data-bs-toggle="pill" data-bs-target="#tabs-featured-deal-{{ category.id }}"
+                                role="tab" aria-controls="tabs-home" aria-selected="true">{{category.name}}</a>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+
+
+            <div class="tab-content mt-[1.2rem]" id="tabs-tabContent">
+                <div class="tab-pane fade show active" id="tabs-featured-deal-all" role="tabpanel" aria-labelledby="tabs-featured-deal-all">
+                    <div class="grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-4">
+                        {% for deal in searched_deals %}
+                        {% if deal.is_featured == True %}
+                        <div class="rounded-md shadow-md p-3 flex items-start gap-3">
+                            <div class="h-[6rem] w-[6rem]">
+                                {% for media in deal.dealmedia_business_deal.all %}
+                                <img src="/media/{{media.image}}"
+                                    class="w-full h-full object-cover">
+                                    {% endfor %}
+                            </div>
+                            <div class="flex items-center gap-3 flex-1">
+                                <div class="flex flex-col gap-1">
+                                    <h2 class="font-bold text-[#1E1E1E]">{{deal.title}}</h2>
+                                    <div class="flex items-center gap-2">
+                                        <svg width="12" height="12" viewBox="0 0 7 8" fill="none"
+                                            xmlns="http://www.w3.org/2000/svg">
+                                            <path
+                                                d="M3.55428 7.65689L3.55427 7.65688C3.50092 7.59273 2.85164 6.80769 2.21544 5.856C1.89737 5.3802 1.58189 4.86174 1.34575 4.37021C1.11033 3.88018 0.950752 3.41092 0.950752 3.03537C0.950752 1.50434 2.19626 0.258858 3.72726 0.258858C5.25829 0.258858 6.50377 1.50434 6.50377 3.03537C6.50377 3.41092 6.3442 3.88018 6.10878 4.37021C5.87264 4.86173 5.55716 5.3802 5.2391 5.85599C4.60291 6.80766 3.95364 7.59268 3.90026 7.65688L3.55428 7.65689ZM3.55428 7.65689C3.59701 7.70826 3.66039 7.73802 3.72726 7.73802M3.55428 7.65689L3.72726 7.73802M3.72726 7.73802C3.79409 7.73802 3.8575 7.7083 3.90025 7.65688L3.72726 7.73802ZM4.81824 5.67429C4.39087 6.30644 3.95915 6.86395 3.72726 7.15524C3.49537 6.86395 3.06363 6.30644 2.63629 5.67429C2.23024 5.07366 1.92073 4.54452 1.71291 4.09908C1.50451 3.65238 1.40071 3.29467 1.40071 3.03537C1.40071 1.75253 2.44445 0.708814 3.72726 0.708814C5.01007 0.708814 6.05382 1.75253 6.05382 3.03537C6.05382 3.29466 5.95002 3.65236 5.74162 4.09906C5.53381 4.5445 5.2243 5.07365 4.81824 5.67429Z"
+                                                fill="#6C6C6C" stroke="#6C6C6C" stroke-width="0.0984954"></path>
+                                            <path
+                                                d="M4.62448 5.32114C4.54406 5.26681 4.43481 5.28799 4.38049 5.3684C4.14335 5.71944 3.87769 6.08735 3.5909 6.46191C3.5319 6.53898 3.54652 6.64927 3.62359 6.70826C3.65545 6.73268 3.69301 6.74449 3.73029 6.74449C3.7831 6.74449 3.83535 6.72075 3.86994 6.67558C4.16095 6.29553 4.43071 5.92193 4.67171 5.56515C4.72605 5.48474 4.70491 5.37548 4.62448 5.32114Z"
+                                                fill="#6C6C6C"></path>
+                                            <path
+                                                d="M3.73005 1.60651C2.90829 1.60651 2.23981 2.27499 2.23981 3.09675C2.23981 3.91851 2.90829 4.58698 3.73005 4.58698C4.55181 4.58698 5.22029 3.91851 5.22029 3.09675C5.22029 2.27499 4.55181 1.60651 3.73005 1.60651ZM3.73005 4.13703C3.15649 4.13703 2.68977 3.67031 2.68977 3.09675C2.68977 2.52319 3.15649 2.05647 3.73005 2.05647C4.30364 2.05647 4.77033 2.52318 4.77033 3.09675C4.77033 3.67031 4.30364 4.13703 3.73005 4.13703Z"
+                                                fill="#6C6C6C" stroke="#6C6C6C" stroke-width="0.0984954"></path>
+                                        </svg>
+
+                                        <p class="text-xs text-[#6C6C6C]">{{deal.country}}, {{country.city}}</p>
+                                    </div>
+                                    <div class="flex items-center gap-2">
+                                        {% if deal.store.business_logo %}
+                                        <img src="/media/{{deal.store.business_logo}}"
+                                            class="rounded-full h-[1.4rem] w-[1.4rem]">
+                                            {% else %}
+                                            <img src="/static/assets/images/dummy.png"
+                                            class="rounded-full h-[1.4rem] w-[1.4rem]">
+                                            {% endif %}
+                                        <h1 class="font-bold text-xs">{{deal.store.name}}</h1>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {% endif %}
+                        {% endfor %}
+                    </div>
+                </div>
+                
+                {% for category in parent_category_filter_by_status %}
+                <div class="tab-pane fade" id="tabs-featured-deal-{{ category.id }}" role="tabpanel" aria-labelledby="tabs-featured-deal-{{ category.id }}">
+                    <div class="grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-4">
+                        {% for deal in searched_deals %}
+                        {% if deal.category.name == category.name %}
+                        {% if deal.is_featured == True %}
+                        <div class="rounded-md shadow-md p-3 flex items-start gap-3">
+                            <div class="h-[6rem] w-[6rem]">
+                                {% for media in deal.dealmedia_business_deal.all %}
+                                <img src="/media/{{media.image}}"
+                                    class="w-full h-full object-cover">
+                                    {% endfor %}
+                            </div>
+                            <div class="flex items-center gap-3 flex-1">
+                                <div class="flex flex-col gap-1">
+                                    <h2 class="font-bold text-[#1E1E1E]">{{deal.title}}</h2>
+                                    <div class="flex items-center gap-2">
+                                        <svg width="12" height="12" viewBox="0 0 7 8" fill="none"
+                                            xmlns="http://www.w3.org/2000/svg">
+                                            <path
+                                                d="M3.55428 7.65689L3.55427 7.65688C3.50092 7.59273 2.85164 6.80769 2.21544 5.856C1.89737 5.3802 1.58189 4.86174 1.34575 4.37021C1.11033 3.88018 0.950752 3.41092 0.950752 3.03537C0.950752 1.50434 2.19626 0.258858 3.72726 0.258858C5.25829 0.258858 6.50377 1.50434 6.50377 3.03537C6.50377 3.41092 6.3442 3.88018 6.10878 4.37021C5.87264 4.86173 5.55716 5.3802 5.2391 5.85599C4.60291 6.80766 3.95364 7.59268 3.90026 7.65688L3.55428 7.65689ZM3.55428 7.65689C3.59701 7.70826 3.66039 7.73802 3.72726 7.73802M3.55428 7.65689L3.72726 7.73802M3.72726 7.73802C3.79409 7.73802 3.8575 7.7083 3.90025 7.65688L3.72726 7.73802ZM4.81824 5.67429C4.39087 6.30644 3.95915 6.86395 3.72726 7.15524C3.49537 6.86395 3.06363 6.30644 2.63629 5.67429C2.23024 5.07366 1.92073 4.54452 1.71291 4.09908C1.50451 3.65238 1.40071 3.29467 1.40071 3.03537C1.40071 1.75253 2.44445 0.708814 3.72726 0.708814C5.01007 0.708814 6.05382 1.75253 6.05382 3.03537C6.05382 3.29466 5.95002 3.65236 5.74162 4.09906C5.53381 4.5445 5.2243 5.07365 4.81824 5.67429Z"
+                                                fill="#6C6C6C" stroke="#6C6C6C" stroke-width="0.0984954"></path>
+                                            <path
+                                                d="M4.62448 5.32114C4.54406 5.26681 4.43481 5.28799 4.38049 5.3684C4.14335 5.71944 3.87769 6.08735 3.5909 6.46191C3.5319 6.53898 3.54652 6.64927 3.62359 6.70826C3.65545 6.73268 3.69301 6.74449 3.73029 6.74449C3.7831 6.74449 3.83535 6.72075 3.86994 6.67558C4.16095 6.29553 4.43071 5.92193 4.67171 5.56515C4.72605 5.48474 4.70491 5.37548 4.62448 5.32114Z"
+                                                fill="#6C6C6C"></path>
+                                            <path
+                                                d="M3.73005 1.60651C2.90829 1.60651 2.23981 2.27499 2.23981 3.09675C2.23981 3.91851 2.90829 4.58698 3.73005 4.58698C4.55181 4.58698 5.22029 3.91851 5.22029 3.09675C5.22029 2.27499 4.55181 1.60651 3.73005 1.60651ZM3.73005 4.13703C3.15649 4.13703 2.68977 3.67031 2.68977 3.09675C2.68977 2.52319 3.15649 2.05647 3.73005 2.05647C4.30364 2.05647 4.77033 2.52318 4.77033 3.09675C4.77033 3.67031 4.30364 4.13703 3.73005 4.13703Z"
+                                                fill="#6C6C6C" stroke="#6C6C6C" stroke-width="0.0984954"></path>
+                                        </svg>
+
+                                        <p class="text-xs text-[#6C6C6C]">{{deal.country}}, {{country.city}}</p>
+                                    </div>
+                                    <div class="flex items-center gap-2">
+                                        {% if deal.store.business_logo %}
+                                        <img src="/media/{{deal.store.business_logo}}"
+                                            class="rounded-full h-[1.4rem] w-[1.4rem]">
+                                            {% else %}
+                                            <img src="/static/assets/images/dummy.png"
+                                            class="rounded-full h-[1.4rem] w-[1.4rem]">
+                                            {% endif %}
+                                        <h1 class="font-bold text-xs">{{deal.store.name}}</h1>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                       
+                        {% endif %}
+                        {% endif %}
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% else %}
+        {% include 'common/not-found.html' %}
+        {% endif %}
+    </div>
+</div>
+{% include 'common/footer-com.html' %}
+<script>
+    let dashboard_tabs = document.querySelectorAll('.dashboard-tab');
+    document.addEventListener('DOMContentLoaded', () => {
+        if (dashboard_tabs) {
+            dashboard_tabs.forEach(tab => {
+                dashboard_tabs.forEach(all => {
+                    all.classList.remove('dashboard-tab-active')
+                })
+                dashboard_tabs[2].classList.add('dashboard-tab-active')
+            })
+        }
+    })
+</script>
+{% endblock body %}

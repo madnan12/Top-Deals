@@ -1,0 +1,181 @@
+{% extends 'Store/base.html' %}
+{% block title %} Top Deals {% endblock title %}
+{% block body %}
+
+
+<div class="container mx-auto bg-white flex flex-col gap-5 w-[80%] my-[3rem] py-4 px-2">
+    <h1 class="font-semibold text-xl text-[#205a42]">Overview</h1>
+    <div class="rounded-2xl shadow-cstm-2 bg-white w-full">
+        <div class="flex flex-col gap-3">
+            <div class="flex items-center gap-4 flex-wrap px-4 py-4">
+                <div class="bg-[#FCA92D] rounded-md p-3 flex items-center justify-between text-white w-[17rem]">
+                    <div class="flex flex-col gap-3">
+                        <h1 class="font-bold text-2xl">24</h1>
+                        <p class="text-sm font-semibold">Total Purchases</p>
+                    </div>
+                    <div class="h-[4rem] w-[4rem] rounded-full bg-white/30 flex items-center justify-center">
+                        <svg width="28" height="31" viewBox="0 0 28 31" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path
+                                d="M20.2313 15.7998L19.7115 6.90088H15.515V10.8968H13.7414V6.90088H6.91012V10.8968H5.13645V6.90088H0.939943L0.00787924 22.8564C-0.0646639 24.0987 0.365629 25.2815 1.21953 26.1867C2.07344 27.0919 3.22904 27.5905 4.47345 27.5905H14.3121C13.738 26.4727 13.4138 25.2064 13.4138 23.8657C13.4138 19.8194 16.3672 16.4504 20.2313 15.7998Z"
+                                fill="white" />
+                            <path
+                                d="M6.91039 5.18923C6.91039 3.30589 8.44261 1.77367 10.3259 1.77367C12.2093 1.77367 13.7416 3.30589 13.7416 5.18923V6.90076H15.5152V5.18923C15.5152 2.32788 13.1874 0 10.3259 0C7.46454 0 5.13672 2.32788 5.13672 5.18923V6.90076H6.91039V5.18923Z"
+                                fill="white" />
+                            <path
+                                d="M28.0001 23.8653C28.0001 20.3329 25.1263 17.459 21.5938 17.459C18.0614 17.459 15.1875 20.3329 15.1875 23.8653C15.1875 27.3977 18.0614 30.2716 21.5938 30.2716C25.1263 30.2716 28.0001 27.3977 28.0001 23.8653ZM20.6347 27.0029L17.7539 23.7448L19.0827 22.5699L20.6919 24.39L24.0245 20.9379L25.3006 22.1698L20.6347 27.0029Z"
+                                fill="white" />
+                        </svg>
+                    </div>
+                </div>
+                <div class="bg-[#FF785A] rounded-md p-3 flex items-center justify-between text-white w-[17rem]">
+                    <div class="flex flex-col gap-3">
+                        <h1 class="font-bold text-2xl">24</h1>
+                        <p class="text-sm font-semibold">Total Spending</p>
+                    </div>
+                    <div class="h-[4rem] w-[4rem] rounded-full bg-white/30 flex items-center justify-center">
+                        <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path
+                                d="M20.5 21.5C20.5 20.6345 20.5 18 23 18H28V15C28 13.6215 26.8785 12.5 25.5 12.5H4C2.6215 12.5 1.5 13.6215 1.5 15V28C1.5 29.3785 2.6215 30.5 4 30.5H25.5C26.8785 30.5 28 29.3785 28 28V25H23C20.5 25 20.5 22.3655 20.5 21.5Z"
+                                fill="white" />
+                            <path
+                                d="M21.5 11.5002V8.46916C21.5 7.95266 21.2305 7.48416 20.779 7.21616C20.311 6.93816 19.746 6.92866 19.2685 7.18916L10.623 11.5002H21.5Z"
+                                fill="white" />
+                            <path
+                                d="M24.5 22.5C25.0523 22.5 25.5 22.0523 25.5 21.5C25.5 20.9477 25.0523 20.5 24.5 20.5C23.9477 20.5 23.5 20.9477 23.5 21.5C23.5 22.0523 23.9477 22.5 24.5 22.5Z"
+                                fill="white" />
+                            <path
+                                d="M16.9986 7.203V5.0745C16.9986 4.314 16.5306 3.831 16.0931 3.6325C15.5621 3.3915 14.9801 3.4805 14.5361 3.87L5.82812 11.5H8.38112L16.9986 7.203Z"
+                                fill="white" />
+                            <path
+                                d="M29 19H23C22.0995 19 21.5 19.4255 21.5 21.5C21.5 23.5745 22.0995 24 23 24H29C29.827 24 30.5 23.327 30.5 22.5V20.5C30.5 19.673 29.827 19 29 19ZM24.5 23.5C23.397 23.5 22.5 22.603 22.5 21.5C22.5 20.397 23.397 19.5 24.5 19.5C25.603 19.5 26.5 20.397 26.5 21.5C26.5 22.603 25.603 23.5 24.5 23.5Z"
+                                fill="white" />
+                            <path
+                                d="M30.8895 4.39859L28.5895 1.30459C28.2915 0.903594 27.6905 0.903594 27.3925 1.30509L25.1065 4.38359C24.879 4.61109 25.04 4.99959 25.3615 4.99959H26.4905C26.796 6.49759 26.123 8.02559 24.812 8.81209L24.5 8.99959L26.5 10.4996L26.588 10.4411C28.407 9.22809 29.5 7.18609 29.5 4.99959H30.6405C30.9545 4.99959 31.1115 4.62059 30.8895 4.39859Z"
+                                fill="white" />
+                        </svg>
+
+                    </div>
+                </div>
+                <div class="bg-[#6DA5B2] rounded-md p-3 flex items-center justify-between text-white w-[17rem]">
+                    <div class="flex flex-col gap-3">
+                        <h1 class="font-bold text-2xl">24</h1>
+                        <p class="text-sm font-semibold">Total Savings</p>
+                    </div>
+                    <div class="h-[4rem] w-[4rem] rounded-full bg-white/30 flex items-center justify-center">
+                        <svg width="33" height="39" viewBox="0 0 33 39" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path
+                                d="M8.41211 17.9751C8.41211 22.5024 12.0822 26.1724 16.6094 26.1724C21.1366 26.1724 24.8067 22.5024 24.8067 17.9751C24.8067 13.4479 21.1366 9.77783 16.6094 9.77783C12.0844 9.7829 8.41718 13.4501 8.41211 17.9751ZM16.6094 18.4931C15.2491 18.5007 14.0964 17.4933 13.9224 16.1441C13.7484 14.7952 14.6075 13.5278 15.9253 13.1901V12.4972C15.9253 12.1833 16.1795 11.9291 16.4934 11.9291C16.8072 11.9291 17.0615 12.1833 17.0615 12.4972V13.1556C18.3504 13.3737 19.2913 14.4943 19.2831 15.802C19.2831 16.112 19.0317 16.3634 18.7217 16.3634C18.4116 16.3634 18.1602 16.112 18.1602 15.802C18.1593 14.9439 17.4631 14.249 16.605 14.2499C15.7468 14.2509 15.0519 14.9473 15.0532 15.8055C15.0541 16.6633 15.7506 17.3582 16.6088 17.357C18.0001 17.3649 19.1556 18.4326 19.2733 19.8192C19.3909 21.2055 18.4316 22.4526 17.0615 22.6948V23.3719C17.0615 23.6858 16.8072 23.94 16.4934 23.94C16.1795 23.94 15.9253 23.6858 15.9253 23.3719V22.6599C14.7381 22.3464 13.9085 21.2762 13.9005 20.0484C13.9005 19.7311 14.1579 19.4736 14.4753 19.4736C14.7926 19.4736 15.05 19.7311 15.05 20.0484C15.0519 20.8419 15.6498 21.5073 16.4385 21.5938C16.4677 21.5891 16.4975 21.5868 16.5273 21.5865C16.5701 21.5865 16.6126 21.5916 16.6544 21.6011C17.5065 21.5802 18.1827 20.877 18.1704 20.0249C18.158 19.1725 17.4615 18.4893 16.6094 18.4931Z"
+                                fill="white" />
+                            <path
+                                d="M29.7651 30.082C29.7609 30.0843 29.7565 30.0865 29.7517 30.0887L24.4783 32.5801C24.535 32.8721 24.5597 33.1691 24.5518 33.4665C24.5436 33.774 24.2918 34.019 23.9843 34.019C23.979 34.019 23.9736 34.019 23.9682 34.019L16.2502 33.8066C15.9364 33.798 15.6891 33.5368 15.6977 33.223C15.7062 32.9091 15.9678 32.6619 16.2813 32.6704L23.3757 32.8657C23.1405 31.4908 21.9682 30.4726 20.5739 30.432L15.879 30.303C14.9517 30.2764 14.0425 30.0415 13.2186 29.6157L12.7409 29.3684C10.3947 28.146 7.56757 28.3052 5.37353 29.7834L5.18555 36.6134L5.99234 36.1813C6.79406 35.7502 7.7321 35.6475 8.60832 35.8951L16.5761 38.1316C18.1117 38.4461 19.7075 38.2679 21.136 37.6218L32.1747 30.4815C31.5448 29.8367 30.5693 29.6747 29.7651 30.082Z"
+                                fill="white" />
+                            <path d="M0 37.8L0.279921 27.6382L4.29266 27.7488L4.01274 37.9106L0 37.8Z" fill="white" />
+                            <path
+                                d="M17.142 6.73587V0.568085C17.142 0.254243 16.8878 0 16.5739 0C16.2601 0 16.0059 0.254243 16.0059 0.568085V6.73587C16.0059 7.04971 16.2601 7.30395 16.5739 7.30395C16.8878 7.30395 17.142 7.04971 17.142 6.73587Z"
+                                fill="white" />
+                            <path
+                                d="M22.0112 6.73625V3.81467C22.0112 3.50083 21.7569 3.24658 21.4431 3.24658C21.1292 3.24658 20.875 3.50083 20.875 3.81467V6.73625C20.875 7.05009 21.1292 7.30433 21.4431 7.30433C21.7569 7.30433 22.0112 7.05009 22.0112 6.73625Z"
+                                fill="white" />
+                            <path
+                                d="M12.2729 6.73625V3.81467C12.2729 3.50083 12.0186 3.24658 11.7048 3.24658C11.391 3.24658 11.1367 3.50083 11.1367 3.81467V6.73625C11.1367 7.05009 11.391 7.30433 11.7048 7.30433C12.0186 7.30433 12.2729 7.05009 12.2729 6.73625Z"
+                                fill="white" />
+                        </svg>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="rounded-2xl shadow-cstm-2 bg-white w-full overflow-hidden">
+        <div class="">
+            <div class="flex items-center gap-4 justify-between px-4 py-4 border-b">
+                <div>
+                    <h1 class="font-semibold text-xl text-[#205a42]">Credits</h1>
+                </div>
+                <div class="flex items-center gap-3">
+                    <h1 class="font-semibold text-[#555555]">Filter By:</h1>
+                    <select required="" id="cities_dropdown" name="city"
+                        class="border bg-[#F7F7F7] border-[#D2D2D2] rounded-md text-sm outline-none lg:px-4 px-2 lg:py-3 !pr-[1.8rem] py-[0.6rem] placeholder:text-[#A1A1A1] text-[#101928] focus:border-[#205a42] ease-in transition-all focus:border-l-[7px]  bg-transparent">
+                        <option value="" selected="" disabled="">Category</option>
+                    </select>
+                    <select required="" id="cities_dropdown" name="city"
+                        class="border bg-[#F7F7F7] border-[#D2D2D2] rounded-md text-sm outline-none lg:px-4 px-2 lg:py-3 !pr-[1.8rem] py-[0.6rem] placeholder:text-[#A1A1A1] text-[#101928] focus:border-[#205a42] ease-in transition-all focus:border-l-[7px]  bg-transparent">
+                        <option value="" selected="" disabled="">Date Range</option>
+                    </select>
+                </div>
+            </div>
+            <div class="overflow-auto">
+                <table class="min-w-full table-fixed">
+                    <thead class="bg-[#F8F9FD]">
+                        <tr class="">
+                            <th scope="col" class="text-sm font-medium text-gray-900 px-6 py-4 text-left">
+                                Deal
+                            </th>
+                            <th scope="col" class="text-sm font-medium text-gray-900 px-6 py-4 text-left whitespace-nowrap">
+                                Store Name
+                            </th>
+                            <th scope="col" class="text-sm font-medium text-gray-900 px-6 py-4 text-left">
+                                Store Location
+                            </th>
+                            <th scope="col" class="text-sm font-medium text-gray-900 px-6 py-4 text-left">
+                                Billing Date
+                            </th>
+                            <th scope="col" class="text-sm font-medium text-gray-900 px-6 py-4 text-left">
+                                Billing Name
+                            </th>
+                            <th scope="col" class="text-sm font-medium text-gray-900 px-6 py-4 text-left">
+                                Total Spend 
+                            </th>
+                            <th scope="col" class="text-sm font-medium text-gray-900 px-6 py-4 text-left">
+                                Total Save 
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="bg-white odd-bg">
+                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                                <div class="flex items-center gap-2 w-fit">
+                                    <div class="h-[3rem] w-[3rem] rounded-xl overflow-hidden">
+                                        <img src="https://images.unsplash.com/photo-1474511320723-9a56873867b5?ixlib=rb-4.0.3&amp;ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8YW5pbWFsfGVufDB8fDB8fA%3D%3D&amp;auto=format&amp;fit=crop&amp;w=500&amp;q=60"
+                                            class="h-full w-full object-cover">
+                                    </div>
+                                    <h1 class="flex-1 line-clamp-1 font-semibold">
+                                        Lorem ipsum.</h1>
+                                </div>
+                            </td>
+                            <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
+                                <div class="flex items-center gap-2 w-fit">
+                                    <div class="h-[1.5rem] w-[1.5rem] rounded-full overflow-hidden">
+                                        <img src="https://images.unsplash.com/photo-1474511320723-9a56873867b5?ixlib=rb-4.0.3&amp;ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8YW5pbWFsfGVufDB8fDB8fA%3D%3D&amp;auto=format&amp;fit=crop&amp;w=500&amp;q=60"
+                                            class="h-full w-full object-cover">
+                                    </div>
+                                    <h1 class="flex-1 line-clamp-1 font-semibold">
+                                        Lorem ipsum.</h1>
+                                </div>
+                            </td>
+                            <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
+                                user.dail_code user.phone
+                            </td>
+                            <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
+                                user.city.name
+                            </td>
+                            <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
+                                user.country.name
+                            </td>
+                            <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
+                                user.dail_code user.phone
+                            </td>
+                            <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
+                                user.city.name
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+{% include 'common/footer-com.html' %}
+{% endblock body %}

@@ -1,0 +1,526 @@
+
+{% extends 'Store/base.html' %}
+{% block title %} Top Deals - Filter Deals {% endblock title %}
+{% block body %}
+<section>
+    <div
+        class="min-h-[22rem] flex items-center justify-center deal-landing-bg relative bg-no-repeat bg-cover bg-center">
+        <div class="flex flex-col gap-1 text-center items-center">
+            <h2 class="font-semibold text-[#fff] text-[2.5rem] lg:w-full w-[70%]">{{view_category.name}}</h2>
+            <p class="text-[#fff] leading-[2] text-sm lg:w-full w-[70%]">
+                Shop our newest items, made with love by the <br class="hidden lg:block"> world's best artisans.
+            </p>
+        </div>
+    </div>
+</section>
+        {% if view_category.category.name %}
+        {% else %}
+<section>
+    <div class="py-[3rem] w-[90%] mx-auto">
+        <h2 class="font-bold text-lg text-[#205a42]">
+            {{view_category.name}} By Subatcegory
+        </h2>
+        <div class="py-[1rem] relative">
+            <div class="swiper category_slider py-[1rem] px-[0.3rem] relative">
+                <div class="swiper-wrapper">
+                    {% for subcategory in view_category.subcategory_category.all %}
+                    <div class="swiper-slide">
+                        <a href="/subcategory/{{view_category.slug}}/{{subcategory.slug}}/">
+                            <div
+                                class="flex flex-col gap-3 rounded-lg h-[8rem] w-[8rem] p-4 shadow-lg text-center bg-[#205a421A] overlow-hidden">
+                                <div>
+                                    {% if subcategory.image %}
+                                    <img src="/media/{{subcategory.image}}"
+                                        class="h-[3.6rem] w-[3.6rem] mx-auto object-cover rounded-full overflow-hidden border p-1 border-[#205a42]" />
+                                        {% else %}
+                                        <img src="/static/assets/images/dummy.png"
+                                        class="h-[3.6rem] w-[3.6rem] mx-auto object-cover rounded-full overflow-hidden border p-1 border-[#205a42]" />
+                                        {% endif %}
+                                </div>
+                                <div>
+                                    <h2 class="font-semibold line-clamp-1">{{subcategory.name}}</h2>
+                                    <p class="text-xs text-[#4A4747]">{{ subcategory.businessdeal_sub_category.all | length }} Deals</p>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="absolute -top-8 right-[10px] category-2-next after:content-none ">
+                <div
+                    class="rounded-full border-2 border-[#6C6C6C] flex-1 flex justify-center items-center hover-arrows w-[2.188rem] h-[2.188rem]">
+                    <svg width="9" height="13" viewBox="0 0 9 13" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path
+                            d="M0.230471 1.67036L5.41785 6.49998L0.230469 11.3296L1.93905 12.9204L8.83501 6.49998L1.93905 0.0796034L0.230471 1.67036Z"
+                            fill="#555555" />
+                    </svg>
+
+                </div>
+            </div>
+            <div class="absolute -top-8 right-[4rem] category-2-prev after:content-none ">
+                <div
+                    class="rounded-full border-2 border-[#6C6C6C] flex-1 flex justify-center items-center hover-arrows w-[2.188rem] h-[2.188rem]">
+                    <svg width="9" height="14" viewBox="0 0 9 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path
+                            d="M8.76953 11.6508L3.58216 7L8.76953 2.34925L7.06095 0.817421L0.16499 7L7.06095 13.1826L8.76953 11.6508Z"
+                            fill="#555555" />
+                    </svg>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endif %}
+<section>
+    <div class="pb-[2rem] pt-[1rem] w-[90%] mx-auto">
+        <div class="text-center flex flex-col gap-4">
+            <h2 class="font-semibold text-2xl">Top Offers</h2>
+            <p class="text-[#6B6B6B] text-sm">Find top offers and deals to save
+                <br class="hidden lg:block"> a lot of money</p>
+        </div>
+        <div class="relative w-[94%] mx-auto">
+            <div class="swiper card-slider-1 px-2">
+                <div class="swiper-wrapper py-[3rem]">
+                    {% for offers in top_offers_filter_by_category %}
+                    <div class="swiper-slide w-fit">
+                        {% include 'common/cards.html' %}
+                    </div>
+                    {% endfor %}
+                </div>
+                <div class="swiper-pagination slider-1-paggination"></div>
+            </div>
+            <div class="swiper-button-next slider-1-next after:content-none w-[2.8rem]">
+                <div
+                    class="rounded-full lg:border-2 border border-[#6C6C6C] flex-1 h-[2.8rem] flex justify-center items-center hover-arrows">
+                    <svg width="0.75rem" height="1.188rem" viewBox="0 0 12 19" fill="none"
+                        xmlns="http://www.w3.org/2000/svg">
+                        <path fill-rule="evenodd" clip-rule="evenodd"
+                            d="M1.05788 3.15128L8.11521 9.96502L1.05788 16.7787C0.814999 17.0215 0.680606 17.3467 0.683644 17.6842C0.686682 18.0218 0.826907 18.3446 1.07412 18.5833C1.32133 18.822 1.65575 18.9574 2.00534 18.9603C2.35494 18.9633 2.69174 18.8335 2.94321 18.599L10.9432 10.8751C11.1932 10.6337 11.3336 10.3064 11.3336 9.96502C11.3336 9.62367 11.1932 9.29629 10.9432 9.05489L2.94321 1.33103C2.69174 1.09653 2.35494 0.966781 2.00534 0.969714C1.65575 0.972647 1.32133 1.10803 1.07412 1.34671C0.826907 1.58539 0.686682 1.90826 0.683644 2.24579C0.680606 2.58332 0.814999 2.90849 1.05788 3.15128Z"
+                            fill="#6C6C6C" />
+                    </svg>
+                </div>
+            </div>
+            <div class="swiper-button-prev slider-1-prev after:content-none w-[2.8rem]">
+                <div
+                    class="rounded-full lg:border-2 border border-[#6C6C6C] flex-1 h-[2.8rem] flex justify-center items-center hover-arrows">
+                    <svg class="mr-1" width="0.75rem" height="1.188rem" viewBox="0 0 12 19" fill="none"
+                        xmlns="http://www.w3.org/2000/svg">
+                        <path fill-rule="evenodd" clip-rule="evenodd"
+                            d="M10.9421 16.7788L3.88479 9.96509L10.9421 3.15135C11.185 2.90856 11.3194 2.58338 11.3164 2.24585C11.3133 1.90833 11.1731 1.58545 10.9259 1.34677C10.6787 1.1081 10.3443 0.97271 9.99466 0.969776C9.64506 0.966843 9.30826 1.0966 9.05679 1.33109L1.05679 9.05496C0.806832 9.29636 0.666412 9.62374 0.666412 9.96509C0.666412 10.3064 0.806832 10.6338 1.05679 10.8752L9.05679 18.5991C9.30826 18.8336 9.64506 18.9633 9.99466 18.9604C10.3443 18.9575 10.6787 18.8221 10.9259 18.5834C11.1731 18.3447 11.3133 18.0219 11.3164 17.6843C11.3194 17.3468 11.185 17.0216 10.9421 16.7788Z"
+                            fill="#6C6C6C" />
+                    </svg>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<section>
+    <div class="container mx-auto pt-[2rem] pb-[3rem] w-[90%]">
+        <div class="block lg:grid grid-cols-9 gap-4 pb-12 relative">
+            {% comment %}
+
+            <div class="col-span-2">
+                <div class="border rounded-3xl filter_p overflow-hidden top-dynamic mb-4 lg:mb-0 sticky filters_bar lg:block hidden"
+                    style="top: 123px; height: calc(100vh - 133px);">
+                    <div class="scroll-w-4 relative overflow-y-auto h-full filters_bar_div">
+                        <h2
+                            class="font-semibold text-lg px-3 py-3 bg-[#f9f9fd] flex justify-between sticky top-0 z-[100]">
+                            <span>Filters</span>
+                            <div class="lg:hidden block close_btn_filter">
+                                <svg width="1.25rem" height="1.25rem" viewBox="0 0 10 10" fill="none"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <path
+                                        d="M4.76667 0C2.13436 0 0 2.13436 0 4.76667C0 7.39897 2.13436 9.53333 4.76667 9.53333C7.39897 9.53333 9.53333 7.39897 9.53333 4.76667C9.53333 2.13436 7.39897 0 4.76667 0ZM6.5265 6.57758L5.82427 6.57438L4.76667 5.31356L3.71013 6.57332L3.00683 6.57651C2.96002 6.57651 2.92171 6.53927 2.92171 6.49139C2.92171 6.47118 2.92916 6.45202 2.94193 6.43606L4.32618 4.78688L2.94193 3.13877C2.92907 3.12317 2.92194 3.10365 2.92171 3.08344C2.92171 3.03662 2.96002 2.99832 3.00683 2.99832L3.71013 3.00151L4.76667 4.26234L5.82321 3.00257L6.52544 2.99938C6.57225 2.99938 6.61056 3.03662 6.61056 3.0845C6.61056 3.10472 6.60311 3.12387 6.59034 3.13983L5.20822 4.78795L6.59141 6.43713C6.60417 6.45309 6.61162 6.47224 6.61162 6.49246C6.61162 6.53927 6.57332 6.57758 6.5265 6.57758Z"
+                                        fill="#205a42" />
+                                </svg>
+                            </div>
+                        </h2>
+                        {% comment %} <div class="px-3 py-2 border-b flex flex-col gap-2">
+                            <h2 class="font-semibold text-lg">Category</h2>
+                            <div class="flex flex-wrap items-center gap-2">
+                                {% for category in parent_category_filter_by_status %}
+                                <a href="/category/{{category.slug}}/">
+
+                                <div class="pb-3 flex items-center gap-3 flex-wrap radio-select-parent">
+                                    <div class="bg-transparent rounded-lg px-3 py-2  border radio-select-options "
+                                        id="category-input-main">
+
+                                        
+                                        <div class="flex items-center gap-2">
+                                           <label
+                                                    class="text-[#8E8E8E] text-sm">{{category.name}}</label>
+                                        
+                                        </div>
+                                   
+                                    </div>
+                                </div>
+                            </a>
+                                {% endfor %}
+                            </div>
+                            <div class="text-center text-sm text-[#8E8E8E] underline cursor-pointer hidden">See more
+                            </div>
+                        </div> {% endcomment %}
+                        <form action="" method="get" class="my-5 personForm"
+                        data-cities-url="{% url 'ajax_load_cities' %}">
+
+                        <div class="px-3 py-2 border-b flex flex-col gap-2">
+                            <h2 class="font-semibold text-lg">Types</h2>
+                            <div class="flex flex-wrap items-center gap-2">
+                                {% for subcategory in sub_categories %}
+                                <div class="pb-3 flex items-center gap-3 flex-wrap radio-select-parent">
+                                    <div class="bg-transparent rounded-lg px-3 py-2  border radio-select-options "
+                                        id="category-input-main">
+                                        <div class="flex items-center gap-2">
+                                            <svg width="1rem" height="1rem" viewBox="0 0 16 16" fill="none"
+                                                xmlns="http://www.w3.org/2000/svg">
+                                                <g clip-path="url(#clip0_120_3499)">
+                                                    <path d="M0.5625 4.09839H5.14342V13.0057H0.5625V4.09839Z"
+                                                        fill="#E6E6E6" />
+                                                    <path d="M5.14453 4.09839H6.6715V13.0057H5.14453V4.09839Z"
+                                                        fill="#29ABE2" />
+                                                    <path d="M5.14453 4.09861L5.90802 2.31714L6.6715 4.09861H5.14453Z"
+                                                        fill="#0071BC" />
+                                                    <path
+                                                        d="M5.9069 2.31714H1.32599L0.5625 4.09861H5.14342L5.9069 2.31714Z"
+                                                        fill="#CCCCCC" />
+                                                    <path d="M1.32422 1.04443H5.90514V2.31691H1.32422V1.04443Z"
+                                                        fill="#29ABE2" />
+                                                    <path
+                                                        d="M2.84942 7.40686C3.27109 7.40686 3.61291 7.06503 3.61291 6.64337C3.61291 6.22171 3.27109 5.87988 2.84942 5.87988C2.42776 5.87988 2.08594 6.22171 2.08594 6.64337C2.08594 7.06503 2.42776 7.40686 2.84942 7.40686Z"
+                                                        fill="#29ABE2" />
+                                                    <path
+                                                        d="M2.17781 11.8145L0.485668 13.0236C0.288307 13.1639 0.205691 13.4167 0.282072 13.6466C0.357148 13.8719 0.568061 14.0239 0.805569 14.0237H2.95427L2.17781 11.8145Z"
+                                                        fill="#C69C6D" />
+                                                    <path
+                                                        d="M4.09434 10.8618L2.42408 11.339C2.14751 11.4181 1.97792 11.6962 2.0342 11.9783L2.4447 14.0239H4.96268L4.09434 10.8618Z"
+                                                        fill="#A67C52" />
+                                                    <path
+                                                        d="M8.70683 14.0239H4.19946L3.80194 11.0865C3.76103 10.7847 3.97255 10.5068 4.27438 10.4659C4.29897 10.4626 4.32378 10.4609 4.34859 10.4609H8.70683V14.0239Z"
+                                                        fill="#8C6239" />
+                                                    <path
+                                                        d="M11.2471 13.2603H9.97897C8.57167 13.2587 7.43125 12.1183 7.42969 10.711V7.91587C7.42969 7.77533 7.54364 7.66138 7.68418 7.66138H13.5419C13.6825 7.66138 13.7964 7.77533 13.7964 7.91587V10.711C13.7949 12.1183 12.6544 13.2587 11.2471 13.2603Z"
+                                                        fill="#F7931E" />
+                                                    <path
+                                                        d="M13.2864 14.0238H8.19649L7.6875 13.0059H13.7954L13.2864 14.0238Z"
+                                                        fill="#F7931E" />
+                                                    <path
+                                                        d="M14.8139 7.66142H7.68367C7.54312 7.66142 7.42917 7.77537 7.42917 7.91591V10.2064H6.92451V4.09848C6.92457 4.06409 6.91754 4.03005 6.90389 3.99846L6.16102 2.26611V1.04453C6.16102 0.903989 6.04707 0.790039 5.90653 0.790039H1.32561C1.18506 0.790039 1.07111 0.903989 1.07111 1.04453V2.26611L0.32824 3.99923C0.314688 4.03056 0.307657 4.06435 0.307626 4.09848V12.8412C-0.0417968 13.1156 -0.102589 13.6213 0.17182 13.9707C0.324581 14.1652 0.558335 14.2787 0.805673 14.2783H13.2869C13.3838 14.2788 13.4726 14.2243 13.5159 14.1376L13.9532 13.2603H15.0684V12.7513H12.7685C13.347 12.3214 13.716 11.6663 13.7839 10.9487C14.5235 10.8298 15.0675 10.1919 15.0684 9.44289V7.91591C15.0684 7.77537 14.9544 7.66142 14.8139 7.66142ZM5.39754 10.2064V4.35298H6.41552V10.2064H5.39754ZM3.74077 10.482C3.67562 10.5581 3.62536 10.6458 3.59265 10.7406L2.35428 11.0943C2.03912 11.1868 1.81122 11.4608 1.77759 11.7876L0.816617 12.4739V4.35298H4.88854V10.2064H4.34774C4.11513 10.2063 3.89382 10.3068 3.74077 10.482ZM1.49332 2.57151H5.52071L4.97533 3.84398H0.947936L1.49332 2.57151ZM6.2842 3.84398H5.52886L5.90653 2.96318L6.2842 3.84398ZM1.5801 1.29903H5.65203V2.06252H1.5801V1.29903ZM0.523947 13.5657C0.482209 13.442 0.52646 13.3056 0.632871 13.23L1.85165 12.3594L2.13363 13.7693H0.805673C0.67763 13.7695 0.563998 13.6873 0.523947 13.5657ZM2.28429 11.9273C2.25483 11.7757 2.34575 11.6266 2.494 11.5834L3.57 11.276L3.90746 13.7693H2.65255L2.28429 11.9273ZM4.05329 11.0516C4.03166 10.889 4.1459 10.7396 4.30849 10.718C4.3215 10.7163 4.3346 10.7154 4.34774 10.7154H7.42943C7.43159 11.518 7.81228 12.2726 8.45657 12.7513H6.41552V13.2603H7.53072L7.78521 13.7693H4.42129L4.05329 11.0516ZM13.3841 13.2603L13.1296 13.7693H8.35426L8.09977 13.2603H13.3841ZM13.2869 10.711C13.2856 11.8373 12.3729 12.7501 11.2466 12.7513H9.97845C8.85222 12.7499 7.93956 11.8373 7.93816 10.711V8.17041H13.2869V10.711ZM14.5594 9.44289C14.5576 9.90565 14.244 10.309 13.7959 10.4247V8.17041H14.5594V9.44289Z"
+                                                        fill="black" />
+                                                    <path
+                                                        d="M10.2268 12.2423H10.4813V11.7333H10.2268C9.52437 11.7324 8.95513 11.1632 8.9543 10.4608V10.2063H8.44531V10.4608C8.44658 11.4442 9.24344 12.241 10.2268 12.2423Z"
+                                                        fill="black" />
+                                                    <path d="M8.44531 9.18848H8.9543V9.69747H8.44531V9.18848Z"
+                                                        fill="black" />
+                                                    <path
+                                                        d="M8.95821 7.15245C8.95821 6.73078 9.30003 6.38897 9.7217 6.38897H13.4119C13.9038 6.38897 14.3026 5.99017 14.3026 5.49823C14.3026 5.00629 13.9038 4.6075 13.4119 4.6075H10.3579C10.1471 4.6075 9.97619 4.43657 9.97619 4.22575C9.97619 4.01494 10.1471 3.84401 10.3579 3.84401H11.5032C12.2056 3.84318 12.7748 3.27394 12.7756 2.57153H12.2667C12.2667 2.9932 11.9248 3.33502 11.5032 3.33502H10.3579C9.86599 3.33502 9.4672 3.73381 9.4672 4.22575C9.4672 4.71769 9.86599 5.11649 10.3579 5.11649H13.4119C13.6227 5.11649 13.7936 5.28741 13.7936 5.49823C13.7936 5.70905 13.6227 5.87998 13.4119 5.87998H9.7217C9.01929 5.8808 8.45005 6.45004 8.44922 7.15245H8.95821Z"
+                                                        fill="black" />
+                                                    <path
+                                                        d="M2.85392 5.62549C2.29171 5.62549 1.83594 6.08126 1.83594 6.64347C1.83594 7.20568 2.29171 7.66145 2.85392 7.66145C3.41613 7.66145 3.8719 7.20568 3.8719 6.64347C3.8719 6.08126 3.41613 5.62549 2.85392 5.62549ZM2.85392 7.15246C2.5728 7.15246 2.34493 6.92459 2.34493 6.64347C2.34493 6.36235 2.5728 6.13448 2.85392 6.13448C3.13504 6.13448 3.36291 6.36235 3.36291 6.64347C3.36291 6.92459 3.13504 7.15246 2.85392 7.15246Z"
+                                                        fill="black" />
+                                                    <path d="M1.83594 8.17041H3.8719V8.6794H1.83594V8.17041Z"
+                                                        fill="black" />
+                                                    <path d="M1.83594 9.18848H3.8719V9.69747H1.83594V9.18848Z"
+                                                        fill="black" />
+                                                </g>
+                                                <defs>
+                                                    <clipPath id="clip0_120_3499">
+                                                        <rect width="15.0684" height="15.0684" fill="white" />
+                                                    </clipPath>
+                                                </defs>
+                                            </svg>
+                                            <label class="text-[#8E8E8E] text-sm" for='#{{subcategory.id}}'>{{subcategory.name}}</label>
+                                            <input type="radio" value="{{subcategory.id}}" class="accent-[#bf801f]" name='sub_category'>
+                                        </div>
+                                    </div>
+                                </div>
+                                {% endfor %}
+
+                            </div>
+                            <div class="text-center text-sm text-[#8E8E8E] underline cursor-pointer hidden">See more
+                            </div>
+                        </div>
+                       
+                            <div class="px-3 py-2 border- flex flex-col gap-2">
+                                <h2 class="font-semibold text-lg mb-4">Location</h2>
+                                {{ dealfilter.form.country.errors }}
+                                <h2 class="font-semibold">Country</h2>
+                                <select name="country"
+                                    class="py-2 px-2 id_country rounded-lg form-control border border-secondary"
+                                    id="id_country">
+                                    <option selected value="229">United Arab Emirates</option>
+                                    {% for country in all_countries %}
+                                    {% if country == 'United Arab Emirates' %}
+                                    {% else %}
+                                    <option value="{{country.id}}">{{country.name}}</option>
+                                    {% endif %}
+                                    {% endfor %}
+                                </select>
+                                {{ dealfilter.form.country.errors }}
+                                <h2 class="font-semibold">City</h2>
+                                <select name="city"
+                                    class="py-2 px-2 cities_dropdown  rounded-lg form-control border border-secondary"
+                                    id="id_city">
+                                    {% if cities %}
+                                    {% for city in cities %}
+                                    <option value="{{ city.pk }}">{{ city.name }}</option>
+                                    {% endfor %}
+                                    {% else %}
+                                    <option value="47923">Abu Dhabi</option>
+                                    <option value="40954">Ajman</option>
+                                    <option value="40961">al-Fujayrah</option>
+                                    <option value="47924">Al Ayn</option>
+                                    <option value="40955">Al Qusais</option>
+                                    <option value="40956">Deira</option>
+                                    <option value="40957">Dubai</option>
+                                    <option value="40958">Jebel Ali</option>
+                                    <option value="40960">Khawr Fakkan</option>
+                                    <option value="47925">Ras Al Khaymah</option>
+                                    <option value="40959">Sharjah</option>
+                                    <option value="47926">Umm al Qaywayn</option>
+                                    {% endif %}
+                                </select>
+                                <!-- <h2 class="font-semibold">Area</h2>
+                                <div class="border-[#e3e3e3] rounded-lg flex items-center px-3 py-2 border">
+                                    <select
+                                        class="outline-none text-[#8E8E8E] bg-transparent w-full text-sm province_select">
+                                        <option value="All over the pakistan">
+                                            Area
+                                        </option>
+                                    </select>
+                                </div> -->
+                            </div>
+
+
+                            <!-- <div class="px-[1rem] my-[1rem]">
+                                <h2 class="font-semibold mb-[1rem]">Price</h2>
+                                <input type="text" class="js-range-slider" name="my_range" value="" />
+                            </div> -->
+
+                            <div
+                                class="pl-3 py-4 sticky bottom-0 bg-white z-[100] flex items-center justify-center gap-3 lg:pr-:0 pr-3">
+                                <a href=""
+                                    class="text-xs rounded-md lg:w-auto bg-[#E1E1E1] px-6 py-2 font-semibold text-center flex-1"
+                                    type="button">Reset</a>
+                                <button class="text-xs rounded-md lg:w-auto bg-[#205a42] px-6 py-2 font-semibold flex-1 whitespace-nowrap"
+                                    type="submit">Show Results</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            {% endcomment %}
+
+            <div class="col-span-9">
+                <div class="flex lg:flex-row flex-col items-center justify-between lg:gap-0 gap-4">
+                    <div class="flex items-center justify-between lg:w-auto w-full">
+                        <h2 class="font-bold text-2xl">{{view_category.name}}</h2>
+                        <div
+                            class="filters_show lg:hidden border border-[#D8D1D1] bg-[#F9F9FD] rounded-md p-2 flex items-center gap-2">
+                            <svg width="13" height="13" viewBox="0 0 13 13" fill="none"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <path
+                                    d="M2.16784 12.154L2.16784 6.29807C2.97118 6.12158 3.57428 5.40418 3.57428 4.5486C3.57428 3.69302 2.9712 2.97562 2.16784 2.79913L2.16784 0.615497C2.16784 0.403093 1.99563 0.230882 1.78322 0.230882C1.57082 0.230882 1.39861 0.403093 1.39861 0.615497V2.79932C0.595673 2.97615 -0.0078125 3.69454 -0.0078125 4.5486C-0.0078125 5.40312 0.595577 6.12117 1.39861 6.29793L1.39861 12.154C1.39861 12.3664 1.57082 12.5386 1.78322 12.5386C1.99563 12.5386 2.16784 12.3664 2.16784 12.154ZM1.78423 5.57038C1.78286 5.57038 1.78147 5.57035 1.7801 5.57035C1.21839 5.56867 0.761442 5.11033 0.761442 4.5486C0.761442 3.98766 1.21776 3.52929 1.77921 3.52687L1.78486 3.52679C2.34752 3.52768 2.80507 3.98571 2.80507 4.5486C2.80507 5.11124 2.34798 5.56913 1.78565 5.5704L1.78423 5.57038ZM10.1361 0.615497V2.79932C9.33322 2.97617 8.72971 3.69454 8.72971 4.5486C8.72971 5.40312 9.33312 6.12117 10.1361 6.29793V12.154C10.1361 12.3664 10.3083 12.5386 10.5207 12.5386C10.7332 12.5386 10.9054 12.3664 10.9054 12.154V6.29807C11.7087 6.12158 12.3118 5.40418 12.3118 4.5486C12.3118 3.69302 11.7087 2.97562 10.9054 2.79913V0.615497C10.9054 0.403093 10.7332 0.230882 10.5207 0.230882C10.3083 0.230882 10.1361 0.403093 10.1361 0.615497ZM11.5426 4.5486C11.5426 5.11124 11.0855 5.56913 10.5231 5.5704L10.5218 5.57038C10.5204 5.57038 10.519 5.57035 10.5176 5.57035C9.95591 5.56867 9.49894 5.11033 9.49894 4.5486C9.49894 3.98766 9.95526 3.52929 10.5167 3.52687L10.5223 3.52679C11.0851 3.52761 11.5426 3.98567 11.5426 4.5486ZM5.76738 0.615497L5.76738 6.47139C4.96404 6.64788 4.36096 7.36528 4.36096 8.22086C4.36096 9.07643 4.96404 9.79384 5.76738 9.97033V12.154C5.76738 12.3664 5.93959 12.5386 6.15199 12.5386C6.36442 12.5386 6.53661 12.3664 6.53661 12.154V9.97014C7.33952 9.79329 7.94303 9.07492 7.94303 8.22086C7.94303 7.36634 7.33961 6.64829 6.53661 6.47153L6.53661 0.615497C6.53661 0.403093 6.36442 0.230882 6.15199 0.230882C5.93959 0.230882 5.76738 0.403093 5.76738 0.615497ZM6.15099 7.19908C6.15238 7.19908 6.15375 7.1991 6.15512 7.1991C6.71683 7.20079 7.17377 7.65913 7.17377 8.22086C7.17377 8.7818 6.71745 9.24016 6.15603 9.24259L6.15041 9.24266C5.58767 9.24182 5.13019 8.78377 5.13019 8.22086C5.13019 7.65821 5.58726 7.20033 6.14961 7.19906L6.15099 7.19908Z"
+                                    fill="#555555" />
+                            </svg>
+                            <p class="text-[#555555]">Filters</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-3 text-sm">
+                        <div class="border border-[#D8D1D1] bg-[#F9F9FD] rounded-md p-2 flex items-center gap-2">
+                            <svg width="14" height="14" viewBox="0 0 14 14" fill="none"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <path
+                                    d="M13.5642 7.07695L12.1252 5.43157L12.3257 3.25541L10.1968 2.77182L9.08215 0.884644L7.07702 1.74567L5.0719 0.884644L3.95728 2.76593L1.82831 3.24362L2.02882 5.42567L0.589844 7.07695L2.02882 8.72234L1.82831 10.9044L3.95728 11.388L5.0719 13.2693L7.07702 12.4023L9.08215 13.2634L10.1968 11.3821L12.3257 10.8985L12.1252 8.72234L13.5642 7.07695ZM5.53189 9.44182L4.1283 8.02644C4.07363 7.97188 4.03026 7.90707 4.00067 7.83573C3.97107 7.76439 3.95584 7.68791 3.95584 7.61067C3.95584 7.53343 3.97107 7.45695 4.00067 7.38561C4.03026 7.31426 4.07363 7.24946 4.1283 7.1949L4.16959 7.15362C4.39959 6.92362 4.77702 6.92362 5.00702 7.15362L5.95651 8.109L8.99369 5.06593C9.22369 4.83593 9.60113 4.83593 9.83113 5.06593L9.87241 5.10721C10.1024 5.33721 10.1024 5.70875 9.87241 5.93875L6.38113 9.44182C6.13933 9.67182 5.76779 9.67182 5.53189 9.44182Z"
+                                    fill="#555555" />
+                            </svg>
+                            <p class="text-[#555555]">New Arrival</p>
+                        </div>
+                        <div class="border border-[#D8D1D1] bg-[#F9F9FD] rounded-md p-2 flex items-center gap-2">
+                            <svg width="14" height="14" viewBox="0 0 14 14" fill="none"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <path
+                                    d="M13.5642 7.07695L12.1252 5.43157L12.3257 3.25541L10.1968 2.77182L9.08215 0.884644L7.07702 1.74567L5.0719 0.884644L3.95728 2.76593L1.82831 3.24362L2.02882 5.42567L0.589844 7.07695L2.02882 8.72234L1.82831 10.9044L3.95728 11.388L5.0719 13.2693L7.07702 12.4023L9.08215 13.2634L10.1968 11.3821L12.3257 10.8985L12.1252 8.72234L13.5642 7.07695ZM5.53189 9.44182L4.1283 8.02644C4.07363 7.97188 4.03026 7.90707 4.00067 7.83573C3.97107 7.76439 3.95584 7.68791 3.95584 7.61067C3.95584 7.53343 3.97107 7.45695 4.00067 7.38561C4.03026 7.31426 4.07363 7.24946 4.1283 7.1949L4.16959 7.15362C4.39959 6.92362 4.77702 6.92362 5.00702 7.15362L5.95651 8.109L8.99369 5.06593C9.22369 4.83593 9.60113 4.83593 9.83113 5.06593L9.87241 5.10721C10.1024 5.33721 10.1024 5.70875 9.87241 5.93875L6.38113 9.44182C6.13933 9.67182 5.76779 9.67182 5.53189 9.44182Z"
+                                    fill="#555555" />
+                            </svg>
+                            <p class="text-[#555555]">New Arrival</p>
+                        </div>
+                        <div class="border border-[#D8D1D1] bg-[#F9F9FD] rounded-md p-2 flex items-center gap-2">
+                            <svg width="14" height="14" viewBox="0 0 14 14" fill="none"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <path
+                                    d="M13.5642 7.07695L12.1252 5.43157L12.3257 3.25541L10.1968 2.77182L9.08215 0.884644L7.07702 1.74567L5.0719 0.884644L3.95728 2.76593L1.82831 3.24362L2.02882 5.42567L0.589844 7.07695L2.02882 8.72234L1.82831 10.9044L3.95728 11.388L5.0719 13.2693L7.07702 12.4023L9.08215 13.2634L10.1968 11.3821L12.3257 10.8985L12.1252 8.72234L13.5642 7.07695ZM5.53189 9.44182L4.1283 8.02644C4.07363 7.97188 4.03026 7.90707 4.00067 7.83573C3.97107 7.76439 3.95584 7.68791 3.95584 7.61067C3.95584 7.53343 3.97107 7.45695 4.00067 7.38561C4.03026 7.31426 4.07363 7.24946 4.1283 7.1949L4.16959 7.15362C4.39959 6.92362 4.77702 6.92362 5.00702 7.15362L5.95651 8.109L8.99369 5.06593C9.22369 4.83593 9.60113 4.83593 9.83113 5.06593L9.87241 5.10721C10.1024 5.33721 10.1024 5.70875 9.87241 5.93875L6.38113 9.44182C6.13933 9.67182 5.76779 9.67182 5.53189 9.44182Z"
+                                    fill="#555555" />
+                            </svg>
+                            <p class="text-[#555555]">New Arrival</p>
+                        </div>
+                        <div class="border border-[#D8D1D1] bg-[#F9F9FD] rounded-md p-2 flex items-center gap-2">
+                            <svg width="14" height="14" viewBox="0 0 14 14" fill="none"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <path
+                                    d="M13.5642 7.07695L12.1252 5.43157L12.3257 3.25541L10.1968 2.77182L9.08215 0.884644L7.07702 1.74567L5.0719 0.884644L3.95728 2.76593L1.82831 3.24362L2.02882 5.42567L0.589844 7.07695L2.02882 8.72234L1.82831 10.9044L3.95728 11.388L5.0719 13.2693L7.07702 12.4023L9.08215 13.2634L10.1968 11.3821L12.3257 10.8985L12.1252 8.72234L13.5642 7.07695ZM5.53189 9.44182L4.1283 8.02644C4.07363 7.97188 4.03026 7.90707 4.00067 7.83573C3.97107 7.76439 3.95584 7.68791 3.95584 7.61067C3.95584 7.53343 3.97107 7.45695 4.00067 7.38561C4.03026 7.31426 4.07363 7.24946 4.1283 7.1949L4.16959 7.15362C4.39959 6.92362 4.77702 6.92362 5.00702 7.15362L5.95651 8.109L8.99369 5.06593C9.22369 4.83593 9.60113 4.83593 9.83113 5.06593L9.87241 5.10721C10.1024 5.33721 10.1024 5.70875 9.87241 5.93875L6.38113 9.44182C6.13933 9.67182 5.76779 9.67182 5.53189 9.44182Z"
+                                    fill="#555555" />
+                            </svg>
+                            <p class="text-[#555555]">New Arrival</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="grid 2xl:grid-cols-5 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-3 sm:grid-cols-3 grid-cols-2 gap-4 pt-4">
+
+                    {% comment %} 
+                    {% for offers in deal_filtered_category %}
+                    {% include 'common/cards.html' %}
+                    {% endfor %} {% endcomment %}
+
+                    {% for offers in dealfilter %}
+                    {% include 'common/cards.html' %}
+                   
+
+                    {% endfor %}
+                </div>
+                <div class="pt-[2rem] text-center lg:text-left">
+                    {% comment %}
+                    <button class="py-2 px-5 bg-[#205a42] text-white font-semibold rounded-md">Explore More</button>
+                    {% endcomment %}
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section>
+    <div class="container mx-auto pt-[2rem] pb-[3rem] w-[90%]">
+        <div class="text-center">
+            <h1 class="font-semibold text-3xl pb-5">Special Discounts of the Day</h1>
+            <p class="text-[#6B6B6B] leading-[2]">Find  on your favorite categories of
+                <br class="hidden md:block"> getaways, tickets, food, beauty & more.</p>
+        </div>
+
+        <div class="pt-[3rem]">
+            <div class="grid lg:grid-cols-3 gap-[2rem] w-[90%] mx-auto">
+                {% for deal_discounts in discounts_filter_by_category %}
+                <div class="rounded-xl bg-[#F9F9F9] overflow-hidden">
+                    <div class="h-[17rem]">
+                        {% for discounts in deal_discounts.dealmedia_business_deal.all %}
+                        <img src="/media/{{discounts.image}}" class="w-full h-full object-cover">
+                        {% endfor %}
+                    </div>
+                    <div class="p-[1.5rem] text-center flex flex-col justify-center items-center gap-[1.5rem]">
+                        <svg width="81" height="81" viewBox="0 0 81 81" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path
+                                d="M9.96311 43.7703H4.94849C4.2944 43.7703 3.8584 43.3343 3.8584 42.6803V30.4712C3.8584 29.8171 4.2944 29.3811 4.94849 29.3811H9.85398C10.5081 29.3811 10.9441 29.8171 10.9441 30.4712C10.9441 31.1253 10.5081 31.5613 9.85398 31.5613H6.03857V41.5902H9.96293C10.617 41.5902 11.053 42.0262 11.053 42.6803C11.053 43.3343 10.5081 43.7703 9.96311 43.7703Z"
+                                fill="#373737" />
+                            <path
+                                d="M75.0415 48.7848H69.7C69.0459 48.7848 68.6099 48.3488 68.6099 47.6947C68.6099 47.0406 69.0459 46.6046 69.7 46.6046H73.9514V37.2298C73.9514 36.2487 73.1883 35.4857 72.2072 35.4857H56.8368C56.5098 35.4857 56.1827 35.2676 55.9648 35.0497L48.4432 24.4756C48.1161 24.0396 47.5712 23.7126 47.026 23.7126H10.8345L11.0526 46.6048H15.304C15.9581 46.6048 16.3941 47.0408 16.3941 47.6949C16.3941 48.349 15.9581 48.785 15.304 48.785H9.96248C9.41734 48.785 8.87239 48.349 8.87239 47.6949L8.6543 22.5135C8.6543 22.1865 8.76325 21.9684 8.98134 21.7505C9.19943 21.5324 9.41734 21.4235 9.74439 21.4235H47.0259C48.334 21.4235 49.5331 22.0776 50.2961 23.0587L57.4907 33.1967H72.0981C74.2782 33.1967 76.0224 34.9409 76.0224 37.1211V47.5861C76.1317 48.3488 75.5866 48.7848 75.0415 48.7848Z"
+                                fill="#373737" />
+                            <path
+                                d="M56.1831 48.7848H28.8215C28.1674 48.7848 27.7314 48.3488 27.7314 47.6947C27.7314 47.0406 28.1674 46.6046 28.8215 46.6046H56.2922C56.9463 46.6046 57.3823 47.0406 57.3823 47.6947C57.3823 48.3488 56.8372 48.7848 56.1831 48.7848Z"
+                                fill="#373737" />
+                            <path
+                                d="M17.7022 54.0173C17.4841 54.0173 17.1571 53.9084 17.0481 53.7992C15.304 52.2732 14.2139 50.0928 14.2139 47.8037C14.2139 43.4433 17.7022 39.955 22.0626 39.955C26.4229 39.955 29.9113 43.4433 29.9113 47.8037C29.9113 49.5478 29.2572 51.292 28.1671 52.7092C27.8401 53.1452 27.077 53.2543 26.641 52.8181C26.205 52.4911 26.0959 51.728 26.5321 51.292C27.4041 50.3109 27.8402 49.0029 27.8402 47.6947C27.8402 44.6424 25.333 42.0262 22.1717 42.0262C19.0104 42.0262 16.5032 44.5334 16.5032 47.6947C16.5032 49.3299 17.2662 50.965 18.5744 52.0551C19.0104 52.4911 19.1195 53.1452 18.6834 53.5812C18.3563 53.7992 18.0293 54.0173 17.7022 54.0173Z"
+                                fill="#373737" />
+                            <path
+                                d="M56.837 35.4855H16.5032C15.8491 35.4855 15.4131 35.0495 15.4131 34.3954V26.3286C15.4131 25.6745 15.8491 25.2385 16.5032 25.2385H51.1685C51.4955 25.2385 51.8226 25.4566 52.0405 25.6745L57.709 33.7413C57.9271 34.0684 57.9271 34.5044 57.8179 34.8314C57.6 35.2676 57.273 35.4855 56.837 35.4855ZM17.5933 33.3053H54.6568L50.5144 27.4187H17.5933V33.3053Z"
+                                fill="#373737" />
+                            <path
+                                d="M33.0725 35.4855C32.4184 35.4855 31.9824 35.0495 31.9824 34.3954V26.3286C31.9824 25.6745 32.4184 25.2385 33.0725 25.2385C33.7266 25.2385 34.1626 25.6745 34.1626 26.3286V34.3954C34.1626 34.9405 33.6175 35.4855 33.0725 35.4855Z"
+                                fill="#373737" />
+                            <path
+                                d="M79.8382 71.023H1.13283C0.805783 71.023 0.478738 70.914 0.260831 70.587C0.0427396 70.3689 -0.0662143 70.0418 0.0427396 69.715C0.151694 69.1698 2.76805 55.9796 11.5979 54.0175C14.1051 53.4724 15.8493 52.6004 17.3754 51.8374C20.8637 50.0932 23.5891 48.785 30.8926 52.1644C39.5044 56.0888 47.1352 54.6716 54.0028 53.4726C56.074 53.1456 57.9271 52.7096 59.7802 52.6006C60.4343 52.4916 60.8703 52.9276 60.9793 53.5817C61.0882 54.2358 60.6522 54.6718 59.9982 54.7808C58.145 54.9989 56.2919 55.3259 54.3296 55.6528C47.244 56.961 39.1772 58.3781 30.0203 54.1267C23.5887 51.1835 21.6264 52.1644 18.3562 53.7996C16.7209 54.5627 14.8678 55.5438 12.0335 56.1979C6.03795 57.5061 3.31264 65.6818 2.5496 68.8432H78.3118C73.9514 57.7242 69.2638 55.5438 65.6665 54.8899C65.1214 54.781 64.6854 54.2358 64.7945 53.5817C64.9035 53.0366 65.4486 52.6006 66.1027 52.7097C72.6432 53.9088 77.2217 59.1413 80.9281 69.6064C81.0371 69.9334 81.0371 70.2605 80.8192 70.5875C80.6012 70.8049 80.2742 71.023 79.8382 71.023Z"
+                                fill="#373737" />
+                            <path
+                                d="M62.9415 55.5434C58.5811 55.5434 55.0928 52.055 55.0928 47.6947C55.0928 43.3343 58.5811 39.8459 62.9415 39.8459C67.3018 39.8459 70.7902 43.3343 70.7902 47.6947C70.7902 52.055 67.1929 55.5434 62.9415 55.5434ZM62.9415 42.1351C59.8891 42.1351 57.2729 44.6423 57.2729 47.8036C57.2729 50.9649 59.7802 53.4721 62.9415 53.4721C66.1028 53.4721 68.61 50.9649 68.61 47.8036C68.61 44.6423 65.9938 42.1351 62.9415 42.1351Z"
+                                fill="#373737" />
+                            <path
+                                d="M67.956 26.3286C63.4865 26.3286 59.7803 22.6223 59.7803 18.1528C59.7803 13.6833 63.4865 9.97705 67.956 9.97705C72.4255 9.97705 76.1318 13.6833 76.1318 18.1528C76.1318 22.6223 72.4255 26.3286 67.956 26.3286ZM67.956 12.1572C64.6858 12.1572 61.9605 14.8825 61.9605 18.1528C61.9605 21.4231 64.6858 24.1484 67.956 24.1484C71.2263 24.1484 73.9516 21.4231 73.9516 18.1528C73.9516 14.8825 71.2265 12.1572 67.956 12.1572Z"
+                                fill="#373737" />
+                        </svg>
+                        <h2>{{deal_discounts.title}}
+                            <br class="lg:block hidden">
+                            {{deal_discounts.category.name}}
+                        </h2>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="bg-[#F7F7F7]">
+    <div class="container w-[90%] mx-auto ">
+        <div class=" py-[2rem]">
+            <div class="flex items-center justify-evenly gap-[2rem] flex-wrap">
+                <img src='/static/assets/images/two-mobiles.png' class="w-[25rem]" />
+                <div class="flex flex-col gap-4 lg:text-left text-center">
+                    <h2 class="text-[#205a42] font-semibold text-[2.2rem]">Download Our App To Get <br
+                            class="hidden lg:block"> Amazing Deals</h2>
+                    <p class="text-sm leading-[2] text-[#6B6B6B]">Get new deals every day. Top deals have the best
+                        offers and share <br class="hidden lg:block"> them with you. To avail of offers, find our
+                        app in the play store</p>
+                    <div class="flex items-center flex-wrap gap-4 lg:justify-start justify-center">
+                        <img src='/static/assets/images/google-play.png' />
+                        <img src='/static/assets/images/app-store.png' />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<section>
+    <div class="container w-[90%] mx-auto ">
+        <div class="flex gap-4 justify-evenly flex-col lg:flex-row items-center py-[2rem] ">
+            <div class="flex flex-col gap-2 text-center">
+                <h2 class="text-[#205a42] font-bold text-3xl">75,000+</h2>
+                <p class="text-[#373737]">Deals</p>
+            </div>
+            <div class="flex flex-col gap-2 text-center">
+                <h2 class="text-[#205a42] font-bold text-3xl">6,000+</h2>
+                <p class="text-[#373737]">Retailers</p>
+            </div>
+            <div class="flex flex-col gap-2 text-center">
+                <h2 class="text-[#205a42] font-bold text-3xl">2 Million</h2>
+                <p class="text-[#373737]">Active Users</p>
+            </div>
+            <div class="flex flex-col gap-2 text-center">
+                <h2 class="text-[#205a42] font-bold text-3xl">1.3 Million</h2>
+                <p class="text-[#373737]">App Downloads</p>
+            </div>
+        </div>
+    </div>
+</section>
+{% include 'common/footer-com.html' %}
+<script>
+    $(".id_country").change(function () {
+        var url = $(".personForm").attr("data-cities-url");  // get the url of the `load_cities` view
+        var countryId = $(this).val();  // get the selected country ID from the HTML input
+        $.ajax({                       // initialize an AJAX request
+            url: url,                    // set the url of the request (= localhost:8000/hr/ajax/load-cities/)
+            data: {
+                'country': countryId       // add the country id to the GET parameters
+            },
+            success: function (data) {   // `data` is the return of the `load_cities` view function
+                let cities = data.cities
+                let c_dds = document.querySelectorAll('.cities_dropdown')
+                c_dds.forEach(c_dd => {
+                    c_dd.innerHTML = ''
+                    cities.map(city => {
+                        let drp_opt = document.createElement('option')
+                        drp_opt.innerText = city.name
+                        drp_opt.value = city.id
+                        c_dd.append(drp_opt)
+                        // <option value="{{ city.pk }}">{{ city.name }}</option>
+                        //   console.log(city)
+                    })
+                })
+                // html(data);  // replace the contents of the city input with the data that came from the server
+            }
+        });
+
+    });
+</script>
+
+{% endblock body %}

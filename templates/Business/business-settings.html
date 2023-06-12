@@ -1,0 +1,264 @@
+{% extends 'Business/base.html' %}
+{% block title %} Top Deals - Business Settings {% endblock title %}
+{% block body %}
+<div class="col-span-1 lg:col-span-4 m-4 lg:ml-0">
+    <div class="flex flex-col gap-6 py-[1rem]">
+        <div class="flex flex-col gap-5">
+            <h1 class="font-bold text-2xl text-[#205a42]">Business Settings</h1>
+        </div>
+        {% if pending_business_msg %}
+        {% if request.user.business_status == 'Pending' %}
+                             <p class="text-red-400">{{pending_business_msg}}</p>
+                            {% endif %}
+                            {% endif%}
+        <form method="POST" action="{% url 'update_business_profile' %}" enctype="multipart/form-data" class="basic_settings">
+            <div class="rounded-2xl shadow bg-white px-4 py-4">
+                <div class="flex flex-col gap-3">
+                    <div class="flex items-center gap-5 justify-between pb-[1rem]">
+                        <div>
+                            <h2 class="text-[#205a42] text-lg font-bold">Basic Information</h2>
+                            <p class="text-[#555555] text-sm">This section contains Business basic information like
+                                name, Logo
+                                etc.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex flex-col gap-3 w-full lg:w-[70%]">
+                    <div class="flex flex-col gap-2">
+                        <p class="text-sm">Business Logo</p>
+                        <div class="border rounded-lg p-5">
+                            <div class="flex items-center gap-4">
+                                <div>
+                                    <div class="h-[6rem] w-[6rem] rounded-full overflow-hidden">
+                                        {% if user.logo %}
+                                        <img src='/media/{{user.logo}}'
+                                            class="h-full w-full object-cover img_preview" />
+                                            {% else %}
+                                            <img src='/static/assets/images/dummy.png'
+                                            class="h-full w-full object-cover img_preview" />
+                                            {% endif %}
+                                    </div>
+                                </div>
+                                <div class="flex flex-col gap-2">
+                                    <div class="flex items-center gap-3">
+                                        <label for="img_upload"
+                                            class="bg-[#205a42] rounded-md px-4 py-2 text-sm text-white font-bold cursor-pointer">Upload
+                                            New Logo</label>
+                                        <input type="file" hidden name="site_logo" accept="image/*" id="img_upload"
+                                            class="img_upload" max-size="3">
+                                         <a href="{% url 'remove_logo_business' %}" class="text-[#A1A1A1] px-3 py-2 text-sm rounded-md border remove_img" type="button">Remove</a>
+                                    </div>
+                                    <div class="text-sm text-[#A1A1A1]">
+                                        <p>You can upload png image file</p>
+                                        <p>Max size of 3mb</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="grid lg:grid-cols-2 gap-5">
+                        <div class="flex flex-col gap-2">
+                            <p class="text-sm">Business Name *</p>
+                            <input type="text" placeholder="Enter Business Name" required name="name"
+                                class="border rounded-md text-sm outline-none lg:px-4 px-2 lg:py-3 py-[0.6rem] placeholder:text-[#A1A1A1] text-[#101928] focus:border-[#205a42] ease-in transition-all focus:border-l-[7px]  bg-transparent"
+                                value="{{user.name}}">
+                        </div>
+                        <div class="flex flex-col gap-2">
+                            <p class="text-sm">Email Address *</p>
+                            <input type="email" required placeholder="Enter Email Address" name="email"
+                                class="border rounded-md text-sm outline-none lg:px-4 px-2 lg:py-3 py-[0.6rem] placeholder:text-[#A1A1A1] text-[#101928] focus:border-[#205a42] ease-in transition-all focus:border-l-[7px]  bg-transparent"         value="{{user.email}}" disabled>
+                        </div>
+                    </div>
+                    <div class="flex flex-col gap-2">
+                        <p class="text-sm">Business Location *</p>
+                        <input type="text" required placeholder="Enter Business Location" name="business_address"
+                            class="border rounded-md text-sm outline-none lg:px-4 px-2 lg:py-3 py-[0.6rem] placeholder:text-[#A1A1A1] text-[#101928] focus:border-[#205a42] ease-in transition-all focus:border-l-[7px]  bg-transparent"
+                            value="{{user.business_address}}">
+                    </div>
+                    <button class="bg-[#205a42] rounded-md px-4 py-2 text-sm text-white font-bold w-fit" type="submit">
+                        Save Changes</button>
+                </div>
+            </div>
+        </form>
+
+        <form method="POST" action="{% url 'update_business_password' %}" class="">
+        <div class="rounded-2xl shadow bg-white px-4 py-4">
+            <div class="flex flex-col gap-3">
+                <div class="flex items-center gap-5 justify-between pb-[1rem]">
+                    <div>
+                        <h2 class="text-[#205a42] text-lg font-bold">Change Password</h2>
+                        <p class="text-[#555555] text-sm">
+                            It is not a bad idea to change your password often for a more secure account.
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="flex flex-col gap-3 w-full lg:w-[70%] password_p">
+
+                <div class="grid lg:grid-cols-2 gap-5 ">
+                    <div class="flex flex-col gap-2  ">
+                        <p class="text-sm">Enter Current Password</p>
+                        <div class="password-show-p relative">
+                            <input type="password" required placeholder="Enter Current Password" name="current_password"
+                            class="w-full password-show border rounded-md text-sm outline-none lg:px-4 px-2 lg:py-3 py-[0.6rem] placeholder:text-[#A1A1A1] text-[#101928] focus:border-[#205a42] ease-in transition-all focus:border-l-[7px]  bg-transparent"
+                            value="">
+                            <div class="absolute password-show-icon right-4 top-1/2 -translate-y-1/2 cursor-pointer">
+                                <svg width="13" height="9" viewBox="0 0 13 9" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M8.53125 4.5C8.53125 5.03872 8.31724 5.55538 7.93631 5.93631C7.55538 6.31724 7.03872 6.53125 6.5 6.53125C5.96128 6.53125 5.44462 6.31724 5.06369 5.93631C4.68276 5.55538 4.46875 5.03872 4.46875 4.5C4.46875 3.96128 4.68276 3.44462 5.06369 3.06369C5.44462 2.68276 5.96128 2.46875 6.5 2.46875C7.03872 2.46875 7.55538 2.68276 7.93631 3.06369C8.31724 3.44462 8.53125 3.96128 8.53125 4.5Z" fill="#A1A1A1"></path>
+                                    <path d="M0 4.5C0 4.5 2.4375 0.03125 6.5 0.03125C10.5625 0.03125 13 4.5 13 4.5C13 4.5 10.5625 8.96875 6.5 8.96875C2.4375 8.96875 0 4.5 0 4.5ZM6.5 7.34375C7.25421 7.34375 7.97753 7.04414 8.51083 6.51083C9.04414 5.97753 9.34375 5.25421 9.34375 4.5C9.34375 3.74579 9.04414 3.02247 8.51083 2.48917C7.97753 1.95586 7.25421 1.65625 6.5 1.65625C5.74579 1.65625 5.02247 1.95586 4.48917 2.48917C3.95586 3.02247 3.65625 3.74579 3.65625 4.5C3.65625 5.25421 3.95586 5.97753 4.48917 6.51083C5.02247 7.04414 5.74579 7.34375 6.5 7.34375V7.34375Z" fill="#A1A1A1"></path>
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+                    <div></div>
+                    <div class="flex flex-col gap-2 ">
+                        <p class="text-sm">New Password *</p>
+                        <div class="password-show-p relative">
+                        <input type="password" required placeholder="Enter New Password" name="password1"
+                            class="w-full password-show password_ border rounded-md text-sm outline-none lg:px-4 px-2 lg:py-3 py-[0.6rem] placeholder:text-[#A1A1A1] text-[#101928] focus:border-[#205a42] ease-in transition-all focus:border-l-[7px]  bg-transparent"
+                            value="">
+                            <div class="absolute password-show-icon right-4 top-1/2 -translate-y-1/2 cursor-pointer">
+                                <svg width="13" height="9" viewBox="0 0 13 9" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M8.53125 4.5C8.53125 5.03872 8.31724 5.55538 7.93631 5.93631C7.55538 6.31724 7.03872 6.53125 6.5 6.53125C5.96128 6.53125 5.44462 6.31724 5.06369 5.93631C4.68276 5.55538 4.46875 5.03872 4.46875 4.5C4.46875 3.96128 4.68276 3.44462 5.06369 3.06369C5.44462 2.68276 5.96128 2.46875 6.5 2.46875C7.03872 2.46875 7.55538 2.68276 7.93631 3.06369C8.31724 3.44462 8.53125 3.96128 8.53125 4.5Z" fill="#A1A1A1"></path>
+                                    <path d="M0 4.5C0 4.5 2.4375 0.03125 6.5 0.03125C10.5625 0.03125 13 4.5 13 4.5C13 4.5 10.5625 8.96875 6.5 8.96875C2.4375 8.96875 0 4.5 0 4.5ZM6.5 7.34375C7.25421 7.34375 7.97753 7.04414 8.51083 6.51083C9.04414 5.97753 9.34375 5.25421 9.34375 4.5C9.34375 3.74579 9.04414 3.02247 8.51083 2.48917C7.97753 1.95586 7.25421 1.65625 6.5 1.65625C5.74579 1.65625 5.02247 1.95586 4.48917 2.48917C3.95586 3.02247 3.65625 3.74579 3.65625 4.5C3.65625 5.25421 3.95586 5.97753 4.48917 6.51083C5.02247 7.04414 5.74579 7.34375 6.5 7.34375V7.34375Z" fill="#A1A1A1"></path>
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flex flex-col gap-2">
+                        <p class="text-sm">Confirm Password *</p>
+                        <div class="relative password-show-p">
+                            <input type="password" required placeholder="Enter Confirm Password" name="password2"
+                            class="w-full password-show  password_confirm border rounded-md text-sm outline-none lg:px-4 px-2 lg:py-3 py-[0.6rem] placeholder:text-[#A1A1A1] text-[#101928] focus:border-[#205a42] ease-in transition-all focus:border-l-[7px]  bg-transparent"
+                            value="">
+                            <div class="absolute password-show-icon right-4 top-1/2 -translate-y-1/2 cursor-pointer">
+                                <svg width="13" height="9" viewBox="0 0 13 9" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M8.53125 4.5C8.53125 5.03872 8.31724 5.55538 7.93631 5.93631C7.55538 6.31724 7.03872 6.53125 6.5 6.53125C5.96128 6.53125 5.44462 6.31724 5.06369 5.93631C4.68276 5.55538 4.46875 5.03872 4.46875 4.5C4.46875 3.96128 4.68276 3.44462 5.06369 3.06369C5.44462 2.68276 5.96128 2.46875 6.5 2.46875C7.03872 2.46875 7.55538 2.68276 7.93631 3.06369C8.31724 3.44462 8.53125 3.96128 8.53125 4.5Z" fill="#A1A1A1"></path>
+                                    <path d="M0 4.5C0 4.5 2.4375 0.03125 6.5 0.03125C10.5625 0.03125 13 4.5 13 4.5C13 4.5 10.5625 8.96875 6.5 8.96875C2.4375 8.96875 0 4.5 0 4.5ZM6.5 7.34375C7.25421 7.34375 7.97753 7.04414 8.51083 6.51083C9.04414 5.97753 9.34375 5.25421 9.34375 4.5C9.34375 3.74579 9.04414 3.02247 8.51083 2.48917C7.97753 1.95586 7.25421 1.65625 6.5 1.65625C5.74579 1.65625 5.02247 1.95586 4.48917 2.48917C3.95586 3.02247 3.65625 3.74579 3.65625 4.5C3.65625 5.25421 3.95586 5.97753 4.48917 6.51083C5.02247 7.04414 5.74579 7.34375 6.5 7.34375V7.34375Z" fill="#A1A1A1"></path>
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+                   
+                </div>
+                <button class="bg-[#205a42] rounded-md px-4 py-2 text-sm text-white font-bold w-fit password_btn" type="submit">Change
+                    Password</button>
+            </div>
+        </div>
+        </form>
+
+
+        <form method="POST" action="{% url 'update_business_len_cur' %}" class="General">
+        <div class="rounded-2xl shadow bg-white px-4 py-4">
+            <div class="flex flex-col gap-3">
+                <div class="flex items-center gap-5 justify-between pb-[1rem]">
+                    <div>
+                        <h2 class="text-[#205a42] text-lg font-bold">General Settings</h2>
+                        <p class="text-[#555555] text-sm">
+                            Change language and currency
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="flex flex-col gap-3 w-full lg:w-[70%]">
+
+                <div class="grid lg:grid-cols-2 gap-5">
+                    <div class="flex flex-col gap-2">
+                        <p class="text-sm">Select Language</p>
+                        <select type="text" required name="language"
+                            class="border bg-transparent rounded-md text-sm outline-none lg:px-4 px-2 lg:py-3 py-[0.6rem] placeholder:text-[#A1A1A1] text-[#101928] focus:border-[#205a42] ease-in transition-all focus:border-l-[7px]"
+                            value="">
+                            <option value="{{ user.language }}" selected>{{ user.language }}</option>
+                            <option value="English">English</option>
+                            <option value="Arabic">Arabic</option>
+                        </select>
+                    </div>
+                    <div class="flex flex-col gap-2">
+                        <p class="text-sm">Currency</p>
+                        
+                        <select type="text" required name="currency"
+                            class="border bg-transparent rounded-md text-sm outline-none lg:px-4 px-2 lg:py-3 py-[0.6rem] placeholder:text-[#A1A1A1] text-[#101928] focus:border-[#205a42] ease-in transition-all focus:border-l-[7px]"
+                            value="">
+
+                            {% if user.currency.name %}
+                            <option value="{{user.currency.id}}" selected>{{user.currency.name}}</option>
+                            {% for currency in currencies %}
+                            {% if currency.name == user.currency.name %}
+                            {% else %}
+                            <option value="{{currency.id}}">{{currency.name}}</option>
+                            {% endif %}
+                            {% endfor %}
+
+                            {% else %}
+                            {% for currency in currencies %}
+                            {% if currency.name == 'UAE' %}
+                            <option selected value="{{currency.id}}">{{currency.name}}</option>
+                            {% endif %}
+                            {% if currency.name == 'UAE' %}
+                            {% else %}
+                            <option value="{{currency.id}}">{{currency.name}}</option>
+                            {% endif %}
+                            {% endfor %}
+                            {% endif %}
+                        </select>
+                        
+                    </div>
+                </div>
+                <button class="bg-[#205a42] rounded-md px-4 py-2 text-sm text-white font-bold w-fit" type="submit">
+                    Save Changes
+                </button>
+            </div>
+        </div>
+        </form>
+    </div>
+</div>
+
+{% include 'common/footer-com.html' %}
+
+<script>
+    let dashboard_tabs = document.querySelectorAll('.dashboard-tab');
+    document.addEventListener('DOMContentLoaded', () => {
+        if (dashboard_tabs) {
+            dashboard_tabs.forEach(tab => {
+                dashboard_tabs.forEach(all => {
+                    all.classList.remove('dashboard-tab-active')
+                })
+                dashboard_tabs[6].classList.add('dashboard-tab-active')
+            })
+        }
+    })
+</script>
+
+{% if messages %}
+{% for msg in messages %}
+<script>
+setTimeout(() => {
+    Toast.fire({
+icon: '{{msg.tags}}', // success
+title: '{{msg}}'
+});
+}, 1000);
+</script>
+{% endfor %}
+{% endif %}
+<script>
+    $(".basic_settings").validate();
+    // $(".password").validate();
+    $(".General").validate();
+</script>
+
+
+{% if messages %}
+{% for msg in messages %}
+<script>
+setTimeout(() => {
+    Toast.fire({
+icon: '{{msg.tags}}', // success
+title: '{{msg}}'
+});
+}, 1000);
+</script>
+{% endfor %}
+{% endif %}
+{% endblock body %}

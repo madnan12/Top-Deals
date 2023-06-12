@@ -1,0 +1,101 @@
+{% extends 'Store/base.html' %}
+{% block body %}
+
+<section>
+    <div class="grid lg:grid-cols-5 delete-header-height" data-height="100">
+        <div class="lg:col-span-3 h-full">
+            <div class="bg-signup h-full flex items-center justify-center">
+                <div class="flex flex-col gap-3">
+                    <h2 class="text-[#373737] inter-bold text-[2.6rem]">Welcome to Top Deals</h2>
+                    <p class="text-[#6B6B6B]">Create your free account to get amazing <br /> deals</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="flex flex-col h-full lg:col-span-2 py-[3rem] px-[2rem] justify-center">
+            <div class="flex flex-col gap-5 w-full text-left">
+                <form method='post' class="form_rickshaw h-full ">
+                    {% csrf_token %}
+                    <h3 class="font-semibold text-2xl">Email Verification</h3>
+                    <div class="text-sm mb-3">
+                        <p class="text-[#7B7B7B]">We sent a text message with 4 digit code to your </p>
+                        <p class="font-semibold text-[#555555]">{{email}}</p>
+                    </div>
+                    <div class="flex items-center gap-8 mt-0 lg:mt-6 numberAddInp_p">
+                        <div class="border-2 rounded-lg h-[4rem] w-[4rem] overflow-hidden">
+                            <input type="number" name="num1" placeholder="-"
+                                class="h-full w-full outline-none p-3 text-center numberAddInp" value="">
+                        </div>
+                        <div class="border-2 rounded-lg h-[4rem] w-[4rem] overflow-hidden">
+                            <input type="number" name="num2" placeholder="-"
+                                class="h-full w-full outline-none p-3 text-center numberAddInp" value="">
+                        </div>
+                        <div class="border-2 rounded-lg h-[4rem] w-[4rem] overflow-hidden">
+                            <input type="number" name="num3" placeholder="-"
+                                class="h-full w-full outline-none p-3 text-center numberAddInp" value="">
+                        </div>
+                        <div class="border-2 rounded-lg h-[4rem] w-[4rem] overflow-hidden">
+                            <input type="number" name="num4" placeholder="-"
+                                class="h-full w-full outline-none p-3 text-center numberAddInp" value="">
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <form action="{% url 'resend_code' %}" method="POST" class="mt-[2rem]">
+                {% csrf_token %}
+                <input type="hidden" value="{{email}}" name="email">
+                <div class="flex items-center gap-3">
+                    <p class="text-[#7B7B7B] text-sm"><span class="font-semibold text-black">Resend Code in <span
+                                class="counter_resend">40</span>s </span></p>
+                    <button type="submit"
+                        class="hidden text-sm rounded-lg border text-[#373737] bg-[#FCD16F] px-4 py-2 resend_btn">Resend
+                        Code</button>
+                </div>
+            </form>
+        </div>
+
+    </div>
+
+</section>
+
+{% include 'common/footer-com.html' %}
+{% if messages %}
+{% for msg in messages %}
+<script>
+    setTimeout(() => {
+        Toast.fire({
+            icon: '{{msg.tags}}', // success
+            title: '{{msg}}'
+        });
+    }, 1000);
+</script>
+{% endfor %}
+{% else %}
+{% if otp_msg %}
+<script>
+    setTimeout(() => {
+        Toast.fire({
+            icon: 'error', // success
+            title: '{{otp_msg}}'
+        });
+    }, 1000);
+</script>
+{% endif %}
+{% endif %}
+
+<script>
+    let numberAddInp = document.querySelectorAll('.numberAddInp');
+    let numberAddInp_p = document.querySelector('.numberAddInp_p');
+    let form_rickshaw = document.querySelector('.form_rickshaw');
+    numberAddInp.forEach((num, i) => {
+        num.addEventListener('input', () => {
+            num.value = num.value.slice(0, 1)
+            if (num.value.length == 1 && i < numberAddInp.length - 1) {
+                numberAddInp[i + 1].focus();
+            } else {
+                form_rickshaw.submit();
+            }
+        })
+    })
+</script>
+{% endblock body %}

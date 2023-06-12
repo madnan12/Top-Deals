@@ -1,0 +1,97 @@
+{% extends 'Store/base.html' %}
+{% block title %} Top Deals - Searched Deals {% endblock title %}
+{% block body %}
+
+
+<section>
+    <div
+        class="min-h-[22rem] flex items-center justify-center deal-landing-bg relative bg-no-repeat bg-cover bg-center">
+        <div class="flex flex-col gap-1 text-center items-center">
+            <div
+                class="font-semibold text-sm text-[#fff] lg:w-full w-[70%] flex items-center gap-2 justify-center mb-[2rem]">
+                <p class="text-[#E4E4E4]"><a href="/">Home</a></p>
+                <p>&gt;</p>
+                <p class="text-[#205a42]">Search</p>
+            </div>
+            <h2 class="font-semibold text-[#fff] text-4xl lg:w-full w-[70%]">Search</h2>
+        </div>
+    </div>
+</section>
+
+
+<section>
+    <div class="container pb-[2rem] pt-[1rem] w-[90%] mx-auto">
+        <div class="text-center flex flex-col gap-4">
+            <h2 class="font-semibold text-2xl">Deals Searched Results</h2>
+            {% comment %}
+            <p class="text-[#6B6B6B] text-sm">Lorem Ipsum is simply dummy text of the printing and typesetting
+                industry. Lorem Ipsum <br class="hidden lg:block"> has been the
+                industry's standard dummy text ever since the 1500s</p>
+                {% endcomment %}
+        </div>
+        <div
+            class="grid 2xl:grid-cols-5 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-3 sm:grid-cols-3 grid-cols-2 gap-4 pt-4">
+            {% if searched_deals %}
+            {% for offers in searched_deals %}
+            {% include 'common/cards.html' %}
+            {% endfor %}
+            
+            {% else %}
+
+            {% include 'common/not-found.html' %}
+
+            {% endif %}
+        </div>
+    {% comment %}
+        <div class="pt-[2rem] text-center lg:text-left">
+            <button class="py-2 px-5 bg-[#205a42] text-white font-semibold rounded-md">Explore More</button>
+        </div>
+        {% endcomment %}
+    </div>
+</section>
+
+
+<section class="bg-[#F7F7F7]">
+    <div class="container w-[90%] mx-auto ">
+        <div class=" py-[2rem]">
+            <div class="flex items-center justify-evenly gap-[2rem] flex-wrap">
+                <img src='/static/assets/images/two-mobiles.png' class="w-[25rem]" />
+                <div class="flex flex-col gap-4 lg:text-left text-center">
+                    <h2 class="text-[#205a42] font-semibold text-2xl">Download Our App To Get <br
+                            class="hidden lg:block"> Amazing Deals</h2>
+                    <p class="text-sm leading-[2] text-[#6B6B6B]">Get new deals every day. Top deals have the best
+                        offers and share <br class="hidden lg:block"> them with you. To avail of offers, find our
+                        app in the play store</p>
+                    <div class="flex items-center flex-wrap gap-4 lg:justify-start justify-center">
+                        <img src='/static/assets/images/google-play.png' class="lg:h-fit h-[4rem]"/>
+                        <img src='/static/assets/images/app-store.png' class="lg:h-fit h-[4rem]"/>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<section>
+    <div class="container w-[90%] mx-auto ">
+        <div class="flex lg:gap-4 gap-6 justify-evenly lg:flex-row items-center py-[2rem] flex-wrap">
+            <div class="flex flex-col gap-2 text-center">
+                <h2 class="text-[#205a42] font-bold text-3xl">75,000+</h2>
+                <p class="text-[#373737]">Deals</p>
+            </div>
+            <div class="flex flex-col gap-2 text-center">
+                <h2 class="text-[#205a42] font-bold text-3xl">6,000+</h2>
+                <p class="text-[#373737]">Retailers</p>
+            </div>
+            <div class="flex flex-col gap-2 text-center">
+                <h2 class="text-[#205a42] font-bold text-3xl">2 Million</h2>
+                <p class="text-[#373737]">Active Users</p>
+            </div>
+            <div class="flex flex-col gap-2 text-center">
+                <h2 class="text-[#205a42] font-bold text-3xl">1.3 Million</h2>
+                <p class="text-[#373737]">App Downloads</p>
+            </div>
+        </div>
+    </div>
+</section>
+{% include 'common/footer-com.html' %}
+{% endblock body %}

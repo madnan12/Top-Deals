@@ -1,0 +1,790 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title%}Top Deals-Login{% endblock title %}</title>
+    {% include 'common/header-com.html' %}
+</head>
+<body>
+    <div class="preloader fixed inset-0 z-[12312213] flex items-center justify-center bg-white">
+        <div class="flex flex-col items-center justify-center gap-2">
+            <img src="/static/assets/images/prealoder.gif" class="w-[20rem]">
+            <h1 class="text-[#205a42] font-bold text-lg">Top Deals</h1>
+        </div>
+    </div>
+
+
+    <div class="modal fade fixed top-0 left-0 hidden w-full h-full outline-none overflow-x-hidden overflow-y-auto"
+        id="Signup" tabindex="-1" aria-labelledby="SignupLabel" aria-modal="true" role="dialog">
+        <div
+            class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-xl relative w-auto pointer-events-none">
+            <div
+                class="modal-content border-none rounded-lg shadow-lg relative flex flex-col w-full pointer-events-auto bg-white bg-clip-padding outline-none text-current">
+                <div class="modal-body relative">
+                    <div class="grid grid-cols-1 lg:grid-cols-2 mobile-bg">
+                        <div class="h-[92vh] sticky top-0 lg:block hidden">
+                            <div class="bg-signup h-full flex items-center justify-center">
+                                <div class="flex flex-col gap-3">
+                                    <h2 class="text-[#373737] inter-bold text-[2.6rem]">Welcome to Top Deals</h2>
+                                    <p class="text-[#6B6B6B]">Create your free account to get amazing <br /> deals</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="h-full py-[3rem] px-[2rem]">
+                            <div class="flex items-center justify-center h-full choose_section">
+                                <div class="signup_card_toggle_p">
+                                    <h2 class="font-extrabold text-2xl mb-[2rem] text-center">Choose Your Account Type
+                                    </h2>
+                                    <div class="flex items-center gap-6 flex-row flew-rap">
+                                        <div data-link="free"
+                                            class="signup-card-btn cursor-pointer px-6 py-4 flex items-center flex-col justify-center gap-5 dark-shadow rounded-lg">
+                                            <svg class="w-[4.125rem] h-[3.688rem]" width="66" height="59"
+                                                viewBox="0 0 66 59" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                <path
+                                                    d="M33.2354 0.567213C15.1916 0.258941 0.313141 14.6367 0.00486918 32.6805C-0.170229 42.9114 4.38973 52.1066 11.6501 58.2215C12.1249 57.8071 12.6342 57.4274 13.2001 57.1191L22.9502 51.8008C24.2289 51.1028 25.0255 49.7625 25.0255 48.305V44.3098C25.0255 44.3098 22.1635 40.8867 21.0722 36.1307C20.1671 35.545 19.5604 34.5326 19.5604 33.3797V29.0071C19.5604 28.0453 19.9883 27.1859 20.6529 26.5841V20.2633C20.6529 20.2633 19.3545 10.427 32.6755 10.427C45.9966 10.427 44.6981 20.2633 44.6981 20.2633V26.5841C45.364 27.1859 45.7907 28.0453 45.7907 29.0071V33.3797C45.7907 34.8495 44.8042 36.0863 43.465 36.4994C42.719 38.8188 41.6425 41.0298 40.2196 43.0397C39.8607 43.5465 39.5253 43.9756 39.2319 44.3098V48.4061C39.2319 49.9142 40.0839 51.294 41.4329 51.9672L51.8735 57.1869C52.4999 57.5001 53.0659 57.8959 53.5875 58.3361C60.6284 52.4642 65.1773 43.6846 65.3462 33.7977C65.6569 15.7539 51.2804 0.875485 33.2354 0.567213Z"
+                                                    fill="#205a42" />
+                                            </svg>
+                                            <p>For Everyone</p>
+                                        </div>
+                                        <p class="text-[#7E7E7E]">OR</p>
+                                        <div data-link="business"
+                                            class="signup-card-btn cursor-pointer px-6 py-4 flex items-center flex-col justify-center gap-5 dark-shadow rounded-lg">
+                                            <svg class="h-[3.938rem] w-[4.125rem]" width="66" height="63"
+                                                viewBox="0 0 66 63" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                <path
+                                                    d="M0.515625 17.027C0.515625 20.4023 2.99707 23.2708 6.1875 24.3255V57.4971H0.515625V61.9389H65.4844V57.4971H59.8125V24.32C63.1357 23.3465 65.4068 20.5208 65.4844 17.027V15.0529H0.515625V17.027ZM16.8326 16.8656C16.8326 18.464 18.5741 24.6314 25.0122 24.6314C30.6039 24.6314 33.0565 19.7911 33.0565 16.8656C33.0565 19.5929 34.9669 24.6258 41.1683 24.6258C46.7713 24.6258 49.254 19.4439 49.254 16.8656C49.254 20.4253 51.7615 23.3843 55.1719 24.3067V57.4971H10.8281V24.3299C14.2833 23.4346 16.8326 20.4559 16.8326 16.8656ZM57.4489 5.42891H57.4922V0.493538H8.76563V5.42891L0.515625 13.3255H65.4844L57.4489 5.42891Z"
+                                                    fill="#373737" />
+                                                <path
+                                                    d="M24.1895 44.0595C24.1895 39.6263 27.7833 36.0324 32.2165 36.0324C36.6497 36.0324 40.2435 39.6263 40.2435 44.0595V57.4379H24.1895V44.0595Z"
+                                                    fill="#373737" />
+                                            </svg>
+                                            <p>For Business</p>
+                                        </div>
+                                    </div>
+                                    <div class="mt-[2rem] text-center">
+                                        <button disabled
+                                            class="w-fit signup-card-submit transition-all bg-[#555555] px-5 py-2 rounded-md text-white flex items-center gap-2 mx-auto">
+                                            <p>Next</p>
+                                            <svg width="18" height="16" viewBox="0 0 18 16" fill="none"
+                                                xmlns="http://www.w3.org/2000/svg">
+                                                <path d="M1 8H17M10 1L17 8L10 15" stroke="white" stroke-width="2"
+                                                    stroke-linecap="round" stroke-linejoin="round" />
+                                            </svg>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <div class="flex flex-col gap-7 h-full free-account-section hidden">
+                                <p class="text-sm text-[#7B7B7B] text-right">
+                                    Already have an account?
+                                    <button data-bs-target="#SignIn" data-bs-toggle="modal"
+                                        class="text-[#205a42] cursor-pointer"> Sign In Now</button>
+                                </p>
+                                <h2 class="font-semibold text-3xl text-[#373737] mt-[2rem]">Create Your Free Account
+                                </h2>
+                                <div class="flex flex-col gap-2">
+                                    <p class="text-sm">Full Name *</p>
+                                    <input type="text" placeholder="Enter your name"
+                                        class="border rounded-md text-sm outline-none lg:px-4 px-2 lg:py-3 py-[0.6rem] placeholder:text-[#A1A1A1] text-[#101928] focus:border-[#205a42] ease-in transition-all focus:border-l-[7px]  bg-transparent"
+                                        value="">
+                                </div>
+                                <div class="flex flex-col gap-2">
+                                    <p class="text-sm">Email Address *</p>
+                                    <input type="text" placeholder="Enter your email address"
+                                        class="border rounded-md text-sm outline-none lg:px-4 px-2 lg:py-3 py-[0.6rem] placeholder:text-[#A1A1A1] text-[#101928] focus:border-[#205a42] ease-in transition-all focus:border-l-[7px]  bg-transparent"
+                                        value="">
+                                </div>
+                                <div class="flex flex-col gap-2">
+                                    <p class="text-sm">Phone Number *</p>
+                                    <div class="flex border rounded-md overflow-hidden ease-in transition-all ">
+                                        <div class="px-4 py-3 flex items-center before-plus">
+                                            <select class="bg-transparent text-sm px-2 outline-none" id="">
+                                                <option value="92">92</option>
+                                            </select>
+                                        </div>
+                                        <input type="number" placeholder="Enter your phone number" name="mobile_number"
+                                            class="px-4 py-3 border-l w-full outline-none text-sm" value="">
+                                    </div>
+                                </div>
+                                <div class="grid lg:grid-cols-2 gap-4">
+                                    <div class="flex flex-col gap-2 relative">
+                                        <p class="text-sm">Password *</p>
+                                        <div class="flex flex-col gap-2 relative password-show-p">
+                                            <input type="password" name="password"
+                                                class="border password-show rounded-md text-sm outline-none px-4 py-3 placeholder:text-[#A1A1A1] text-[#101928] focus:border-[#205a42] ease-in transition-all focus:border-l-[7px]"
+                                                placeholder="Enter password" value="">
+                                            <div
+                                                class="absolute password-show-icon right-4 top-1/2 -translate-y-1/2 cursor-pointer">
+                                                <svg width="13" height="9" viewBox="0 0 13 9" fill="none"
+                                                    xmlns="http://www.w3.org/2000/svg">
+                                                    <path
+                                                        d="M8.53125 4.5C8.53125 5.03872 8.31724 5.55538 7.93631 5.93631C7.55538 6.31724 7.03872 6.53125 6.5 6.53125C5.96128 6.53125 5.44462 6.31724 5.06369 5.93631C4.68276 5.55538 4.46875 5.03872 4.46875 4.5C4.46875 3.96128 4.68276 3.44462 5.06369 3.06369C5.44462 2.68276 5.96128 2.46875 6.5 2.46875C7.03872 2.46875 7.55538 2.68276 7.93631 3.06369C8.31724 3.44462 8.53125 3.96128 8.53125 4.5Z"
+                                                        fill="#A1A1A1"></path>
+                                                    <path
+                                                        d="M0 4.5C0 4.5 2.4375 0.03125 6.5 0.03125C10.5625 0.03125 13 4.5 13 4.5C13 4.5 10.5625 8.96875 6.5 8.96875C2.4375 8.96875 0 4.5 0 4.5ZM6.5 7.34375C7.25421 7.34375 7.97753 7.04414 8.51083 6.51083C9.04414 5.97753 9.34375 5.25421 9.34375 4.5C9.34375 3.74579 9.04414 3.02247 8.51083 2.48917C7.97753 1.95586 7.25421 1.65625 6.5 1.65625C5.74579 1.65625 5.02247 1.95586 4.48917 2.48917C3.95586 3.02247 3.65625 3.74579 3.65625 4.5C3.65625 5.25421 3.95586 5.97753 4.48917 6.51083C5.02247 7.04414 5.74579 7.34375 6.5 7.34375V7.34375Z"
+                                                        fill="#A1A1A1"></path>
+                                                </svg>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="flex flex-col gap-2 relative">
+                                        <p class="text-sm">Confirm Password *</p>
+                                        <div class="flex flex-col gap-2 relative password-show-p">
+                                            <input type="password" name="password"
+                                                class="border password-show rounded-md text-sm outline-none px-4 py-3 placeholder:text-[#A1A1A1] text-[#101928] focus:border-[#205a42] ease-in transition-all focus:border-l-[7px]"
+                                                placeholder="Enter confirm password" value="">
+                                            <div
+                                                class="absolute password-show-icon right-4 top-1/2 -translate-y-1/2 cursor-pointer">
+                                                <svg width="13" height="9" viewBox="0 0 13 9" fill="none"
+                                                    xmlns="http://www.w3.org/2000/svg">
+                                                    <path
+                                                        d="M8.53125 4.5C8.53125 5.03872 8.31724 5.55538 7.93631 5.93631C7.55538 6.31724 7.03872 6.53125 6.5 6.53125C5.96128 6.53125 5.44462 6.31724 5.06369 5.93631C4.68276 5.55538 4.46875 5.03872 4.46875 4.5C4.46875 3.96128 4.68276 3.44462 5.06369 3.06369C5.44462 2.68276 5.96128 2.46875 6.5 2.46875C7.03872 2.46875 7.55538 2.68276 7.93631 3.06369C8.31724 3.44462 8.53125 3.96128 8.53125 4.5Z"
+                                                        fill="#A1A1A1"></path>
+                                                    <path
+                                                        d="M0 4.5C0 4.5 2.4375 0.03125 6.5 0.03125C10.5625 0.03125 13 4.5 13 4.5C13 4.5 10.5625 8.96875 6.5 8.96875C2.4375 8.96875 0 4.5 0 4.5ZM6.5 7.34375C7.25421 7.34375 7.97753 7.04414 8.51083 6.51083C9.04414 5.97753 9.34375 5.25421 9.34375 4.5C9.34375 3.74579 9.04414 3.02247 8.51083 2.48917C7.97753 1.95586 7.25421 1.65625 6.5 1.65625C5.74579 1.65625 5.02247 1.95586 4.48917 2.48917C3.95586 3.02247 3.65625 3.74579 3.65625 4.5C3.65625 5.25421 3.95586 5.97753 4.48917 6.51083C5.02247 7.04414 5.74579 7.34375 6.5 7.34375V7.34375Z"
+                                                        fill="#A1A1A1"></path>
+                                                </svg>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="text-center w-full">
+                                    <button
+                                        class="text-center w-full transition-all bg-[#205a42] px-5 py-2 rounded-md text-white mx-auto">
+                                        Create an Account
+                                    </button>
+                                </div>
+                                <div class="flex items-center gap-3">
+                                    <div class="flex-1 h-[1px] bg-[#B3B3B3]"></div>
+                                    <p class="text-[#B3B3B3]">OR</p>
+                                    <div class="flex-1 h-[1px] bg-[#B3B3B3]"></div>
+                                </div>
+                                <div class="flex items-center flex-wrap gap-4">
+                                    <div class="cursor-pointer border rounded px-5 py-3 flex items-center gap-3 flex-1">
+                                        <svg width="18" height="19" viewBox="0 0 18 19" fill="none"
+                                            xmlns="http://www.w3.org/2000/svg">
+                                            <path
+                                                d="M18 9.36694C18 13.8592 14.7087 17.5826 10.4062 18.2576V11.9685H12.5033L12.9023 9.36694H10.4062V7.67874C10.4062 6.96683 10.755 6.27319 11.873 6.27319H13.0078V4.05835C13.0078 4.05835 11.9777 3.88257 10.993 3.88257C8.93742 3.88257 7.59375 5.12851 7.59375 7.38413V9.36694H5.30859V11.9685H7.59375V18.2576C3.29133 17.5826 0 13.8592 0 9.36694C0 4.39655 4.02961 0.366943 9 0.366943C13.9704 0.366943 18 4.39655 18 9.36694Z"
+                                                fill="#193FF6" />
+                                            <path
+                                                d="M12.5033 11.9685L12.9023 9.36694H10.4062V7.67871C10.4062 6.96697 10.7549 6.27319 11.8729 6.27319H13.0078V4.05835C13.0078 4.05835 11.9779 3.88257 10.9932 3.88257C8.93739 3.88257 7.59375 5.12851 7.59375 7.38413V9.36694H5.30859V11.9685H7.59375V18.2576C8.05198 18.3295 8.52159 18.3669 9 18.3669C9.47841 18.3669 9.94802 18.3295 10.4062 18.2576V11.9685H12.5033Z"
+                                                fill="white" />
+                                        </svg>
+                                        <p class="whitespace-nowrap">Login with Facebook</p>
+                                    </div>
+                                    <div class="cursor-pointer border rounded px-5 py-3 flex items-center gap-3 flex-1">
+                                        <svg width="18" height="19" viewBox="0 0 18 19" fill="none"
+                                            xmlns="http://www.w3.org/2000/svg">
+                                            <g clip-path="url(#clip0_269_1470)">
+                                                <path
+                                                    d="M3.98918 11.2446L3.36263 13.5836L1.07258 13.632C0.388195 12.3626 0 10.9103 0 9.36695C0 7.87453 0.362953 6.46716 1.00631 5.22794H1.0068L3.04559 5.60172L3.9387 7.62826C3.75177 8.17322 3.64989 8.75822 3.64989 9.36695C3.64996 10.0276 3.76963 10.6606 3.98918 11.2446Z"
+                                                    fill="#FBBB00" />
+                                                <path
+                                                    d="M17.8422 7.68564C17.9455 8.23007 17.9994 8.79232 17.9994 9.36695C17.9994 10.0113 17.9317 10.6398 17.8026 11.2461C17.3645 13.3092 16.2197 15.1106 14.6338 16.3855L14.6333 16.385L12.0654 16.254L11.7019 13.9851C12.7542 13.368 13.5766 12.4022 14.0098 11.2461H9.19727V7.68564H14.08H17.8422Z"
+                                                    fill="#518EF8" />
+                                                <path
+                                                    d="M14.6336 16.385L14.6341 16.3855C13.0917 17.6252 11.1325 18.3669 8.99968 18.3669C5.57227 18.3669 2.59239 16.4512 1.07227 13.6321L3.98886 11.2446C4.74891 13.273 6.70567 14.717 8.99968 14.717C9.98571 14.717 10.9095 14.4505 11.7021 13.9851L14.6336 16.385Z"
+                                                    fill="#28B446" />
+                                                <path
+                                                    d="M14.7442 2.43891L11.8286 4.82588C11.0082 4.31309 10.0385 4.01687 8.99955 4.01687C6.65361 4.01687 4.66025 5.52707 3.93828 7.62826L1.00635 5.22793H1.00586C2.50373 2.34002 5.52119 0.366943 8.99955 0.366943C11.1833 0.366943 13.1855 1.14481 14.7442 2.43891Z"
+                                                    fill="#F14336" />
+                                            </g>
+                                            <defs>
+                                                <clipPath id="clip0_269_1470">
+                                                    <rect width="18" height="18" fill="white"
+                                                        transform="translate(0 0.366943)" />
+                                                </clipPath>
+                                            </defs>
+                                        </svg>
+                                        <p class="whitespace-nowrap">Login with Google</p>
+                                    </div>
+                                </div>
+                                <p class="text-[#6B6B6B]">By signing up, you agree to our <span
+                                        class="text-[#2B87FF]">Terms &
+                                        Conditions</span></p>
+                            </div>
+
+                            <div class="flex flex-col gap-7 h-full business-account-section hidden">
+                                <p class="text-sm text-[#7B7B7B] text-right">
+                                    Already have an account?
+                                    <button data-bs-target="#SignIn" data-bs-toggle="modal"
+                                        class="text-[#205a42] cursor-pointer"> Sign In Now</button>
+                                </p>
+                                <h2 class="font-semibold text-3xl text-[#373737] mt-[2rem]">Create Your Business Account
+                                </h2>
+                                <div class="flex items-center gap-4 mx-auto">
+                                    <div class="flex items-center gap-3">
+                                        <div
+                                            class="flex items-center justify-center font-semibold text-[#205a42] border-[#205a42] border h-[2.188rem] w-[2.188rem] rounded-full">
+                                            1
+                                        </div>
+                                        <p class="font-semibold text-[#205a42]">Personal Info</p>
+                                    </div>
+                                    <div class="h-[1px] w-[40px] border-t border-dashed border-[#A1A1A1]"></div>
+                                    <div class="flex items-center gap-3">
+                                        <div
+                                            class="flex items-center justify-center font-semibold text-[#A1A1A1] border-[#A1A1A1] border h-[2.188rem] w-[2.188rem] rounded-full">
+                                            2
+                                        </div>
+                                        <p class="font-semibold text-[#A1A1A1]">Business Details</p>
+                                    </div>
+                                </div>
+                                <div class="flex flex-col gap-2">
+                                    <p class="text-sm">Full Name *</p>
+                                    <input type="text" placeholder="Enter your name"
+                                        class="border rounded-md text-sm outline-none lg:px-4 px-2 lg:py-3 py-[0.6rem] placeholder:text-[#A1A1A1] text-[#101928] focus:border-[#205a42] ease-in transition-all focus:border-l-[7px]  bg-transparent"
+                                        value="">
+                                </div>
+                                <div class="flex flex-col gap-2">
+                                    <p class="text-sm">Email Address *</p>
+                                    <input type="text" placeholder="Enter your email address"
+                                        class="border rounded-md text-sm outline-none lg:px-4 px-2 lg:py-3 py-[0.6rem] placeholder:text-[#A1A1A1] text-[#101928] focus:border-[#205a42] ease-in transition-all focus:border-l-[7px]  bg-transparent"
+                                        value="">
+                                </div>
+                                <div class="flex flex-col gap-2">
+                                    <p class="text-sm">Phone Number *</p>
+                                    <div class="flex border rounded-md overflow-hidden ease-in transition-all ">
+                                        <div class="px-4 py-3 flex items-center before-plus">
+                                            <select class="bg-transparent text-sm px-2 outline-none" id="">
+                                                <option value="92">92</option>
+                                            </select>
+                                        </div>
+                                        <input type="number" placeholder="Enter your phone number" name="mobile_number"
+                                            class="px-4 py-3 border-l w-full outline-none text-sm" value="">
+                                    </div>
+                                </div>
+                                <div class="grid lg:grid-cols-2 gap-4">
+                                    <div class="flex flex-col gap-2 relative">
+                                        <p class="text-sm">Password *</p>
+                                        <div class="flex flex-col gap-2 relative password-show-p">
+                                            <input type="password" name="password"
+                                                class="border password-show rounded-md text-sm outline-none px-4 py-3 placeholder:text-[#A1A1A1] text-[#101928] focus:border-[#205a42] ease-in transition-all focus:border-l-[7px]"
+                                                placeholder="Enter password" value="">
+                                            <div
+                                                class="absolute password-show-icon right-4 top-1/2 -translate-y-1/2 cursor-pointer">
+                                                <svg width="13" height="9" viewBox="0 0 13 9" fill="none"
+                                                    xmlns="http://www.w3.org/2000/svg">
+                                                    <path
+                                                        d="M8.53125 4.5C8.53125 5.03872 8.31724 5.55538 7.93631 5.93631C7.55538 6.31724 7.03872 6.53125 6.5 6.53125C5.96128 6.53125 5.44462 6.31724 5.06369 5.93631C4.68276 5.55538 4.46875 5.03872 4.46875 4.5C4.46875 3.96128 4.68276 3.44462 5.06369 3.06369C5.44462 2.68276 5.96128 2.46875 6.5 2.46875C7.03872 2.46875 7.55538 2.68276 7.93631 3.06369C8.31724 3.44462 8.53125 3.96128 8.53125 4.5Z"
+                                                        fill="#A1A1A1"></path>
+                                                    <path
+                                                        d="M0 4.5C0 4.5 2.4375 0.03125 6.5 0.03125C10.5625 0.03125 13 4.5 13 4.5C13 4.5 10.5625 8.96875 6.5 8.96875C2.4375 8.96875 0 4.5 0 4.5ZM6.5 7.34375C7.25421 7.34375 7.97753 7.04414 8.51083 6.51083C9.04414 5.97753 9.34375 5.25421 9.34375 4.5C9.34375 3.74579 9.04414 3.02247 8.51083 2.48917C7.97753 1.95586 7.25421 1.65625 6.5 1.65625C5.74579 1.65625 5.02247 1.95586 4.48917 2.48917C3.95586 3.02247 3.65625 3.74579 3.65625 4.5C3.65625 5.25421 3.95586 5.97753 4.48917 6.51083C5.02247 7.04414 5.74579 7.34375 6.5 7.34375V7.34375Z"
+                                                        fill="#A1A1A1"></path>
+                                                </svg>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="flex flex-col gap-2 relative">
+                                        <p class="text-sm">Confirm Password *</p>
+                                        <div class="flex flex-col gap-2 relative password-show-p">
+                                            <input type="password" name="password"
+                                                class="border password-show rounded-md text-sm outline-none px-4 py-3 placeholder:text-[#A1A1A1] text-[#101928] focus:border-[#205a42] ease-in transition-all focus:border-l-[7px]"
+                                                placeholder="Enter confirm password" value="">
+                                            <div
+                                                class="absolute password-show-icon right-4 top-1/2 -translate-y-1/2 cursor-pointer">
+                                                <svg width="13" height="9" viewBox="0 0 13 9" fill="none"
+                                                    xmlns="http://www.w3.org/2000/svg">
+                                                    <path
+                                                        d="M8.53125 4.5C8.53125 5.03872 8.31724 5.55538 7.93631 5.93631C7.55538 6.31724 7.03872 6.53125 6.5 6.53125C5.96128 6.53125 5.44462 6.31724 5.06369 5.93631C4.68276 5.55538 4.46875 5.03872 4.46875 4.5C4.46875 3.96128 4.68276 3.44462 5.06369 3.06369C5.44462 2.68276 5.96128 2.46875 6.5 2.46875C7.03872 2.46875 7.55538 2.68276 7.93631 3.06369C8.31724 3.44462 8.53125 3.96128 8.53125 4.5Z"
+                                                        fill="#A1A1A1"></path>
+                                                    <path
+                                                        d="M0 4.5C0 4.5 2.4375 0.03125 6.5 0.03125C10.5625 0.03125 13 4.5 13 4.5C13 4.5 10.5625 8.96875 6.5 8.96875C2.4375 8.96875 0 4.5 0 4.5ZM6.5 7.34375C7.25421 7.34375 7.97753 7.04414 8.51083 6.51083C9.04414 5.97753 9.34375 5.25421 9.34375 4.5C9.34375 3.74579 9.04414 3.02247 8.51083 2.48917C7.97753 1.95586 7.25421 1.65625 6.5 1.65625C5.74579 1.65625 5.02247 1.95586 4.48917 2.48917C3.95586 3.02247 3.65625 3.74579 3.65625 4.5C3.65625 5.25421 3.95586 5.97753 4.48917 6.51083C5.02247 7.04414 5.74579 7.34375 6.5 7.34375V7.34375Z"
+                                                        fill="#A1A1A1"></path>
+                                                </svg>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="text-center w-full">
+                                    <button
+                                        class="text-center business-account-next-step w-full transition-all bg-[#205a42] px-5 py-2 rounded-md text-white mx-auto">
+                                        Next Step
+                                    </button>
+                                </div>
+                                <p class="text-[#6B6B6B]">By signing up, you agree to our <span
+                                        class="text-[#2B87FF]">Terms &
+                                        Conditions</span></p>
+                            </div>
+
+                            <div class="flex flex-col gap-7 h-full business-account-section_2 hidden">
+                                <p class="text-sm text-[#7B7B7B] text-right">
+                                    Already have an account?
+                                    <button data-bs-target="#SignIn" data-bs-toggle="modal"
+                                        class="text-[#205a42] cursor-pointer"> Sign In Now</button>
+                                </p>
+                                <h2 class="font-semibold text-3xl text-[#373737] mt-[2rem]">Create Your Business Account
+                                </h2>
+                                <div class="flex items-center gap-4 mx-auto">
+                                    <div class="flex items-center gap-3">
+                                        <div
+                                            class="flex items-center justify-center font-semibold text-[#1BE347] bg-[#1BE347] border h-[2.188rem] w-[2.188rem] rounded-full">
+                                            <svg width="16" height="15" viewBox="0 0 16 15" fill="none"
+                                                xmlns="http://www.w3.org/2000/svg">
+                                                <rect x="1.84375" y="8.08096" width="2" height="6"
+                                                    transform="rotate(-45 1.84375 8.08096)" fill="white" />
+                                                <rect x="13.9082" y="2.65239" width="2" height="12.3011"
+                                                    transform="rotate(45 13.9082 2.65239)" fill="white" />
+                                            </svg>
+                                        </div>
+                                        <p class="font-semibold text-[#1BE347]">Personal Info</p>
+                                    </div>
+                                    <div class="h-[1px] w-[40px] border-t border-dashed border-[#205a42]"></div>
+                                    <div class="flex items-center gap-3">
+                                        <div
+                                            class="flex items-center justify-center font-semibold text-[#205a42] border-[#205a42] border h-[2.188rem] w-[2.188rem] rounded-full">
+                                            2
+                                        </div>
+                                        <p class="font-semibold text-[#205a42]">Buisness Details</p>
+                                    </div>
+                                </div>
+                                <div class="flex flex-col gap-2">
+                                    <p class="text-sm">Business Name *</p>
+                                    <input type="text" placeholder="Enter your business name"
+                                        class="border rounded-md text-sm outline-none lg:px-4 px-2 lg:py-3 py-[0.6rem] placeholder:text-[#A1A1A1] text-[#101928] focus:border-[#205a42] ease-in transition-all focus:border-l-[7px]  bg-transparent"
+                                        value="">
+                                </div>
+                                <div class="grid lg:grid-cols-2 gap-4">
+                                    <div class="flex flex-col gap-2">
+                                        <p class="text-sm">Country *</p>
+                                        <select type="text" placeholder="Enter your email address"
+                                            class="border bg-transparent rounded-md text-sm outline-none lg:px-4 px-2 lg:py-3 py-[0.6rem] placeholder:text-[#A1A1A1] text-[#101928] focus:border-[#205a42] ease-in transition-all focus:border-l-[7px]"
+                                            value="">
+                                            <option value="12">123</option>
+                                        </select>
+                                    </div>
+                                    <div class="flex flex-col gap-2">
+                                        <p class="text-sm">City *</p>
+                                        <select type="text" placeholder="Enter your email address"
+                                            class="border bg-transparent rounded-md text-sm outline-none lg:px-4 px-2 lg:py-3 py-[0.6rem] placeholder:text-[#A1A1A1] text-[#101928] focus:border-[#205a42] ease-in transition-all focus:border-l-[7px]"
+                                            value="">
+                                            <option value="12">123</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="flex flex-col gap-2">
+                                    <p class="text-sm">Business Address *</p>
+                                    <input type="text" placeholder="Enter Business Address"
+                                        class="border rounded-md text-sm outline-none lg:px-4 px-2 lg:py-3 py-[0.6rem] placeholder:text-[#A1A1A1] text-[#101928] focus:border-[#205a42] ease-in transition-all focus:border-l-[7px]  bg-transparent"
+                                        value="">
+                                </div>
+                                <div class="grid lg:grid-cols-2 gap-4">
+                                    <div class="flex flex-col gap-2">
+                                        <p class="text-sm">Business Category *</p>
+                                        <select type="text" placeholder="Enter your email address"
+                                            class="border bg-transparent rounded-md text-sm outline-none lg:px-4 px-2 lg:py-3 py-[0.6rem] placeholder:text-[#A1A1A1] text-[#101928] focus:border-[#205a42] ease-in transition-all focus:border-l-[7px]"
+                                            value="">
+                                            <option value="12">123</option>
+                                        </select>
+                                    </div>
+                                    <div class="flex flex-col gap-2">
+                                        <p class="text-sm">License Number *</p>
+                                        <input type="text" placeholder="Enter License Number"
+                                            class="border rounded-md text-sm outline-none lg:px-4 px-2 lg:py-3 py-[0.6rem] placeholder:text-[#A1A1A1] text-[#101928] focus:border-[#205a42] ease-in transition-all focus:border-l-[7px]  bg-transparent"
+                                            value="">
+                                    </div>
+                                </div>
+                                <div class="flex flex-col gap-2">
+                                    <p class="text-sm text-[#101928]">Attach License *</p>
+                                    <label for="upload"
+                                        class="px-4 py-3 text-sm rounded bg-[#205a42] text-white w-fit cursor-pointer">Upload License</label>
+                                    <input type="file" accept="image/*" hidden id="upload">
+                                </div>
+                                <div class="text-center w-full">
+                                    <button
+                                        class="text-center w-full transition-all bg-[#205a42] px-5 py-2 rounded-md text-white mx-auto">
+                                        Create an Account
+                                    </button>
+                                </div>
+                                <p class="text-[#6B6B6B]">By signing up, you agree to our <span
+                                        class="text-[#2B87FF]">Terms &
+                                        Conditions</span></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade fixed top-0 left-0 hidden w-full h-full outline-none overflow-x-hidden overflow-y-auto"
+        id="SignIn" tabindex="-1" aria-labelledby="SignInLabel" aria-modal="true" role="dialog">
+        <div
+            class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-xl relative w-auto pointer-events-none">
+            <div
+                class="modal-content border-none rounded-lg shadow-lg relative flex flex-col w-full pointer-events-auto bg-white bg-clip-padding outline-none text-current">
+                <div class="modal-body relative">
+                    <div class="grid grid-cols-1 lg:grid-cols-2 mobile-bg">
+                        <div class="h-[92vh] sticky top-0 lg:block hidden">
+                            <div class="bg-signup h-full flex items-center justify-center">
+                                <div class="flex flex-col gap-3">
+                                    <h2 class="text-[#373737] inter-bold text-[2.6rem]">Welcome Back</h2>
+                                    <p class="text-[#6B6B6B]">Sign In to your account to get amazing <br /> deals</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="h-full py-[3rem] px-[2rem]">
+                            <div class="flex flex-col gap-7 h-full justify-center">
+                                <p class="text-sm text-[#7B7B7B] text-right">
+                                    Don't have an account?
+                                    <button data-bs-target="#Signup" data-bs-toggle="modal"
+                                        class="text-[#205a42] cursor-pointer"> Sign Up Now</button>
+                                </p>
+                                <h2 class="font-semibold text-3xl text-[#373737] mt-[2rem]">Sign In</h2>
+
+                                <div class="flex flex-col gap-2">
+                                    <p class="text-sm">Email Address *</p>
+                                    <input type="text" placeholder="Enter your email address"
+                                        class="border rounded-md text-sm outline-none lg:px-4 px-2 lg:py-3 py-[0.6rem] placeholder:text-[#A1A1A1] text-[#101928] focus:border-[#205a42] ease-in transition-all focus:border-l-[7px]  bg-transparent"
+                                        value="">
+                                </div>
+                                <div class="flex flex-col gap-2 relative">
+                                    <p class="text-sm">Password *</p>
+                                    <div class="flex flex-col gap-2 relative password-show-p">
+                                        <input type="password" name="password"
+                                            class="border password-show rounded-md text-sm outline-none px-4 py-3 placeholder:text-[#A1A1A1] text-[#101928] focus:border-[#205a42] ease-in transition-all focus:border-l-[7px]"
+                                            placeholder="Enter password" value="">
+                                        <div
+                                            class="absolute password-show-icon right-4 top-1/2 -translate-y-1/2 cursor-pointer">
+                                            <svg width="13" height="9" viewBox="0 0 13 9" fill="none"
+                                                xmlns="http://www.w3.org/2000/svg">
+                                                <path
+                                                    d="M8.53125 4.5C8.53125 5.03872 8.31724 5.55538 7.93631 5.93631C7.55538 6.31724 7.03872 6.53125 6.5 6.53125C5.96128 6.53125 5.44462 6.31724 5.06369 5.93631C4.68276 5.55538 4.46875 5.03872 4.46875 4.5C4.46875 3.96128 4.68276 3.44462 5.06369 3.06369C5.44462 2.68276 5.96128 2.46875 6.5 2.46875C7.03872 2.46875 7.55538 2.68276 7.93631 3.06369C8.31724 3.44462 8.53125 3.96128 8.53125 4.5Z"
+                                                    fill="#A1A1A1"></path>
+                                                <path
+                                                    d="M0 4.5C0 4.5 2.4375 0.03125 6.5 0.03125C10.5625 0.03125 13 4.5 13 4.5C13 4.5 10.5625 8.96875 6.5 8.96875C2.4375 8.96875 0 4.5 0 4.5ZM6.5 7.34375C7.25421 7.34375 7.97753 7.04414 8.51083 6.51083C9.04414 5.97753 9.34375 5.25421 9.34375 4.5C9.34375 3.74579 9.04414 3.02247 8.51083 2.48917C7.97753 1.95586 7.25421 1.65625 6.5 1.65625C5.74579 1.65625 5.02247 1.95586 4.48917 2.48917C3.95586 3.02247 3.65625 3.74579 3.65625 4.5C3.65625 5.25421 3.95586 5.97753 4.48917 6.51083C5.02247 7.04414 5.74579 7.34375 6.5 7.34375V7.34375Z"
+                                                    fill="#A1A1A1"></path>
+                                            </svg>
+                                        </div>
+                                    </div>
+                                    <button data-bs-target="#forgotPassword" data-bs-toggle="modal"
+                                        class="text-xs text-right cursor-pointer">Forgot Password ?</button>
+                                </div>
+                                <div class="text-center w-full">
+                                    <button
+                                        class="text-center w-full transition-all bg-[#205a42] px-5 py-2 rounded-md text-white mx-auto">
+                                        Sign In Now
+                                    </button>
+                                </div>
+                                <div class="flex items-center gap-3">
+                                    <div class="flex-1 h-[1px] bg-[#B3B3B3]"></div>
+                                    <p class="text-[#B3B3B3]">OR</p>
+                                    <div class="flex-1 h-[1px] bg-[#B3B3B3]"></div>
+                                </div>
+                                <div class="flex items-center flex-wrap gap-4">
+                                    <div class="cursor-pointer border rounded px-5 py-3 flex items-center gap-3 flex-1">
+                                        <svg width="18" height="19" viewBox="0 0 18 19" fill="none"
+                                            xmlns="http://www.w3.org/2000/svg">
+                                            <path
+                                                d="M18 9.36694C18 13.8592 14.7087 17.5826 10.4062 18.2576V11.9685H12.5033L12.9023 9.36694H10.4062V7.67874C10.4062 6.96683 10.755 6.27319 11.873 6.27319H13.0078V4.05835C13.0078 4.05835 11.9777 3.88257 10.993 3.88257C8.93742 3.88257 7.59375 5.12851 7.59375 7.38413V9.36694H5.30859V11.9685H7.59375V18.2576C3.29133 17.5826 0 13.8592 0 9.36694C0 4.39655 4.02961 0.366943 9 0.366943C13.9704 0.366943 18 4.39655 18 9.36694Z"
+                                                fill="#193FF6" />
+                                            <path
+                                                d="M12.5033 11.9685L12.9023 9.36694H10.4062V7.67871C10.4062 6.96697 10.7549 6.27319 11.8729 6.27319H13.0078V4.05835C13.0078 4.05835 11.9779 3.88257 10.9932 3.88257C8.93739 3.88257 7.59375 5.12851 7.59375 7.38413V9.36694H5.30859V11.9685H7.59375V18.2576C8.05198 18.3295 8.52159 18.3669 9 18.3669C9.47841 18.3669 9.94802 18.3295 10.4062 18.2576V11.9685H12.5033Z"
+                                                fill="white" />
+                                        </svg>
+                                        <p class="whitespace-nowrap">Login with Facebook</p>
+                                    </div>
+                                    <div class="cursor-pointer border rounded px-5 py-3 flex items-center gap-3 flex-1">
+                                        <svg width="18" height="19" viewBox="0 0 18 19" fill="none"
+                                            xmlns="http://www.w3.org/2000/svg">
+                                            <g clip-path="url(#clip0_269_1470)">
+                                                <path
+                                                    d="M3.98918 11.2446L3.36263 13.5836L1.07258 13.632C0.388195 12.3626 0 10.9103 0 9.36695C0 7.87453 0.362953 6.46716 1.00631 5.22794H1.0068L3.04559 5.60172L3.9387 7.62826C3.75177 8.17322 3.64989 8.75822 3.64989 9.36695C3.64996 10.0276 3.76963 10.6606 3.98918 11.2446Z"
+                                                    fill="#FBBB00" />
+                                                <path
+                                                    d="M17.8422 7.68564C17.9455 8.23007 17.9994 8.79232 17.9994 9.36695C17.9994 10.0113 17.9317 10.6398 17.8026 11.2461C17.3645 13.3092 16.2197 15.1106 14.6338 16.3855L14.6333 16.385L12.0654 16.254L11.7019 13.9851C12.7542 13.368 13.5766 12.4022 14.0098 11.2461H9.19727V7.68564H14.08H17.8422Z"
+                                                    fill="#518EF8" />
+                                                <path
+                                                    d="M14.6336 16.385L14.6341 16.3855C13.0917 17.6252 11.1325 18.3669 8.99968 18.3669C5.57227 18.3669 2.59239 16.4512 1.07227 13.6321L3.98886 11.2446C4.74891 13.273 6.70567 14.717 8.99968 14.717C9.98571 14.717 10.9095 14.4505 11.7021 13.9851L14.6336 16.385Z"
+                                                    fill="#28B446" />
+                                                <path
+                                                    d="M14.7442 2.43891L11.8286 4.82588C11.0082 4.31309 10.0385 4.01687 8.99955 4.01687C6.65361 4.01687 4.66025 5.52707 3.93828 7.62826L1.00635 5.22793H1.00586C2.50373 2.34002 5.52119 0.366943 8.99955 0.366943C11.1833 0.366943 13.1855 1.14481 14.7442 2.43891Z"
+                                                    fill="#F14336" />
+                                            </g>
+                                            <defs>
+                                                <clipPath id="clip0_269_1470">
+                                                    <rect width="18" height="18" fill="white"
+                                                        transform="translate(0 0.366943)" />
+                                                </clipPath>
+                                            </defs>
+                                        </svg>
+                                        <p class="whitespace-nowrap">Login with Google</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade fixed top-0 left-0 hidden w-full h-full outline-none overflow-x-hidden overflow-y-auto"
+        id="forgotPassword" tabindex="-1" aria-labelledby="forgotPasswordLabel" aria-modal="true" role="dialog">
+        <div
+            class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-xl relative w-auto pointer-events-none">
+            <div
+                class="modal-content border-none rounded-lg shadow-lg relative flex flex-col w-full pointer-events-auto bg-white bg-clip-padding outline-none text-current">
+                <div class="modal-body relative">
+                    <div class="grid grid-cols-1 lg:grid-cols-2 mobile-bg">
+                        <div class="h-[92vh] sticky top-0 lg:block hidden">
+                            <div class="bg-signup h-full flex items-center justify-center">
+                                <div class="flex flex-col gap-3">
+                                    <h2 class="text-[#373737] inter-bold text-[2.6rem]">Don't worry, We can Help</h2>
+                                    <p class="text-[#6B6B6B]">Do not reveal your password to anybody</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="h-full py-[3rem] px-[2rem]">
+                            <div class="flex flex-col gap-7 h-full justify-center">
+
+                                <h2 data-bs-target="#ForgotPassword" data-bs-toggle="modal"
+                                    class="font-semibold text-3xl text-[#373737] mt-[2rem]">Forgot Password</h2>
+
+                                <div class="flex flex-col gap-2">
+                                    <p class="text-sm">Email Address *</p>
+                                    <input type="text" placeholder="Enter your email address"
+                                        class="border rounded-md text-sm outline-none lg:px-4 px-2 lg:py-3 py-[0.6rem] placeholder:text-[#A1A1A1] text-[#101928] focus:border-[#205a42] ease-in transition-all focus:border-l-[7px]  bg-transparent"
+                                        value="">
+                                </div>
+                                <div class="text-center w-full">
+                                    <button data-bs-target="#NewPassword" data-bs-toggle="modal"
+                                        class="text-center w-full transition-all bg-[#205a42] px-5 py-2 rounded-md text-white mx-auto">
+                                        Send Email
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="modal fade fixed top-0 left-0 hidden w-full h-full outline-none overflow-x-hidden overflow-y-auto"
+        id="NewPassword" tabindex="-1" aria-labelledby="NewPasswordLabel" aria-modal="true" role="dialog">
+        <div
+            class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-xl relative w-auto pointer-events-none">
+            <div
+                class="modal-content border-none rounded-lg shadow-lg relative flex flex-col w-full pointer-events-auto bg-white bg-clip-padding outline-none text-current">
+                <div class="modal-body relative">
+                    <div class="grid grid-cols-1 lg:grid-cols-2 mobile-bg">
+                        <div class="h-[92vh] sticky top-0 lg:block hidden">
+                            <div class="bg-signup h-full flex items-center justify-center">
+                                <div class="flex flex-col gap-3">
+                                    <h2 class="text-[#373737] inter-bold text-[2.6rem]">New password</h2>
+                                    <p class="text-[#6B6B6B]">Lorem ipsum is placeholder text commonly used in the <br
+                                            class="hidden md:block"> graphic.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class=" h-full py-[3rem] px-[2rem]">
+                            <div class="flex flex-col gap-7 h-full justify-center">
+
+                                <h2 class="font-semibold text-3xl text-[#373737] mt-[2rem]">New Password</h2>
+                                <div class="flex flex-col gap-2 relative">
+                                    <p class="text-sm">Password *</p>
+                                    <div class="flex flex-col gap-2 relative password-show-p">
+                                        <input type="password" name="password"
+                                            class="border password-show rounded-md text-sm outline-none px-4 py-3 placeholder:text-[#A1A1A1] text-[#101928] focus:border-[#205a42] ease-in transition-all focus:border-l-[7px]"
+                                            placeholder="Enter password" value="">
+                                        <div
+                                            class="absolute password-show-icon right-4 top-1/2 -translate-y-1/2 cursor-pointer">
+                                            <svg width="13" height="9" viewBox="0 0 13 9" fill="none"
+                                                xmlns="http://www.w3.org/2000/svg">
+                                                <path
+                                                    d="M8.53125 4.5C8.53125 5.03872 8.31724 5.55538 7.93631 5.93631C7.55538 6.31724 7.03872 6.53125 6.5 6.53125C5.96128 6.53125 5.44462 6.31724 5.06369 5.93631C4.68276 5.55538 4.46875 5.03872 4.46875 4.5C4.46875 3.96128 4.68276 3.44462 5.06369 3.06369C5.44462 2.68276 5.96128 2.46875 6.5 2.46875C7.03872 2.46875 7.55538 2.68276 7.93631 3.06369C8.31724 3.44462 8.53125 3.96128 8.53125 4.5Z"
+                                                    fill="#A1A1A1"></path>
+                                                <path
+                                                    d="M0 4.5C0 4.5 2.4375 0.03125 6.5 0.03125C10.5625 0.03125 13 4.5 13 4.5C13 4.5 10.5625 8.96875 6.5 8.96875C2.4375 8.96875 0 4.5 0 4.5ZM6.5 7.34375C7.25421 7.34375 7.97753 7.04414 8.51083 6.51083C9.04414 5.97753 9.34375 5.25421 9.34375 4.5C9.34375 3.74579 9.04414 3.02247 8.51083 2.48917C7.97753 1.95586 7.25421 1.65625 6.5 1.65625C5.74579 1.65625 5.02247 1.95586 4.48917 2.48917C3.95586 3.02247 3.65625 3.74579 3.65625 4.5C3.65625 5.25421 3.95586 5.97753 4.48917 6.51083C5.02247 7.04414 5.74579 7.34375 6.5 7.34375V7.34375Z"
+                                                    fill="#A1A1A1"></path>
+                                            </svg>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="flex flex-col gap-2 relative">
+                                    <p class="text-sm">Confirm Password *</p>
+                                    <div class="flex flex-col gap-2 relative password-show-p">
+                                        <input type="password" name="password"
+                                            class="border password-show rounded-md text-sm outline-none px-4 py-3 placeholder:text-[#A1A1A1] text-[#101928] focus:border-[#205a42] ease-in transition-all focus:border-l-[7px]"
+                                            placeholder="Enter confirm password" value="">
+                                        <div
+                                            class="absolute password-show-icon right-4 top-1/2 -translate-y-1/2 cursor-pointer">
+                                            <svg width="13" height="9" viewBox="0 0 13 9" fill="none"
+                                                xmlns="http://www.w3.org/2000/svg">
+                                                <path
+                                                    d="M8.53125 4.5C8.53125 5.03872 8.31724 5.55538 7.93631 5.93631C7.55538 6.31724 7.03872 6.53125 6.5 6.53125C5.96128 6.53125 5.44462 6.31724 5.06369 5.93631C4.68276 5.55538 4.46875 5.03872 4.46875 4.5C4.46875 3.96128 4.68276 3.44462 5.06369 3.06369C5.44462 2.68276 5.96128 2.46875 6.5 2.46875C7.03872 2.46875 7.55538 2.68276 7.93631 3.06369C8.31724 3.44462 8.53125 3.96128 8.53125 4.5Z"
+                                                    fill="#A1A1A1"></path>
+                                                <path
+                                                    d="M0 4.5C0 4.5 2.4375 0.03125 6.5 0.03125C10.5625 0.03125 13 4.5 13 4.5C13 4.5 10.5625 8.96875 6.5 8.96875C2.4375 8.96875 0 4.5 0 4.5ZM6.5 7.34375C7.25421 7.34375 7.97753 7.04414 8.51083 6.51083C9.04414 5.97753 9.34375 5.25421 9.34375 4.5C9.34375 3.74579 9.04414 3.02247 8.51083 2.48917C7.97753 1.95586 7.25421 1.65625 6.5 1.65625C5.74579 1.65625 5.02247 1.95586 4.48917 2.48917C3.95586 3.02247 3.65625 3.74579 3.65625 4.5C3.65625 5.25421 3.95586 5.97753 4.48917 6.51083C5.02247 7.04414 5.74579 7.34375 6.5 7.34375V7.34375Z"
+                                                    fill="#A1A1A1"></path>
+                                            </svg>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="text-center w-full">
+                                    <a href="#">
+                                        <button
+                                            class="text-center w-full transition-all bg-[#205a42] px-5 py-2 rounded-md text-white mx-auto">
+                                            Update Password
+                                        </button>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <section>
+        <div class="grid lg:grid-cols-5 h-[100vh] mobile-bg">
+            <div class="lg:col-span-3 h-full">
+                <div class="bg-signup h-full flex items-center justify-center">
+                    <div class="flex flex-col gap-3">
+                        <h2 class="text-[#373737] inter-bold text-[2.6rem]">Welcome Back</h2>
+                        <p class="text-[#6B6B6B] text-center">Sign In to your account to get amazing <br /> deals</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="lg:col-span-2 h-full py-[3rem] px-[2rem] min-h-[85vh] flex items-center">
+                <form action="{% url 'admin_login' %}" method="POST" class="w-full admin_login">
+                    {% csrf_token %}
+                <div class="flex flex-col gap-7 h-full justify-center">
+                    <div class="flex flex-col gap-2">
+                        <p class="text-sm">Username</p>
+                        <input type="text" placeholder="Enter your username" name="username"
+                            class="border rounded-md text-sm outline-none lg:px-4 px-2 lg:py-3 py-[0.6rem] placeholder:text-[#A1A1A1] text-[#101928] focus:border-[#205a42] ease-in transition-all focus:border-l-[7px]  bg-transparent"
+                            value="" required>
+                    </div>
+                    <div class="flex flex-col gap-2 relative">
+                        <p class="text-sm">Password *</p>
+                        <div class="flex flex-col gap-2 relative password-show-p">
+                            <input type="password" name="password"
+                                class="border password-show rounded-md text-sm outline-none px-4 py-3 placeholder:text-[#A1A1A1] text-[#101928] focus:border-[#205a42] ease-in transition-all focus:border-l-[7px]"
+                                placeholder="Enter password" value="" required="">
+                            <div class="absolute password-show-icon right-4 top-1/2 -translate-y-1/2 cursor-pointer">
+                                <svg width="13" height="9" viewBox="0 0 13 9" fill="none"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <path
+                                        d="M8.53125 4.5C8.53125 5.03872 8.31724 5.55538 7.93631 5.93631C7.55538 6.31724 7.03872 6.53125 6.5 6.53125C5.96128 6.53125 5.44462 6.31724 5.06369 5.93631C4.68276 5.55538 4.46875 5.03872 4.46875 4.5C4.46875 3.96128 4.68276 3.44462 5.06369 3.06369C5.44462 2.68276 5.96128 2.46875 6.5 2.46875C7.03872 2.46875 7.55538 2.68276 7.93631 3.06369C8.31724 3.44462 8.53125 3.96128 8.53125 4.5Z"
+                                        fill="#A1A1A1"></path>
+                                    <path
+                                        d="M0 4.5C0 4.5 2.4375 0.03125 6.5 0.03125C10.5625 0.03125 13 4.5 13 4.5C13 4.5 10.5625 8.96875 6.5 8.96875C2.4375 8.96875 0 4.5 0 4.5ZM6.5 7.34375C7.25421 7.34375 7.97753 7.04414 8.51083 6.51083C9.04414 5.97753 9.34375 5.25421 9.34375 4.5C9.34375 3.74579 9.04414 3.02247 8.51083 2.48917C7.97753 1.95586 7.25421 1.65625 6.5 1.65625C5.74579 1.65625 5.02247 1.95586 4.48917 2.48917C3.95586 3.02247 3.65625 3.74579 3.65625 4.5C3.65625 5.25421 3.95586 5.97753 4.48917 6.51083C5.02247 7.04414 5.74579 7.34375 6.5 7.34375V7.34375Z"
+                                        fill="#A1A1A1"></path>
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+                    {{FormWithCaptcha}}
+                    <div class="text-center w-full">
+                        <button
+                            class="text-center w-full transition-all bg-[#205a42] px-5 py-2 rounded-md text-white mx-auto">
+                            Sign In
+                        </button>
+                    </div>
+              
+                </div>
+            </form>
+            </div>
+        </div>
+    </body>
+    {% include 'common/footer-com.html' %}
+    {% if messages %}
+    {% for msg in messages %}
+    <script>
+    setTimeout(() => {
+        Toast.fire({
+    icon: '{{msg.tags}}', // success
+    title: '{{msg}}'
+    });
+    }, 1000);
+    </script>
+    {% endfor %}
+    {% endif %}
+    <script>
+        $(".admin_login").validate();
+    </script>
+    </html>
+
+
+
+
+    
+    {% comment %} <div class="modal fade fixed top-0 left-0 hidden w-full h-full outline-none overflow-x-hidden overflow-y-auto"
+    id="deal-all-all-{{deal.id}}" tabindex="-1" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog relative w-auto pointer-events-none">
+        <div
+            class="modal-content border-none shadow-lg relative flex flex-col w-full pointer-events-auto bg-white bg-clip-padding rounded-md outline-none text-current">
+            <div
+                class="modal-header flex flex-shrink-0 items-center justify-between p-4 border-b border-gray-200 rounded-t-md">
+                <h5 class="text-xl font-medium leading-normal text-gray-800"
+                    id="exampleModalLabel">Confirm Delete
+
+                </h5>
+                <button type="button"
+                    class="btn-close box-content w-4 h-4 p-1 text-black border-none rounded-none opacity-50 focus:shadow-none focus:outline-none focus:opacity-100 hover:text-black hover:opacity-75 hover:no-underline"
+                    data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body relative p-4">
+                Do you want to delete this Deal?
+            </div>
+            <div
+                class="modal-footer flex flex-shrink-0 flex-wrap items-center justify-end p-4 border-t border-gray-200 rounded-b-md">
+                <button type="button" class="px-6
+py-2.5
+bg-purple-600
+text-white
+font-medium
+text-xs
+leading-tight
+uppercase
+rounded
+shadow-md
+hover:bg-purple-700 hover:shadow-lg
+focus:bg-purple-700 focus:shadow-lg focus:outline-none focus:ring-0
+active:bg-purple-800 active:shadow-lg
+transition
+duration-150
+ease-in-out" data-bs-dismiss="modal">Close</button>
+                <a href="{% url 'delete_deal' deal.id %}">
+
+                    <button type="button" class="px-6
+py-2.5
+bg-blue-600
+text-white
+font-medium
+text-xs
+leading-tight
+uppercase
+rounded
+shadow-md
+hover:bg-blue-700 hover:shadow-lg
+focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0
+active:bg-blue-800 active:shadow-lg
+transition
+duration-150
+ease-in-out
+ml-1">Delete</button>
+                </a>
+
+
+            </div>
+        </div>
+    </div>
+</div>
+{% endfor %}
+</div>
+
+</div> {% endcomment %}

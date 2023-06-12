@@ -1,0 +1,501 @@
+{% extends 'Store/base.html' %}
+{% block title %} Top Deals {% endblock title %}
+{% block body %}
+<div class="w-full">
+    <div class="min-h-[26.875rem] relative container mx-auto">
+        <div class="swiper banner-slider">
+            <div class="swiper-wrapper md:pb-0 pb-[1rem]">
+                {% for banner in banners %}
+                {% for bannermedia in banner.bannermedia_banner.all %}
+                <div class="swiper-slide">
+                    <img src="/media/{{ bannermedia.image }}" class='h-[13rem] lg:h-[28rem] w-full object-cover' />
+                </div>
+                {% endfor %}
+                {% endfor %}
+            </div>
+            <div class="banner-slider-paggination text-center"></div>
+        </div>
+        <div class="swiper-button-next banner-slider-next md:block hidden after:content-none w-[2.8rem]"
+            style="right:4rem !important;">
+            <div
+                class="rounded-full flex-1 h-[2.8rem] flex justify-center items-center hover-arrows lg:bg-white bg-white/60">
+                <svg width="0.7rem" height="1.1rem" viewBox="0 0 12 19" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path fill-rule="evenodd" clip-rule="evenodd"
+                        d="M1.05788 3.15128L8.11521 9.96502L1.05788 16.7787C0.814999 17.0215 0.680606 17.3467 0.683644 17.6842C0.686682 18.0218 0.826907 18.3446 1.07412 18.5833C1.32133 18.822 1.65575 18.9574 2.00534 18.9603C2.35494 18.9633 2.69174 18.8335 2.94321 18.599L10.9432 10.8751C11.1932 10.6337 11.3336 10.3064 11.3336 9.96502C11.3336 9.62367 11.1932 9.29629 10.9432 9.05489L2.94321 1.33103C2.69174 1.09653 2.35494 0.966781 2.00534 0.969714C1.65575 0.972647 1.32133 1.10803 1.07412 1.34671C0.826907 1.58539 0.686682 1.90826 0.683644 2.24579C0.680606 2.58332 0.814999 2.90849 1.05788 3.15128Z"
+                        fill="#6C6C6C" />
+                </svg>
+            </div>
+        </div>
+        <div class="absolute z-[122] swiper-button-prev banner-slider-prev md:block hidden after:content-none w-[2.8rem]"
+            style="left:4rem !important;">
+            <div
+                class="rounded-full flex-1 h-[2.8rem] flex justify-center items-center hover-arrows lg:bg-white bg-white/60">
+                <svg class="mr-1" width="0.7rem" height="1.1rem" viewBox="0 0 12 19" fill="none"
+                    xmlns="http://www.w3.org/2000/svg">
+                    <path fill-rule="evenodd" clip-rule="evenodd"
+                        d="M10.9421 16.7788L3.88479 9.96509L10.9421 3.15135C11.185 2.90856 11.3194 2.58338 11.3164 2.24585C11.3133 1.90833 11.1731 1.58545 10.9259 1.34677C10.6787 1.1081 10.3443 0.97271 9.99466 0.969776C9.64506 0.966843 9.30826 1.0966 9.05679 1.33109L1.05679 9.05496C0.806832 9.29636 0.666412 9.62374 0.666412 9.96509C0.666412 10.3064 0.806832 10.6338 1.05679 10.8752L9.05679 18.5991C9.30826 18.8336 9.64506 18.9633 9.99466 18.9604C10.3443 18.9575 10.6787 18.8221 10.9259 18.5834C11.1731 18.3447 11.3133 18.0219 11.3164 17.6843C11.3194 17.3468 11.185 17.0216 10.9421 16.7788Z"
+                        fill="#6C6C6C" />
+                </svg>
+            </div>
+        </div>
+        {% include 'Components/SearchBar.html' %}
+    </div>
+</div>
+
+
+{% comment %} </section> {% endcomment %}
+<div class="py-[3rem] !pt-[6rem]">
+    <div class="flex items-start justify-center gap-[2.4rem] flex-wrap">
+        <div class="flex items-center gap-3 w-[24rem]">
+            <div class="rounded-xl p-3 shadow-cstm-2 h-[5rem] w-[5rem] flex items-center justify-center">
+                <svg width="53" height="53" viewBox="0 0 53 53" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path
+                        d="M19.668 33.4856C19.9402 33.4856 20.2073 33.3758 20.3999 33.1822C20.5924 32.9897 20.7032 32.7237 20.7032 32.4504C20.7032 32.1781 20.5924 31.9111 20.3999 31.7185C20.2073 31.526 19.9413 31.4152 19.668 31.4152C19.3957 31.4152 19.1287 31.526 18.9361 31.7185C18.7436 31.9111 18.6328 32.1781 18.6328 32.4504C18.6328 32.7237 18.7436 32.9897 18.9361 33.1822C19.1287 33.3758 19.3957 33.4856 19.668 33.4856Z"
+                        fill="#205a42" />
+                    <path
+                        d="M44.2872 24.5365V20.2993H45.6505C46.735 20.2993 47.6173 19.4171 47.6173 18.3325V10.2481C47.6173 9.16353 46.735 8.28127 45.6505 8.28127H39.1968C40.5346 6.969 41.3667 5.14287 41.3667 3.12535C41.3667 2.55363 40.9032 2.09019 40.3315 2.09019C39.7598 2.09019 39.2964 2.55363 39.2964 3.12535C39.2964 5.05934 38.2255 6.74706 36.646 7.62922C37.0411 6.89861 37.2657 6.06303 37.2657 5.17579C37.2657 2.32186 34.9438 0 32.0899 0C29.7503 0 27.7694 1.56071 27.131 3.69541C26.2313 2.94026 25.0725 2.48438 23.8086 2.48438C22.5448 2.48438 21.386 2.94026 20.4863 3.69541C19.8479 1.56071 17.8669 0 15.5274 0C12.6734 0 10.3516 2.32186 10.3516 5.17579C10.3516 6.06303 10.5762 6.89871 10.9712 7.62922C9.39178 6.74706 8.32091 5.05923 8.32091 3.12525C8.32091 2.55353 7.85747 2.09009 7.28575 2.09009C6.71404 2.09009 6.2506 2.55353 6.2506 3.12525C6.2506 5.14277 7.08266 6.96889 8.42049 8.28116H1.9668C0.882265 8.28116 0 9.16343 0 10.248V18.3324C0 19.417 0.882265 20.2992 1.9668 20.2992H3.3301V45.7539C3.3301 47.4662 4.72322 48.8594 6.43558 48.8594H27.795C30.4734 51.4228 34.1032 53 38.0946 53C46.314 53 53.0009 46.3131 53.0009 38.0937C53.0009 32.0828 49.4239 26.8922 44.2872 24.5365V24.5365ZM28.9844 7.66017V5.17579C28.9844 3.46343 30.3775 2.07032 32.0899 2.07032C33.8023 2.07032 35.1954 3.46343 35.1954 5.17579C35.1954 6.88815 33.8023 8.28127 32.0899 8.28127H28.9844V7.66017ZM28.9844 10.3516H45.547V18.229H28.9844V10.3516ZM28.9844 20.2993H42.2169V23.7678C40.9072 23.3903 39.5242 23.1875 38.0946 23.1875C34.6665 23.1875 31.5055 24.3515 28.9844 26.304V20.2993ZM20.7032 7.66017C20.7032 5.94781 22.0963 4.5547 23.8086 4.5547C25.521 4.5547 26.9141 5.94781 26.9141 7.66017V8.28127H20.7032V7.66017ZM20.7032 10.3516H26.9141V18.229H20.7032V10.3516ZM15.5274 2.07032C17.2397 2.07032 18.6328 3.46343 18.6328 5.17579V7.66017V8.28127H15.5274C13.815 8.28127 12.4219 6.88815 12.4219 5.17579C12.4219 3.46343 13.815 2.07032 15.5274 2.07032ZM2.07032 18.229V10.3516H18.6328V18.229H4.36526H2.07032ZM20.7032 46.7892V37.1088C20.7032 36.5371 20.2397 36.0736 19.668 36.0736C19.0963 36.0736 18.6328 36.5371 18.6328 37.1088V46.7892H6.43558C5.86479 46.7892 5.40042 46.3248 5.40042 45.754V20.2993H18.6328V27.7923C18.6328 28.3641 19.0963 28.8275 19.668 28.8275C20.2397 28.8275 20.7032 28.3641 20.7032 27.7923V20.2993H26.9141V28.2468C24.5967 30.8748 23.1884 34.3227 23.1884 38.0938C23.1884 41.3365 24.2297 44.3401 25.9947 46.7892H20.7032ZM38.0946 50.9298C31.0169 50.9298 25.2587 45.1716 25.2587 38.0938C25.2587 31.016 31.0169 25.2579 38.0946 25.2579C45.1724 25.2579 50.9306 31.016 50.9306 38.0938C50.9306 45.1716 45.1724 50.9298 38.0946 50.9298Z"
+                        fill="#205a42" />
+                    <path
+                        d="M41.4696 31.2815C40.9551 31.0317 40.336 31.2462 40.0862 31.7604L34.3904 43.4894C34.1406 44.0037 34.3551 44.623 34.8693 44.8728C35.015 44.9435 35.169 44.977 35.3208 44.977C35.7047 44.977 36.0736 44.7624 36.2527 44.3938L41.9486 32.6649C42.1984 32.1506 41.9839 31.5312 41.4696 31.2815Z"
+                        fill="#205a42" />
+                    <path
+                        d="M35.4785 30.7001C34.8527 30.0743 34.0206 29.7297 33.1358 29.7297C32.2508 29.7297 31.4188 30.0743 30.7931 30.7001C29.5013 31.9919 29.5013 34.0938 30.7931 35.3856C31.439 36.0316 32.2872 36.3544 33.1358 36.3544C33.9841 36.3544 34.8327 36.0314 35.4786 35.3856C36.7702 34.0938 36.7702 31.9919 35.4785 30.7001ZM34.0145 33.9216C33.53 34.4062 32.7415 34.4061 32.257 33.9216C31.7724 33.437 31.7724 32.6486 32.257 32.164C32.4917 31.9292 32.8038 31.8 33.1358 31.8C33.4677 31.8 33.7797 31.9293 34.0145 32.1641C34.4991 32.6486 34.4991 33.4371 34.0145 33.9216V33.9216Z"
+                        fill="#205a42" />
+                    <path
+                        d="M40.8956 40.8026C39.6038 42.0944 39.6038 44.1963 40.8956 45.4881C41.5214 46.1138 42.3534 46.4584 43.2383 46.4584C44.1233 46.4584 44.9552 46.1138 45.581 45.4881C46.8728 44.1963 46.8728 42.0944 45.581 40.8026C44.2892 39.5108 42.1874 39.5109 40.8956 40.8026V40.8026ZM44.1171 44.0241C43.8824 44.2589 43.5703 44.3881 43.2383 44.3881C42.9063 44.3881 42.5943 44.2588 42.3595 44.024C41.875 43.5395 41.875 42.7511 42.3595 42.2665C42.6019 42.0242 42.9201 41.9031 43.2383 41.9031C43.5565 41.9031 43.8748 42.0242 44.1171 42.2665C44.6016 42.7511 44.6016 43.5396 44.1171 44.0241Z"
+                        fill="#205a42" />
+                </svg>
+            </div>
+            <div class="flex flex-col gap-2">
+                <h2 class="font-semibold text-lg">Amazing Last Minute Discounts</h2>
+                <p class="text-[#6B6B6B] text-sm ">Get Amazing Last Minute Discounts on your favorite categories food, of
+                    beauty, getaways & more.
+                </p>
+            </div>
+        </div>
+        <div class="flex items-center gap-3 w-[24rem]">
+            <div class="rounded-xl p-3 shadow-cstm-2 h-[5rem] w-[5rem] flex items-center justify-center">
+                <svg width="43" height="52" viewBox="0 0 43 52" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path
+                        d="M37.9057 20.7836H18.5346C19.4303 19.7539 19.9746 18.4108 19.9746 16.9421C19.9746 13.7101 17.3452 11.0807 14.1132 11.0807C10.8812 11.0807 8.25178 13.7101 8.25178 16.9421C8.25178 18.4108 8.79604 19.7539 9.69169 20.7836H5.0676C2.27333 20.7836 0 23.0569 0 25.8512V31.8308C0 32.3906 0.453753 32.8444 1.01352 32.8444C1.57329 32.8444 2.02704 32.3906 2.02704 31.8308V25.8512C2.02704 24.1746 3.39104 22.8106 5.0676 22.8106H33.4462C35.1227 22.8106 36.4867 24.1746 36.4867 25.8512V31.3242H25.9461C23.1519 31.3242 20.8785 33.5975 20.8785 36.3918C20.8785 39.1861 23.1519 41.4594 25.9461 41.4594H36.4867V46.9324C36.4867 48.609 35.1227 49.973 33.4462 49.973H5.0676C3.39104 49.973 2.02704 48.609 2.02704 46.9324V40.9447C2.02704 40.3849 1.57329 39.9312 1.01352 39.9312C0.453753 39.9312 0 40.3849 0 40.9447V46.9324C0 49.7267 2.27333 52 5.0676 52H37.9057C40.7 52 42.9733 49.7267 42.9733 46.9324V25.8512C42.9733 23.0569 40.7 20.7836 37.9057 20.7836ZM14.1132 13.1079C16.2275 13.1079 17.9475 14.8279 17.9475 16.9422C17.9475 19.0565 16.2275 20.7766 14.1132 20.7766C11.999 20.7766 10.2788 19.0565 10.2788 16.9422C10.2788 14.8279 11.9989 13.1079 14.1132 13.1079ZM37.4975 22.8106H37.9057C39.5822 22.8106 40.9462 24.1746 40.9462 25.8512V31.3242H38.5138V25.8512C38.5138 24.7113 38.1352 23.6582 37.4975 22.8106ZM22.9056 36.3918C22.9056 34.7152 24.2696 33.3512 25.9461 33.3512H40.9462V39.4323H25.9461C24.2696 39.4323 22.9056 38.0683 22.9056 36.3918ZM37.9057 49.973H37.4975C38.1352 49.1253 38.5138 48.0724 38.5138 46.9324V41.4594H40.9462V46.9324C40.9462 48.609 39.5822 49.973 37.9057 49.973Z"
+                        fill="#205a42" />
+                    <path
+                        d="M25.6873 35.3781C25.4198 35.3781 25.1583 35.4866 24.9698 35.6751C24.7813 35.8636 24.6738 36.1251 24.6738 36.3917C24.6738 36.6582 24.7813 36.9197 24.9698 37.1082C25.1593 37.2967 25.4198 37.4052 25.6873 37.4052C25.9539 37.4052 26.2144 37.2967 26.4039 37.1082C26.5924 36.9197 26.7009 36.6582 26.7009 36.3917C26.7009 36.1251 26.5924 35.8636 26.4039 35.6751C26.2154 35.4865 25.9539 35.3781 25.6873 35.3781Z"
+                        fill="#205a42" />
+                    <path
+                        d="M28.8594 13.9521C32.0915 13.9521 34.7208 11.3228 34.7208 8.09075C34.7208 4.85883 32.0915 2.22935 28.8594 2.22935C25.6274 2.22935 22.998 4.85873 22.998 8.09075C22.998 11.3228 25.6274 13.9521 28.8594 13.9521ZM28.8594 4.2565C30.9736 4.2565 32.6938 5.97654 32.6938 8.09085C32.6938 10.2052 30.9737 11.9252 28.8594 11.9252C26.7451 11.9252 25.0251 10.2052 25.0251 8.09085C25.0251 5.97654 26.7451 4.2565 28.8594 4.2565Z"
+                        fill="#205a42" />
+                    <path
+                        d="M18.9608 9.99139C19.5206 9.99139 19.9743 9.53764 19.9743 8.97787V1.01352C19.9743 0.453753 19.5206 0 18.9608 0C18.401 0 17.9473 0.453753 17.9473 1.01352V8.97787C17.9473 9.53764 18.401 9.99139 18.9608 9.99139Z"
+                        fill="#205a42" />
+                    <path
+                        d="M14.0956 6.48653C14.6553 6.48653 15.1091 6.03278 15.1091 5.47301V1.01352C15.1091 0.453753 14.6553 0 14.0956 0C13.5358 0 13.082 0.453753 13.082 1.01352V5.47301C13.082 6.03278 13.5358 6.48653 14.0956 6.48653Z"
+                        fill="#205a42" />
+                    <path
+                        d="M1.01352 37.4052C1.28008 37.4052 1.54157 37.2967 1.73008 37.1082C1.91859 36.9197 2.02704 36.6582 2.02704 36.3917C2.02704 36.1251 1.91859 35.8636 1.73008 35.6751C1.54157 35.4866 1.28109 35.3781 1.01352 35.3781C0.746965 35.3781 0.485476 35.4866 0.296962 35.6751C0.108447 35.8636 0 36.1251 0 36.3917C0 36.6582 0.108447 36.9197 0.296962 37.1082C0.485476 37.2967 0.746863 37.4052 1.01352 37.4052Z"
+                        fill="#205a42" />
+                </svg>
+
+            </div>
+            <div class="flex flex-col gap-2">
+                <h2 class="font-semibold text-lg">Save</h2>
+                <p class="text-[#6B6B6B] text-sm ">Save Money with our deals of
+                    & offers
+                </p>
+            </div>
+        </div>
+        <div class="flex items-center gap-3 w-[24rem]">
+            <div class="rounded-xl p-3 shadow-cstm-2 h-[5rem] w-[5rem] flex items-center justify-center">
+                <svg width="52" height="51" viewBox="0 0 52 51" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path
+                        d="M50.375 31.8746C49.478 31.8746 48.75 32.5886 48.75 33.4684V44.6246H3.25V25.4996H21.125C22.022 25.4996 22.75 24.7856 22.75 23.9059C22.75 23.0261 22.022 22.3121 21.125 22.3121H3.25V15.9371H21.125C22.022 15.9371 22.75 15.2231 22.75 14.3434C22.75 13.4636 22.022 12.7496 21.125 12.7496H3.25C1.456 12.7496 0 14.1776 0 15.9371V44.6246C0 46.3841 1.456 47.8121 3.25 47.8121H48.75C50.544 47.8121 52 46.3841 52 44.6246V33.4684C52 32.5886 51.272 31.8746 50.375 31.8746Z"
+                        fill="#205a42" />
+                    <path
+                        d="M14.625 31.8746H8.125C7.228 31.8746 6.5 32.5886 6.5 33.4684C6.5 34.3481 7.228 35.0621 8.125 35.0621H14.625C15.522 35.0621 16.25 34.3481 16.25 33.4684C16.25 32.5886 15.522 31.8746 14.625 31.8746Z"
+                        fill="#205a42" />
+                    <path
+                        d="M51.0152 8.09585L39.6402 3.3146C39.2275 3.14566 38.7692 3.14566 38.3565 3.3146L26.9815 8.09585C26.3868 8.34766 26 8.9246 26 9.5621V15.9371C26 24.7059 29.3053 29.8314 38.1908 34.8517C38.441 34.992 38.7205 35.0621 39 35.0621C39.2795 35.0621 39.559 34.992 39.8092 34.8517C48.6947 29.8442 52 24.7187 52 15.9371V9.5621C52 8.9246 51.6132 8.34766 51.0152 8.09585ZM48.75 15.9371C48.75 23.297 46.267 27.3484 39 31.6196C31.733 27.3388 29.25 23.2875 29.25 15.9371V10.614L39 6.51485L48.75 10.614V15.9371Z"
+                        fill="#205a42" />
+                    <path
+                        d="M44.8931 13.097C44.1943 12.5552 43.1738 12.6604 42.6083 13.3457L37.4993 19.6123L35.4778 16.6479C34.9741 15.9148 33.9633 15.7204 33.2256 16.2049C32.4813 16.6925 32.2766 17.6839 32.7738 18.4138L36.0238 23.195C36.3131 23.619 36.7876 23.8804 37.3076 23.9059C37.3303 23.9059 37.3563 23.9059 37.3758 23.9059C37.8666 23.9059 38.3346 23.6891 38.6466 23.3066L45.1466 15.3379C45.7056 14.6494 45.5951 13.6485 44.8931 13.097Z"
+                        fill="#205a42" />
+                </svg>
+            </div>
+            <div class="flex flex-col gap-2">
+                <h2 class="font-semibold text-lg">Secure payments</h2>
+                <p class="text-[#6B6B6B] text-sm ">The Secure payment methods throughout the checkout process of
+                    to keep your data secure & safe.
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<section>
+    {% if top_offers|length > 0 %}
+    <div class="container pb-[2rem] pt-[1rem] w-[90%] mx-auto">
+        <div class="text-center flex flex-col gap-4">
+            <h2 class="font-semibold text-2xl">Deals Of the Day</h2>
+            <p class="text-[#6B6B6B] text-sm">Find deals of the day here & save money with offers and avail <br
+                    class="hidden lg:block">wide discounts on everything.</p>
+        </div>
+        <div class="relative w-[94%] mx-auto">
+            <div class="swiper card-slider-1 px-2">
+                <div class="swiper-wrapper lg:py-[3rem] py-[4rem]">
+                    {% for offers in top_offers %}
+                    <div class="swiper-slide w-fit">
+                        {% include 'common/cards.html' %}
+                    </div>
+                    {% endfor %}
+                </div>
+                <div class="swiper-pagination slider-1-paggination"></div>
+            </div>
+            <div class="swiper-button-next slider-1-next after:content-none w-[2.8rem]">
+                <div
+                    class="rounded-full lg:border-2 border border-[#6C6C6C] flex-1 h-[2.8rem] flex justify-center items-center hover-arrows">
+                    <svg width="0.75rem" height="1.188rem" viewBox="0 0 12 19" fill="none"
+                        xmlns="http://www.w3.org/2000/svg">
+                        <path fill-rule="evenodd" clip-rule="evenodd"
+                            d="M1.05788 3.15128L8.11521 9.96502L1.05788 16.7787C0.814999 17.0215 0.680606 17.3467 0.683644 17.6842C0.686682 18.0218 0.826907 18.3446 1.07412 18.5833C1.32133 18.822 1.65575 18.9574 2.00534 18.9603C2.35494 18.9633 2.69174 18.8335 2.94321 18.599L10.9432 10.8751C11.1932 10.6337 11.3336 10.3064 11.3336 9.96502C11.3336 9.62367 11.1932 9.29629 10.9432 9.05489L2.94321 1.33103C2.69174 1.09653 2.35494 0.966781 2.00534 0.969714C1.65575 0.972647 1.32133 1.10803 1.07412 1.34671C0.826907 1.58539 0.686682 1.90826 0.683644 2.24579C0.680606 2.58332 0.814999 2.90849 1.05788 3.15128Z"
+                            fill="#6C6C6C" />
+                    </svg>
+                </div>
+            </div>
+            <div class="swiper-button-prev slider-1-prev after:content-none w-[2.8rem]">
+                <div
+                    class="rounded-full lg:border-2 border border-[#6C6C6C] flex-1 h-[2.8rem] flex justify-center items-center hover-arrows">
+                    <svg class="mr-1" width="0.75rem" height="1.188rem" viewBox="0 0 12 19" fill="none"
+                        xmlns="http://www.w3.org/2000/svg">
+                        <path fill-rule="evenodd" clip-rule="evenodd"
+                            d="M10.9421 16.7788L3.88479 9.96509L10.9421 3.15135C11.185 2.90856 11.3194 2.58338 11.3164 2.24585C11.3133 1.90833 11.1731 1.58545 10.9259 1.34677C10.6787 1.1081 10.3443 0.97271 9.99466 0.969776C9.64506 0.966843 9.30826 1.0966 9.05679 1.33109L1.05679 9.05496C0.806832 9.29636 0.666412 9.62374 0.666412 9.96509C0.666412 10.3064 0.806832 10.6338 1.05679 10.8752L9.05679 18.5991C9.30826 18.8336 9.64506 18.9633 9.99466 18.9604C10.3443 18.9575 10.6787 18.8221 10.9259 18.5834C11.1731 18.3447 11.3133 18.0219 11.3164 17.6843C11.3194 17.3468 11.185 17.0216 10.9421 16.7788Z"
+                            fill="#6C6C6C" />
+                    </svg>
+                </div>
+            </div>
+        </div>
+        <div class="pt-[2rem] text-center lg:text-left flex items-center justify-center">
+            {% comment %}
+            <button class="py-2 px-5 bg-[#205a42] text-white font-semibold rounded-md">Explore More</button>
+            {% endcomment %}
+        </div>
+    </div>
+    {% endif %}
+</section>
+
+{% comment %}
+<!-- <section>
+    <div class="container pb-[2rem] pt-[1rem] w-[90%] mx-auto">
+        <div class="text-center flex flex-col gap-4">
+            <h2 class="font-semibold text-2xl">Top Offers</h2>
+            <p class="text-[#6B6B6B] text-sm">Find top offers and deals to save <br class="hidden lg:block"> a lot of money</p>
+        </div>
+        <div class="relative w-[94%] mx-auto">
+            <div class="swiper card-slider-1 px-2">
+                <div class="swiper-wrapper lg:py-[3rem] py-[4rem]">
+                   
+                    {% for offers in top_offers %}
+                    <div class="swiper-slide w-fit">
+                        {% include 'common/cards.html' %}
+                    </div>
+                    {% endfor %}
+                    
+                </div>
+                <div class="swiper-pagination slider-1-paggination"></div>
+            </div>
+            <div class="swiper-button-next slider-1-next after:content-none w-[2.8rem]">
+                <div
+                    class="rounded-full lg:border-2 border border-[#6C6C6C] flex-1 h-[2.8rem] flex justify-center items-center hover-arrows">
+                    <svg width="0.75rem" height="1.188rem" viewBox="0 0 12 19" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path fill-rule="evenodd" clip-rule="evenodd"
+                            d="M1.05788 3.15128L8.11521 9.96502L1.05788 16.7787C0.814999 17.0215 0.680606 17.3467 0.683644 17.6842C0.686682 18.0218 0.826907 18.3446 1.07412 18.5833C1.32133 18.822 1.65575 18.9574 2.00534 18.9603C2.35494 18.9633 2.69174 18.8335 2.94321 18.599L10.9432 10.8751C11.1932 10.6337 11.3336 10.3064 11.3336 9.96502C11.3336 9.62367 11.1932 9.29629 10.9432 9.05489L2.94321 1.33103C2.69174 1.09653 2.35494 0.966781 2.00534 0.969714C1.65575 0.972647 1.32133 1.10803 1.07412 1.34671C0.826907 1.58539 0.686682 1.90826 0.683644 2.24579C0.680606 2.58332 0.814999 2.90849 1.05788 3.15128Z"
+                            fill="#6C6C6C" />
+                    </svg>
+                </div>
+            </div>
+            <div class="swiper-button-prev slider-1-prev after:content-none w-[2.8rem]">
+                <div
+                    class="rounded-full lg:border-2 border border-[#6C6C6C] flex-1 h-[2.8rem] flex justify-center items-center hover-arrows">
+                    <svg class="mr-1" width="0.75rem" height="1.188rem" viewBox="0 0 12 19" fill="none"
+                        xmlns="http://www.w3.org/2000/svg">
+                        <path fill-rule="evenodd" clip-rule="evenodd"
+                            d="M10.9421 16.7788L3.88479 9.96509L10.9421 3.15135C11.185 2.90856 11.3194 2.58338 11.3164 2.24585C11.3133 1.90833 11.1731 1.58545 10.9259 1.34677C10.6787 1.1081 10.3443 0.97271 9.99466 0.969776C9.64506 0.966843 9.30826 1.0966 9.05679 1.33109L1.05679 9.05496C0.806832 9.29636 0.666412 9.62374 0.666412 9.96509C0.666412 10.3064 0.806832 10.6338 1.05679 10.8752L9.05679 18.5991C9.30826 18.8336 9.64506 18.9633 9.99466 18.9604C10.3443 18.9575 10.6787 18.8221 10.9259 18.5834C11.1731 18.3447 11.3133 18.0219 11.3164 17.6843C11.3194 17.3468 11.185 17.0216 10.9421 16.7788Z"
+                            fill="#6C6C6C" />
+                    </svg>
+                </div>
+            </div>
+        </div>
+    </div>
+</section> -->
+{% endcomment %}
+
+
+<section>
+    <div class="card-btn-gradient">
+        <div class="container mx-auto pt-[2rem] pb-[4rem] w-[90%] gap-[2rem] lg:grid lg:grid-cols-4">
+            <div class="col-span-1 flex items-center lg:mb-0 mb-[2rem] lg:justify-start justify-center">
+                <div class="flex flex-col gap-3 lg:text-left text-center">
+                    <h1 class="text-white text-2xl font-semibold">Nearby Deals</h1>
+                    <p class="text-[#F6F6F6] text-sm leading-[2]">
+                        Explore nearby deals on map and buy deals to enjoy quality food with your family
+                    </p>
+                    <!-- <button
+                        class="py-2 lg:m-0 m-auto px-5 bg-[#FFFFFF47] text-white font-semibold rounded-md w-fit text-sm"
+                        data-bs-toggle="modal" data-bs-target="#LocationPopup">View
+                        On Map</button> -->
+                    <button
+                        class="py-3 px-6 lg:py-2 lg:px-5 lg:m-0 m-auto bg-[#FFFFFF47] text-white font-semibold rounded-md w-fit text-lg lg:text-sm map_get_cordinates">
+                        View On Map
+                    </button>
+                    <button data-bs-toggle="modal" data-bs-target="#LocationPopup" class="hidden_popup_map"></button>
+                </div>
+            </div>
+            <div class="col-span-3">
+                <div class="relative w-[94%] mx-auto ">
+                    <div class="swiper card-slider-2 px-2">
+                        <div class="swiper-wrapper p-2 ">
+
+                            {% for offers in nearby_deals %}
+                            <div class="swiper-slide w-fit">
+                                {% include 'common/cards.html' %}
+                            </div>
+                            {% endfor %}
+                            {% for offers in nearby_deals %}
+                            <div class="swiper-slide w-fit">
+                                {% include 'common/cards.html' %}
+                            </div>
+                            {% endfor %}
+                            {% for offers in nearby_deals %}
+                            <div class="swiper-slide w-fit">
+                                {% include 'common/cards.html' %}
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <div class="swiper-pagination slider-2-paggination"></div>
+                    <div
+                        class="absolute top-1/2 translate-x-1/2 right-0 -translate-y-[70%] slider-2-next after:content-none w-[2.188rem]">
+                        <div
+                            class="rounded-full border-2 border-[#fff] flex-1 h-[2.188rem] flex justify-center items-center hover-arrows">
+                            <svg width="0.75rem" height="1.188rem" viewBox="0 0 12 19" fill="none"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <path fill-rule="evenodd" clip-rule="evenodd"
+                                    d="M1.05788 3.15128L8.11521 9.96502L1.05788 16.7787C0.814999 17.0215 0.680606 17.3467 0.683644 17.6842C0.686682 18.0218 0.826907 18.3446 1.07412 18.5833C1.32133 18.822 1.65575 18.9574 2.00534 18.9603C2.35494 18.9633 2.69174 18.8335 2.94321 18.599L10.9432 10.8751C11.1932 10.6337 11.3336 10.3064 11.3336 9.96502C11.3336 9.62367 11.1932 9.29629 10.9432 9.05489L2.94321 1.33103C2.69174 1.09653 2.35494 0.966781 2.00534 0.969714C1.65575 0.972647 1.32133 1.10803 1.07412 1.34671C0.826907 1.58539 0.686682 1.90826 0.683644 2.24579C0.680606 2.58332 0.814999 2.90849 1.05788 3.15128Z"
+                                    fill="#fff" />
+                            </svg>
+                        </div>
+                    </div>
+                    <div
+                        class="absolute top-1/2 -translate-x-[24%] left-0 -translate-y-[70%] slider-2-prev after:content-none w-[2.188rem]">
+                        <div
+                            class="rounded-full border-2 border-[#fff] flex-1 h-[2.188rem] flex justify-center items-center hover-arrows">
+                            <svg class="mr-1" width="0.75rem" height="1.188rem" viewBox="0 0 12 19" fill="none"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <path fill-rule="evenodd" clip-rule="evenodd"
+                                    d="M10.9421 16.7788L3.88479 9.96509L10.9421 3.15135C11.185 2.90856 11.3194 2.58338 11.3164 2.24585C11.3133 1.90833 11.1731 1.58545 10.9259 1.34677C10.6787 1.1081 10.3443 0.97271 9.99466 0.969776C9.64506 0.966843 9.30826 1.0966 9.05679 1.33109L1.05679 9.05496C0.806832 9.29636 0.666412 9.62374 0.666412 9.96509C0.666412 10.3064 0.806832 10.6338 1.05679 10.8752L9.05679 18.5991C9.30826 18.8336 9.64506 18.9633 9.99466 18.9604C10.3443 18.9575 10.6787 18.8221 10.9259 18.5834C11.1731 18.3447 11.3133 18.0219 11.3164 17.6843C11.3194 17.3468 11.185 17.0216 10.9421 16.7788Z"
+                                    fill="#fff" />
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% comment %}
+{#<section>#}
+{#    <div class="container mx-auto pt-[2rem] pb-[3rem] w-[90%]">#}
+{#        <div class="text-center">#}
+{#            <h1 class="font-semibold text-2xl pb-5">Special Discounts of the Day</h1>#}
+{#            <p class="text-[#6B6B6B] leading-[2]">Find special discounts of the day on your favorite categories of <br class="hidden md:block">getaways, tickets, food, beauty & more.</p>#}
+{#        </div>#}
+{##}
+{#        <div class="pt-[3rem]">#}
+{#            <div class="flex items-center flex-wrap gap-[2rem] md:w-[90%] mx-auto">#}
+{#                {% for offers in special_discount_of_the_day %}#}
+{#                {% include 'common/cards.html' %}#}
+{#                {% endfor %}#}
+{#            </div>#}
+{#        </div>#}
+{#    </div>#}
+{#</section>#}
+
+
+{#    ################################# commijtnst########################}
+{% endcomment %}
+{% comment %}
+<section>
+    <div class="container mx-auto pt-[2rem] pb-[3rem] w-[90%]">
+        <div class="text-center">
+            <h1 class="font-semibold text-2xl pb-5">Special Discounts of the Day</h1>
+            <p class="text-[#6B6B6B] leading-[2]">Find special discounts of the day on your favorite categories of
+                <br class="hidden md:block"> getaways, tickets, food, beauty & more.</p>
+        </div>
+
+        <div class="pt-[3rem]">
+            <div class="grid lg:grid-cols-3 gap-[2rem] w-[90%] mx-auto">
+                {% for deal_discounts in special_discount_of_the_day %}
+                {% if forloop.counter < 4 %}
+                <a href="{% url 'view_deal' deal_discounts.slug %}">
+                    <div class="rounded-xl bg-[#F9F9F9] overflow-hidden flex flex-col">
+                        <div class="{% if forloop.counter == 2 %} order-2 {% else %} order-1 {% endif %} h-[17rem]">
+                            {% for discounts in deal_discounts.dealmedia_business_deal.all %}
+                            {% if forloop.counter < 2 %}
+
+                            <img src="/media/{{ discounts.image }}" class="w-full h-full object-cover" />
+
+                            {% endif %}
+                            {% endfor %}
+                        </div>
+                        <div
+                            class="{% if forloop.counter == 2 %} order-1 {% else %} order-2 {% endif %} p-[1.5rem] text-center flex flex-col justify-center items-center gap-[1.5rem]">
+                            <svg width="81" height="81" viewBox="0 0 81 81" fill="none"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <path
+                                    d="M9.96311 43.7703H4.94849C4.2944 43.7703 3.8584 43.3343 3.8584 42.6803V30.4712C3.8584 29.8171 4.2944 29.3811 4.94849 29.3811H9.85398C10.5081 29.3811 10.9441 29.8171 10.9441 30.4712C10.9441 31.1253 10.5081 31.5613 9.85398 31.5613H6.03857V41.5902H9.96293C10.617 41.5902 11.053 42.0262 11.053 42.6803C11.053 43.3343 10.5081 43.7703 9.96311 43.7703Z"
+                                    fill="#373737" />
+                                <path
+                                    d="M75.0415 48.7848H69.7C69.0459 48.7848 68.6099 48.3488 68.6099 47.6947C68.6099 47.0406 69.0459 46.6046 69.7 46.6046H73.9514V37.2298C73.9514 36.2487 73.1883 35.4857 72.2072 35.4857H56.8368C56.5098 35.4857 56.1827 35.2676 55.9648 35.0497L48.4432 24.4756C48.1161 24.0396 47.5712 23.7126 47.026 23.7126H10.8345L11.0526 46.6048H15.304C15.9581 46.6048 16.3941 47.0408 16.3941 47.6949C16.3941 48.349 15.9581 48.785 15.304 48.785H9.96248C9.41734 48.785 8.87239 48.349 8.87239 47.6949L8.6543 22.5135C8.6543 22.1865 8.76325 21.9684 8.98134 21.7505C9.19943 21.5324 9.41734 21.4235 9.74439 21.4235H47.0259C48.334 21.4235 49.5331 22.0776 50.2961 23.0587L57.4907 33.1967H72.0981C74.2782 33.1967 76.0224 34.9409 76.0224 37.1211V47.5861C76.1317 48.3488 75.5866 48.7848 75.0415 48.7848Z"
+                                    fill="#373737" />
+                                <path
+                                    d="M56.1831 48.7848H28.8215C28.1674 48.7848 27.7314 48.3488 27.7314 47.6947C27.7314 47.0406 28.1674 46.6046 28.8215 46.6046H56.2922C56.9463 46.6046 57.3823 47.0406 57.3823 47.6947C57.3823 48.3488 56.8372 48.7848 56.1831 48.7848Z"
+                                    fill="#373737" />
+                                <path
+                                    d="M17.7022 54.0173C17.4841 54.0173 17.1571 53.9084 17.0481 53.7992C15.304 52.2732 14.2139 50.0928 14.2139 47.8037C14.2139 43.4433 17.7022 39.955 22.0626 39.955C26.4229 39.955 29.9113 43.4433 29.9113 47.8037C29.9113 49.5478 29.2572 51.292 28.1671 52.7092C27.8401 53.1452 27.077 53.2543 26.641 52.8181C26.205 52.4911 26.0959 51.728 26.5321 51.292C27.4041 50.3109 27.8402 49.0029 27.8402 47.6947C27.8402 44.6424 25.333 42.0262 22.1717 42.0262C19.0104 42.0262 16.5032 44.5334 16.5032 47.6947C16.5032 49.3299 17.2662 50.965 18.5744 52.0551C19.0104 52.4911 19.1195 53.1452 18.6834 53.5812C18.3563 53.7992 18.0293 54.0173 17.7022 54.0173Z"
+                                    fill="#373737" />
+                                <path
+                                    d="M56.837 35.4855H16.5032C15.8491 35.4855 15.4131 35.0495 15.4131 34.3954V26.3286C15.4131 25.6745 15.8491 25.2385 16.5032 25.2385H51.1685C51.4955 25.2385 51.8226 25.4566 52.0405 25.6745L57.709 33.7413C57.9271 34.0684 57.9271 34.5044 57.8179 34.8314C57.6 35.2676 57.273 35.4855 56.837 35.4855ZM17.5933 33.3053H54.6568L50.5144 27.4187H17.5933V33.3053Z"
+                                    fill="#373737" />
+                                <path
+                                    d="M33.0725 35.4855C32.4184 35.4855 31.9824 35.0495 31.9824 34.3954V26.3286C31.9824 25.6745 32.4184 25.2385 33.0725 25.2385C33.7266 25.2385 34.1626 25.6745 34.1626 26.3286V34.3954C34.1626 34.9405 33.6175 35.4855 33.0725 35.4855Z"
+                                    fill="#373737" />
+                                <path
+                                    d="M79.8382 71.023H1.13283C0.805783 71.023 0.478738 70.914 0.260831 70.587C0.0427396 70.3689 -0.0662143 70.0418 0.0427396 69.715C0.151694 69.1698 2.76805 55.9796 11.5979 54.0175C14.1051 53.4724 15.8493 52.6004 17.3754 51.8374C20.8637 50.0932 23.5891 48.785 30.8926 52.1644C39.5044 56.0888 47.1352 54.6716 54.0028 53.4726C56.074 53.1456 57.9271 52.7096 59.7802 52.6006C60.4343 52.4916 60.8703 52.9276 60.9793 53.5817C61.0882 54.2358 60.6522 54.6718 59.9982 54.7808C58.145 54.9989 56.2919 55.3259 54.3296 55.6528C47.244 56.961 39.1772 58.3781 30.0203 54.1267C23.5887 51.1835 21.6264 52.1644 18.3562 53.7996C16.7209 54.5627 14.8678 55.5438 12.0335 56.1979C6.03795 57.5061 3.31264 65.6818 2.5496 68.8432H78.3118C73.9514 57.7242 69.2638 55.5438 65.6665 54.8899C65.1214 54.781 64.6854 54.2358 64.7945 53.5817C64.9035 53.0366 65.4486 52.6006 66.1027 52.7097C72.6432 53.9088 77.2217 59.1413 80.9281 69.6064C81.0371 69.9334 81.0371 70.2605 80.8192 70.5875C80.6012 70.8049 80.2742 71.023 79.8382 71.023Z"
+                                    fill="#373737" />
+                                <path
+                                    d="M62.9415 55.5434C58.5811 55.5434 55.0928 52.055 55.0928 47.6947C55.0928 43.3343 58.5811 39.8459 62.9415 39.8459C67.3018 39.8459 70.7902 43.3343 70.7902 47.6947C70.7902 52.055 67.1929 55.5434 62.9415 55.5434ZM62.9415 42.1351C59.8891 42.1351 57.2729 44.6423 57.2729 47.8036C57.2729 50.9649 59.7802 53.4721 62.9415 53.4721C66.1028 53.4721 68.61 50.9649 68.61 47.8036C68.61 44.6423 65.9938 42.1351 62.9415 42.1351Z"
+                                    fill="#373737" />
+                                <path
+                                    d="M67.956 26.3286C63.4865 26.3286 59.7803 22.6223 59.7803 18.1528C59.7803 13.6833 63.4865 9.97705 67.956 9.97705C72.4255 9.97705 76.1318 13.6833 76.1318 18.1528C76.1318 22.6223 72.4255 26.3286 67.956 26.3286ZM67.956 12.1572C64.6858 12.1572 61.9605 14.8825 61.9605 18.1528C61.9605 21.4231 64.6858 24.1484 67.956 24.1484C71.2263 24.1484 73.9516 21.4231 73.9516 18.1528C73.9516 14.8825 71.2265 12.1572 67.956 12.1572Z"
+                                    fill="#373737" />
+                            </svg>
+                            <h2>
+                                {% if deal_discounts.businessdeal_data.all|length > 1 %}
+                                <p class="font-semibold"> UPTO {{ deal_discounts.get_highest_discount }}% OFF</p>
+                                {% else %}
+                                {% for off in deal_discounts.businessdeal_data.all %}
+                                <p class="font-semibold"> FLAT {{ off.discount_percentage }}% OFF</p>
+                                {% endfor %}
+                                {% endif %}</h2>
+                            {{ deal_discounts.category.name }}
+
+                        </div>
+                    </div>
+                    {% endif %}
+                </a>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</section> {% endcomment %}
+
+
+<section>
+    <div class="container pb-[2rem] pt-[3rem] w-[90%] mx-auto">
+        <div class="text-center flex flex-col gap-4">
+            <h2 class="font-semibold text-2xl">Best Sellers</h2>
+            <p class="text-[#6B6B6B] text-sm">Dive into our most popular best sellers for food, getaways, <br
+                    class="hidden lg:block">tickets, beauty & more.</p>
+        </div>
+        <div class="relative w-[94%] mx-auto">
+            <div class="swiper card-slider-1 px-2">
+                <div class="swiper-wrapper lg:py-[3rem] py-[4rem]">
+                    {% for offers in top_offers %}
+                    <div class="swiper-slide w-fit">
+                        {% include 'common/cards.html' %}
+                    </div>
+                    {% endfor %}
+                </div>
+                <div class="swiper-pagination slider-1-paggination"></div>
+            </div>
+            <div class="swiper-button-next slider-1-next after:content-none w-[2.8rem]">
+                <div
+                    class="rounded-full lg:border-2 border border-[#6C6C6C] flex-1 h-[2.8rem] flex justify-center items-center hover-arrows">
+                    <svg width="0.75rem" height="1.188rem" viewBox="0 0 12 19" fill="none"
+                        xmlns="http://www.w3.org/2000/svg">
+                        <path fill-rule="evenodd" clip-rule="evenodd"
+                            d="M1.05788 3.15128L8.11521 9.96502L1.05788 16.7787C0.814999 17.0215 0.680606 17.3467 0.683644 17.6842C0.686682 18.0218 0.826907 18.3446 1.07412 18.5833C1.32133 18.822 1.65575 18.9574 2.00534 18.9603C2.35494 18.9633 2.69174 18.8335 2.94321 18.599L10.9432 10.8751C11.1932 10.6337 11.3336 10.3064 11.3336 9.96502C11.3336 9.62367 11.1932 9.29629 10.9432 9.05489L2.94321 1.33103C2.69174 1.09653 2.35494 0.966781 2.00534 0.969714C1.65575 0.972647 1.32133 1.10803 1.07412 1.34671C0.826907 1.58539 0.686682 1.90826 0.683644 2.24579C0.680606 2.58332 0.814999 2.90849 1.05788 3.15128Z"
+                            fill="#6C6C6C" />
+                    </svg>
+                </div>
+            </div>
+            <div class="swiper-button-prev slider-1-prev after:content-none w-[2.8rem]">
+                <div
+                    class="rounded-full lg:border-2 border border-[#6C6C6C] flex-1 h-[2.8rem] flex justify-center items-center hover-arrows">
+                    <svg class="mr-1" width="0.75rem" height="1.188rem" viewBox="0 0 12 19" fill="none"
+                        xmlns="http://www.w3.org/2000/svg">
+                        <path fill-rule="evenodd" clip-rule="evenodd"
+                            d="M10.9421 16.7788L3.88479 9.96509L10.9421 3.15135C11.185 2.90856 11.3194 2.58338 11.3164 2.24585C11.3133 1.90833 11.1731 1.58545 10.9259 1.34677C10.6787 1.1081 10.3443 0.97271 9.99466 0.969776C9.64506 0.966843 9.30826 1.0966 9.05679 1.33109L1.05679 9.05496C0.806832 9.29636 0.666412 9.62374 0.666412 9.96509C0.666412 10.3064 0.806832 10.6338 1.05679 10.8752L9.05679 18.5991C9.30826 18.8336 9.64506 18.9633 9.99466 18.9604C10.3443 18.9575 10.6787 18.8221 10.9259 18.5834C11.1731 18.3447 11.3133 18.0219 11.3164 17.6843C11.3194 17.3468 11.185 17.0216 10.9421 16.7788Z"
+                            fill="#6C6C6C" />
+                    </svg>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+
+<section class="bg-[#F7F7F7]">
+    <div class="container w-[90%] mx-auto ">
+        <div class=" py-[2rem]">
+            <div class="flex items-center justify-evenly gap-[2rem] flex-wrap">
+                <img src='/static/assets/images/two-mobiles.png' class="w-[25rem]" />
+                <div class="flex flex-col gap-4 lg:text-left text-center">
+                    <h2 class="text-[#205a42] font-semibold text-2xl">Download Our App To Get <br
+                            class="hidden lg:block"> Amazing Deals</h2>
+                    <p class="text-sm leading-[2] text-[#6B6B6B]">Get new deals every day. Top deals have the best
+                        offers and share <br class="hidden lg:block"> them with you. To avail of offers, find our
+                        app in the play store</p>
+                    <div class="flex items-center flex-wrap lg:gap-4 gap-6 lg:justify-start justify-center">
+                        <img src='/static/assets/images/google-play.png' class="lg:h-fit h-[4rem]" />
+                        <img src='/static/assets/images/app-store.png' class="lg:h-fit h-[4rem]" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<section>
+    <div class="container w-[90%] mx-auto ">
+        <div class="flex lg:gap-4 gap-6 justify-evenly lg:flex-row items-center py-[2rem] flex-wrap">
+            <div class="flex flex-col gap-2 text-center">
+                <h2 class="text-[#205a42] font-bold text-2xl">75,000+</h2>
+                <p class="text-[#373737]">Deals</p>
+            </div>
+            <div class="flex flex-col gap-2 text-center">
+                <h2 class="text-[#205a42] font-bold text-2xl">6,000+</h2>
+                <p class="text-[#373737]">Retailers</p>
+            </div>
+            <div class="flex flex-col gap-2 text-center">
+                <h2 class="text-[#205a42] font-bold text-2xl">2 Million</h2>
+                <p class="text-[#373737]">Active Users</p>
+            </div>
+            <div class="flex flex-col gap-2 text-center">
+                <h2 class="text-[#205a42] font-bold text-2xl">1.3 Million</h2>
+                <p class="text-[#373737]">App Downloads</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+
+
+<!-- Location Popup -->
+
+
+
+<!-- {% include 'common/footer-com.html' %} -->
+{% endblock body %}

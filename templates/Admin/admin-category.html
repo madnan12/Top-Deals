@@ -1,0 +1,864 @@
+{% extends 'Admin/admin/base.html' %}
+{% block title %} Top Deals - Admin Categories {% endblock title %}
+{% block body %}
+<div class="col-span-1 lg:col-span-4 m-4 lg:ml-0">
+
+    <div class="flex flex-col gap-6 py-[1rem]">
+
+        <div class="flex items-center justify-between flex-wrap gap-3">
+            <h1 class="font-bold text-xl text-[#205a42]">Manage Categories</h1>
+
+            <div class="flex items-center gap-4 w-full">
+                <div class="rounded-xl bg-white py-2 px-5 flex items-center gap-2 flex-1">
+                    <div>
+                        <svg width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path
+                                d="M5.4344 0.665436C6.79903 0.665436 8.10777 1.20753 9.0727 2.17247C10.0376 3.13741 10.5797 4.44615 10.5797 5.81077C10.5797 7.08523 10.1127 8.25679 9.34486 9.1592L9.55859 9.37293H10.1839L14.1419 13.3309L12.9545 14.5183L8.99656 10.5603V9.93496L8.78283 9.72123C7.88041 10.4891 6.70886 10.9561 5.4344 10.9561C4.06977 10.9561 2.76104 10.414 1.7961 9.44908C0.831159 8.48414 0.289063 7.1754 0.289062 5.81077C0.289062 4.44615 0.831159 3.13741 1.7961 2.17247C2.76104 1.20753 4.06977 0.665436 5.4344 0.665436ZM5.4344 2.24862C3.45542 2.24862 1.87224 3.8318 1.87224 5.81077C1.87224 7.78975 3.45542 9.37293 5.4344 9.37293C7.41338 9.37293 8.99656 7.78975 8.99656 5.81077C8.99656 3.8318 7.41338 2.24862 5.4344 2.24862Z"
+                                fill="#868686"></path>
+                        </svg>
+                    </div>
+                    <form action="{% url 'admin_category' %}" method="GET">
+                        <input type="text" name="item" class="text-[#373737] outline-none w-full min-w-[120px]"
+                            placeholder="Search amazing categories...">
+                    </form>
+                </div>
+                <button class="py-2 px-4 rounded-lg text-white bg-[#205a42]" data-bs-target="#addCategory"
+                    data-bs-toggle="modal">Add Category</button>
+            </div>
+        </div>
+      {% if searched_categories %}
+        <div class="category_spawner swiper category-slider w-full">
+            <div class="swiper-wrapper">
+                <div data-category-id="cats-all"
+                    class="swiper-slide w-fit cursor-pointer category_tab category_tab_active rounded-full py-1 px-3 border flex items-center gap-2">
+                    <h1 class="text-sm whitespace-nowrap">All</h1>
+                </div>
+                {% for category in parent_category_by_order %}
+                <div data-category-id="{{category.id}}"
+                    class="swiper-slide w-fit cursor-pointer category_tab rounded-full py-1 px-3 border flex items-center gap-2">
+                    <h1 class="text-sm whitespace-nowrap">{{category.name}}</h1>
+                    <svg class="edit_cat_btn" data-url="{% url 'category_retrieve'  category.id %}" data-bs-target="#edit_cat" data-bs-toggle="modal" width="1.25rem" height="1.25rem" viewBox="0 0 17 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="8.31441" cy="7.84126" r="7.76753" fill="#E7E7E7" />
+                        <path d="M5.65729 10.829C5.6118 10.8289 5.56683 10.8194 5.52523 10.801C5.48363 10.7826 5.44631 10.7557 5.41566 10.7221C5.38444 10.6888 5.36063 10.6492 5.34576 10.6061C5.3309 10.5629 5.32534 10.517 5.32943 10.4716L5.40975 9.58806L9.12048 5.87763L10.2801 7.03726L6.57038 10.7474L5.68712 10.8277C5.67721 10.8286 5.66725 10.8291 5.65729 10.829ZM10.5116 6.8054L9.35228 5.64577L10.0477 4.95019C10.0781 4.9197 10.1143 4.89551 10.1541 4.879C10.1939 4.8625 10.2366 4.854 10.2796 4.854C10.3227 4.854 10.3654 4.8625 10.4052 4.879C10.445 4.89551 10.4811 4.9197 10.5116 4.95019L11.207 5.64577C11.2375 5.67623 11.2617 5.7124 11.2782 5.75221C11.2947 5.79202 11.3031 5.8347 11.3031 5.87779C11.3031 5.92089 11.2947 5.96357 11.2782 6.00338C11.2617 6.04319 11.2375 6.07936 11.207 6.10982L10.5119 6.80507L10.5116 6.8054Z"
+                            fill="#555555" />
+                    </svg>
+                    <div class="h-[1.25rem] w-[1.25rem] flex items-center justify-center bg-[#E7E7E7] rounded-full" data-bs-target="#category-delete-{{category.id}}" data-bs-toggle="modal">
+                        <svg width="0.75rem" height="0.75rem" viewBox="0 0 9 9" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M3.51298 1.45849H4.99012C4.99012 1.26261 4.91231 1.07475 4.7738 0.936243C4.63529 0.797733 4.44743 0.71992 4.25155 0.71992C4.05567 0.71992 3.86781 0.797733 3.7293 0.936243C3.59079 1.07475 3.51298 1.26261 3.51298 1.45849ZM3.0206 1.45849C3.0206 1.13202 3.15028 0.818925 3.38113 0.588077C3.61198 0.357228 3.92508 0.227539 4.25155 0.227539C4.57802 0.227539 4.89111 0.357228 5.12196 0.588077C5.35281 0.818925 5.4825 1.13202 5.4825 1.45849H7.94441C8.0097 1.45849 8.07232 1.48443 8.11849 1.5306C8.16466 1.57677 8.1906 1.63939 8.1906 1.70468C8.1906 1.76998 8.16466 1.83259 8.11849 1.87876C8.07232 1.92493 8.0097 1.95087 7.94441 1.95087H7.42544L6.83753 7.04406C6.79598 7.40408 6.62351 7.73627 6.35296 7.9774C6.08241 8.21854 5.73265 8.3518 5.37024 8.35182H3.13286C2.77044 8.3518 2.42068 8.21854 2.15013 7.9774C1.87958 7.73627 1.70712 7.40408 1.66556 7.04406L1.07766 1.95087H0.55869C0.493397 1.95087 0.430777 1.92493 0.384608 1.87876C0.338438 1.83259 0.3125 1.76998 0.3125 1.70468C0.3125 1.63939 0.338438 1.57677 0.384608 1.5306C0.430777 1.48443 0.493397 1.45849 0.55869 1.45849H3.0206ZM3.75917 3.42801C3.75917 3.36272 3.73323 3.3001 3.68706 3.25393C3.64089 3.20776 3.57827 3.18182 3.51298 3.18182C3.44768 3.18182 3.38506 3.20776 3.33889 3.25393C3.29272 3.3001 3.26679 3.36272 3.26679 3.42801V6.3823C3.26679 6.44759 3.29272 6.51021 3.33889 6.55638C3.38506 6.60255 3.44768 6.62849 3.51298 6.62849C3.57827 6.62849 3.64089 6.60255 3.68706 6.55638C3.73323 6.51021 3.75917 6.44759 3.75917 6.3823V3.42801ZM4.99012 3.18182C4.92483 3.18182 4.86221 3.20776 4.81604 3.25393C4.76987 3.3001 4.74393 3.36272 4.74393 3.42801V6.3823C4.74393 6.44759 4.76987 6.51021 4.81604 6.55638C4.86221 6.60255 4.92483 6.62849 4.99012 6.62849C5.05541 6.62849 5.11803 6.60255 5.1642 6.55638C5.21037 6.51021 5.23631 6.44759 5.23631 6.3823V3.42801C5.23631 3.36272 5.21037 3.3001 5.1642 3.25393C5.11803 3.20776 5.05541 3.18182 4.99012 3.18182Z" fill="#555555"></path>
+                        </svg>
+                    </div>
+
+                </div>
+
+             
+                {% endfor %}
+            </div>
+            
+        </div>
+        <div class="subcat_area">
+            <div class="flex gap-6 flex-wrap subcategory_spawner first" data-category-id="cats-all">
+                <div data-bs-target="#addSubCategory-new" data-bs-toggle="modal"
+                    class="subcategory_opener min-h-[16rem] cursor-pointer text-center rounded-lg admin-card-hover p-3 min-w-[14rem] w-fit bg-white flex flex-col gap-4 items-center justify-center">
+                    <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path
+                            d="M20.0026 36.6668V20.0002M20.0026 20.0002V3.3335M20.0026 20.0002H36.6693M20.0026 20.0002H3.33594"
+                            stroke="#555555" stroke-width="5" stroke-linecap="round" />
+                    </svg>
+
+                    <h1>Add Subcategory</h1>
+                </div>
+                {% for subcategory in searched_categories %}
+                <div class="modal fade fixed top-0 left-0 hidden w-full h-full outline-none overflow-x-hidden overflow-y-auto"
+                    id="addSubCategory-new" tabindex="-1" aria-labelledby="SignupLabel" aria-modal="true" role="dialog">
+                    <div
+                        class="modal-dialog modal-dialog-centered modal-dialog-scrollable relative w-auto pointer-events-none">
+                        <div
+                            class="modal-content border-none rounded-lg shadow-lg relative flex flex-col w-full pointer-events-auto bg-white bg-clip-padding outline-none text-current">
+                            <div
+                                class="modal-header flex flex-shrink-0 items-center justify-between p-4 border-b border-gray-200 rounded-t-md">
+                                <h5 class="text-xl font-medium leading-normal text-gray-800" id="exampleModalLabel">
+                                    Add Subcategory
+                                </h5>
+                                <button type="button"
+                                    class="subcat_close btn-close box-content text-black border-none rounded-none opacity-50 focus:shadow-none focus:outline-none focus:opacity-100 hover:text-black hover:opacity-75 hover:no-underline"
+                                    data-bs-dismiss="modal" aria-label="Close">
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none"
+                                        xmlns="http://www.w3.org/2000/svg">
+                                        <path
+                                            d="M12 0.625C5.6625 0.625 0.625 5.6625 0.625 12C0.625 18.3375 5.6625 23.375 12 23.375C18.3375 23.375 23.375 18.3375 23.375 12C23.375 5.6625 18.3375 0.625 12 0.625ZM16.3875 17.6875L12 13.3L7.6125 17.6875L6.3125 16.3875L10.7 12L6.3125 7.6125L7.6125 6.3125L12 10.7L16.3875 6.3125L17.6875 7.6125L13.3 12L17.6875 16.3875L16.3875 17.6875Z"
+                                            fill="#205a42" />
+                                    </svg>
+
+                                </button>
+                            </div>
+                            <div class="modal-body relative p-4">
+                                <form action="{% url 'subcategory_create' %}" class="subcategory_create-{{category.id}}"
+                                    method="POST" enctype="multipart/form-data">
+                                    {% csrf_token %}
+                                    <div class="flex flex-col gap-4">
+                                        <div class="flex flex-col gap-2">
+                                            <p class="text-sm">Select Category</p>
+                                            <select name="category_id"
+                                                class="subcategory_type bg-white border rounded-md text-sm outline-none lg:px-4 px-2 lg:py-3 py-[0.6rem] placeholder:text-[#A1A1A1] text-[#101928] focus:border-[#205a42] ease-in transition-all focus:border-l-[7px]  bg-transparent"
+                                                required>
+                                                <option selected>Select Category</option>
+                                                {% for cats in parent_category %}
+                                                <option value="{{cats.id}}">{{cats.name}}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                        <div class="flex flex-col gap-2">
+                                            <p class="text-sm">Subcategory Name</p>
+                                            <input type="text" placeholder="Enter Subcategory Name"
+                                                class="subcategory_name border rounded-md text-sm outline-none lg:px-4 px-2 lg:py-3 py-[0.6rem] placeholder:text-[#A1A1A1] text-[#101928] focus:border-[#205a42] ease-in transition-all focus:border-l-[7px]  bg-transparent"
+                                                required value="" name="name">
+                                        </div>
+                                        <div class="flex flex-col gap-2">
+                                            <p class="text-sm">Subcategory Status</p>
+                                            <select name="status"
+                                                class="subcategory_status bg-white border rounded-md text-sm outline-none lg:px-4 px-2 lg:py-3 py-[0.6rem] placeholder:text-[#A1A1A1] text-[#101928] focus:border-[#205a42] ease-in transition-all focus:border-l-[7px]  bg-transparent"
+                                                required>
+                                                <option disabled>Select Status</option>
+                                                <option value="Active">Active</option>
+                                                <option value="Inactive">Inactive</option>
+                                            </select>
+                                        </div>
+                                        <div class="flex flex-col gap-2 img_render">
+                                            <p class="text-sm">Subcategory Image</p>
+                                            <input class="subcategory_image_ img_render_inp" required name="image"
+                                                hidden id="image-select-{{category.id}}_" type='file' accept="image/*">
+                                            <label for="image-select-{{category.id}}_"
+                                                class="text-center h-[8rem] cursor-pointer w-full rounded-lg flex items-center justify-center border-2 border-dashed border-[#A1A1A1]">
+                                                <div>
+                                                    <svg class="mx-auto mb-2" width="35" height="35" viewBox="0 0 35 35"
+                                                        fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                        <path
+                                                            d="M2 8.17327C2 6.53601 2.6504 4.96582 3.80811 3.80811C4.96582 2.6504 6.53601 2 8.17327 2H26.6931C28.3303 2 29.9005 2.6504 31.0582 3.80811C32.2159 4.96582 32.8663 6.53601 32.8663 8.17327V26.6931C32.8663 28.3303 32.2159 29.9005 31.0582 31.0582C29.9005 32.2159 28.3303 32.8663 26.6931 32.8663H8.17327C6.53601 32.8663 4.96582 32.2159 3.80811 31.0582C2.6504 29.9005 2 28.3303 2 26.6931V8.17327Z"
+                                                            stroke="#A1A1A1" stroke-width="3.08663"
+                                                            stroke-linecap="round" stroke-linejoin="round" />
+                                                        <path
+                                                            d="M12.0302 15.8899C14.161 15.8899 15.8885 14.1625 15.8885 12.0316C15.8885 9.90076 14.161 8.17334 12.0302 8.17334C9.89929 8.17334 8.17188 9.90076 8.17188 12.0316C8.17188 14.1625 9.89929 15.8899 12.0302 15.8899Z"
+                                                            stroke="#A1A1A1" stroke-width="3.08663"
+                                                            stroke-linecap="round" stroke-linejoin="round" />
+                                                        <path
+                                                            d="M21.3302 18.3914L8.17188 32.8662H26.8969C28.4798 32.8662 29.9977 32.2374 31.117 31.1182C32.2362 29.999 32.8649 28.481 32.8649 26.8982V26.6929C32.8649 25.9738 32.5949 25.6975 32.1087 25.1651L25.8892 18.3822C25.5993 18.066 25.2467 17.8137 24.8539 17.6414C24.461 17.469 24.0366 17.3805 23.6076 17.3814C23.1787 17.3822 22.7546 17.4725 22.3625 17.6464C21.9703 17.8203 21.6188 18.0741 21.3302 18.3914Z"
+                                                            stroke="#A1A1A1" stroke-width="3.08663"
+                                                            stroke-linecap="round" stroke-linejoin="round" />
+                                                    </svg>
+                                                    <p class="text-[#A1A1A1] text-sm"><span
+                                                            class="text-[#205a42]">Browse Now</span></p>
+                                                            <p class="text-sm text-[#656565]">Image dimensions should be:	96px x 96px</p>
+                                                        </div>
+                                            </label>
+                                        </div>
+                                        <button
+                                            class="subcategory_bt px-4 py-2 text-sm text-white font-semibold bg-[#205a42] rounded-md w-fit ml-auto"
+                                            type="submit">Create</button>
+
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div
+                    class="text-center rounded-lg admin-card-hover p-4 min-w-[14rem] w-fit bg-white flex flex-col gap-3">
+                    <div class="flex items-center justify-between">
+                        <div class="rounded-full py-1 px-3 border 
+                        {% if subcategory.status == 'Inactive' %}
+                        border-red-600 bg-red-400/20 text-red-600
+                        {% else %}
+                        border-[#05D672] bg-[#E7FFF3] text-[#05D672]
+                        {% endif %}  text-sm">
+                            {{subcategory.status}}
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <!-- Button trigger modal -->
+                        <button type="button"
+                                class="cursor-pointer h-[2rem] w-[2rem] rounded-full border flex items-center justify-center"
+                                data-bs-toggle="modal" data-bs-target="#exampleModal-all-{{subcategory.id}}">
+                                <svg width="1.25rem" height="1.25rem" viewBox="0 0 9 9" fill="none"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <path
+                                        d="M3.51298 1.45849H4.99012C4.99012 1.26261 4.91231 1.07475 4.7738 0.936243C4.63529 0.797733 4.44743 0.71992 4.25155 0.71992C4.05567 0.71992 3.86781 0.797733 3.7293 0.936243C3.59079 1.07475 3.51298 1.26261 3.51298 1.45849ZM3.0206 1.45849C3.0206 1.13202 3.15028 0.818925 3.38113 0.588077C3.61198 0.357228 3.92508 0.227539 4.25155 0.227539C4.57802 0.227539 4.89111 0.357228 5.12196 0.588077C5.35281 0.818925 5.4825 1.13202 5.4825 1.45849H7.94441C8.0097 1.45849 8.07232 1.48443 8.11849 1.5306C8.16466 1.57677 8.1906 1.63939 8.1906 1.70468C8.1906 1.76998 8.16466 1.83259 8.11849 1.87876C8.07232 1.92493 8.0097 1.95087 7.94441 1.95087H7.42544L6.83753 7.04406C6.79598 7.40408 6.62351 7.73627 6.35296 7.9774C6.08241 8.21854 5.73265 8.3518 5.37024 8.35182H3.13286C2.77044 8.3518 2.42068 8.21854 2.15013 7.9774C1.87958 7.73627 1.70712 7.40408 1.66556 7.04406L1.07766 1.95087H0.55869C0.493397 1.95087 0.430777 1.92493 0.384608 1.87876C0.338438 1.83259 0.3125 1.76998 0.3125 1.70468C0.3125 1.63939 0.338438 1.57677 0.384608 1.5306C0.430777 1.48443 0.493397 1.45849 0.55869 1.45849H3.0206ZM3.75917 3.42801C3.75917 3.36272 3.73323 3.3001 3.68706 3.25393C3.64089 3.20776 3.57827 3.18182 3.51298 3.18182C3.44768 3.18182 3.38506 3.20776 3.33889 3.25393C3.29272 3.3001 3.26679 3.36272 3.26679 3.42801V6.3823C3.26679 6.44759 3.29272 6.51021 3.33889 6.55638C3.38506 6.60255 3.44768 6.62849 3.51298 6.62849C3.57827 6.62849 3.64089 6.60255 3.68706 6.55638C3.73323 6.51021 3.75917 6.44759 3.75917 6.3823V3.42801ZM4.99012 3.18182C4.92483 3.18182 4.86221 3.20776 4.81604 3.25393C4.76987 3.3001 4.74393 3.36272 4.74393 3.42801V6.3823C4.74393 6.44759 4.76987 6.51021 4.81604 6.55638C4.86221 6.60255 4.92483 6.62849 4.99012 6.62849C5.05541 6.62849 5.11803 6.60255 5.1642 6.55638C5.21037 6.51021 5.23631 6.44759 5.23631 6.3823V3.42801C5.23631 3.36272 5.21037 3.3001 5.1642 3.25393C5.11803 3.20776 5.05541 3.18182 4.99012 3.18182Z"
+                                        fill="#555555"></path>
+                                </svg>
+                            </button> 
+                            <div data-bs-target="#editSubCat" data-bs-toggle="modal"
+                                class="cursor-pointer h-[2rem] w-[2rem] rounded-full border flex items-center justify-center">
+                                <svg class="edit_subcat_btn" data-url="{% url 'subcategory_retrieve'  subcategory.id %}"
+                                    width="1.25rem" height="1.25rem" viewBox="0 0 8 7" fill="none"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <path
+                                        d="M1.0587 6.56892C1.01064 6.56884 0.963126 6.55875 0.919176 6.53931C0.875227 6.51986 0.835803 6.49148 0.803413 6.45597C0.770437 6.42076 0.745274 6.37898 0.729574 6.33336C0.713874 6.28774 0.707992 6.23931 0.712314 6.19126L0.797178 5.25785L4.71754 1.3378L5.9427 2.56295L2.02337 6.48265L1.09022 6.56754C1.07974 6.5685 1.06922 6.56896 1.0587 6.56892ZM6.18724 2.31799L4.96243 1.09284L5.69711 0.357965C5.72928 0.325751 5.76748 0.300195 5.80954 0.282759C5.85158 0.265322 5.89666 0.256348 5.94218 0.256348C5.9877 0.256348 6.03277 0.265322 6.07482 0.282759C6.11687 0.300195 6.15508 0.325751 6.18724 0.357965L6.92192 1.09284C6.95413 1.12502 6.97968 1.16323 6.99711 1.2053C7.01454 1.24736 7.02351 1.29244 7.02351 1.33798C7.02351 1.38351 7.01454 1.4286 6.99711 1.47066C6.97968 1.51272 6.95413 1.55093 6.92192 1.58311L6.18759 2.31764L6.18724 2.31799Z"
+                                        fill="#555555" />
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-2 w-fit h-fit mx-auto rounded-full border border-[#205a42]">
+                        <div class="h-[6rem] w-[6rem] overflow-hidden rounded-full">
+                            {% if subcategory.image %}
+                            <img class="object-cover w-full h-full" src='/media/{{subcategory.image}}' />
+                            {% else %}
+                            <img class="object-cover w-full h-full" src='/static/assets/images/dummy.png'/>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <h2 class="font-semibold">{{subcategory.name}}</h2>
+
+                    <p class="text-[#555555] text-sm">{{subcategory.businessdeal_sub_category.all|length}} Deals</p>
+                </div>
+                <!-- Modal -->
+                <div class="modal fade fixed top-0 left-0 hidden w-full h-full outline-none overflow-x-hidden overflow-y-auto"
+                    id="exampleModal-all-{{subcategory.id}}" tabindex="-1" aria-labelledby="exampleModalLabel"
+                    aria-hidden="true">
+                    <div class="modal-dialog relative w-auto pointer-events-none">
+                        <div
+                            class="modal-content border-none shadow-lg relative flex flex-col w-full pointer-events-auto bg-white bg-clip-padding rounded-md outline-none text-current">
+                            <div
+                                class="modal-header flex flex-shrink-0 items-center justify-between p-4 border-b border-gray-200 rounded-t-md">
+                                <h5 class="text-xl font-medium leading-normal text-gray-800" id="exampleModalLabel">
+                                    Confirm Delete
+
+                                </h5>
+                                <button type="button"
+                                    class="btn-close box-content w-4 h-4 p-1 text-black border-none rounded-none opacity-50 focus:shadow-none focus:outline-none focus:opacity-100 hover:text-black hover:opacity-75 hover:no-underline"
+                                    data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body relative p-4">
+                                Do you want to delete this Subategory?
+                            </div>
+                            <div
+                                class="modal-footer flex flex-shrink-0 flex-wrap items-center justify-end p-4 border-t border-gray-200 rounded-b-md">
+                                <button type="button" class="px-6
+                                    py-2.5
+                                    bg-purple-600
+                                    text-white
+                                    font-medium
+                                    text-xs
+                                    leading-tight
+                                    uppercase
+                                    rounded
+                                    shadow-md
+                                    hover:bg-purple-700 hover:shadow-lg
+                                    focus:bg-purple-700 focus:shadow-lg focus:outline-none focus:ring-0
+                                    active:bg-purple-800 active:shadow-lg
+                                    transition
+                                    duration-150
+                                    ease-in-out" data-bs-dismiss="modal">Close</button>
+                                                                    <a href="{% url 'subcategory_destroy' subcategory.id %}">
+
+                                                                        <button type="button" class="px-6
+                                    py-2.5
+                                    bg-blue-600
+                                    text-white
+                                    font-medium
+                                    text-xs
+                                    leading-tight
+                                    uppercase
+                                    rounded
+                                    shadow-md
+                                    hover:bg-blue-700 hover:shadow-lg
+                                    focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0
+                                    active:bg-blue-800 active:shadow-lg
+                                    transition
+                                    duration-150
+                                    ease-in-out
+                                    ml-1">Delete</button>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor%}
+            </div>
+        </div>
+
+
+        <div class="subcat_area">
+            {% for category in parent_category_by_order %}
+            <div class="flex gap-6 flex-wrap subcategory_spawner hidden" data-category-id="{{category.id}}">
+                <div data-bs-target="#addSubCategory-{{category.id}}" data-bs-toggle="modal"
+                    class="subcategory_opener min-h-[16rem] cursor-pointer text-center rounded-lg admin-card-hover p-3 min-w-[14rem] w-fit bg-white flex flex-col gap-4 items-center justify-center">
+                    <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path
+                            d="M20.0026 36.6668V20.0002M20.0026 20.0002V3.3335M20.0026 20.0002H36.6693M20.0026 20.0002H3.33594"
+                            stroke="#555555" stroke-width="5" stroke-linecap="round" />
+                    </svg>
+
+                    <h1>Add Subcategory</h1>
+                </div>
+                {% for subcategory in searched_categories %}
+                <div class="modal fade fixed top-0 left-0 hidden w-full h-full outline-none overflow-x-hidden overflow-y-auto"
+                    id="addSubCategory-{{category.id}}" tabindex="-1" aria-labelledby="SignupLabel" aria-modal="true"
+                    role="dialog">
+                    <div
+                        class="modal-dialog modal-dialog-centered modal-dialog-scrollable relative w-auto pointer-events-none">
+                        <div
+                            class="modal-content border-none rounded-lg shadow-lg relative flex flex-col w-full pointer-events-auto bg-white bg-clip-padding outline-none text-current">
+                            <div
+                                class="modal-header flex flex-shrink-0 items-center justify-between p-4 border-b border-gray-200 rounded-t-md">
+                                <h5 class="text-xl font-medium leading-normal text-gray-800" id="exampleModalLabel">
+                                    Add Subcategory
+                                </h5>
+                                <button type="button"
+                                    class="subcat_close btn-close box-content text-black border-none rounded-none opacity-50 focus:shadow-none focus:outline-none focus:opacity-100 hover:text-black hover:opacity-75 hover:no-underline"
+                                    data-bs-dismiss="modal" aria-label="Close">
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none"
+                                        xmlns="http://www.w3.org/2000/svg">
+                                        <path
+                                            d="M12 0.625C5.6625 0.625 0.625 5.6625 0.625 12C0.625 18.3375 5.6625 23.375 12 23.375C18.3375 23.375 23.375 18.3375 23.375 12C23.375 5.6625 18.3375 0.625 12 0.625ZM16.3875 17.6875L12 13.3L7.6125 17.6875L6.3125 16.3875L10.7 12L6.3125 7.6125L7.6125 6.3125L12 10.7L16.3875 6.3125L17.6875 7.6125L13.3 12L17.6875 16.3875L16.3875 17.6875Z"
+                                            fill="#205a42" />
+                                    </svg>
+
+                                </button>
+                            </div>
+                            <div class="modal-body relative p-4">
+                                <form action="{% url 'subcategory_create' %}" class="subcategory_create-{{category.id}}"
+                                    method="POST" enctype="multipart/form-data">
+                                    {% csrf_token %}
+                                    <div class="flex flex-col gap-4">
+                                        <div class="flex flex-col gap-2">
+                                            <p class="text-sm">Select Category</p>
+                                            <select name="category_id"
+                                                class="subcategory_type bg-white border rounded-md text-sm outline-none lg:px-4 px-2 lg:py-3 py-[0.6rem] placeholder:text-[#A1A1A1] text-[#101928] focus:border-[#205a42] ease-in transition-all focus:border-l-[7px]  bg-transparent"
+                                                required>
+                                                <option selected value="{{category.id}}">{{category.name}}</option>
+                                                {% for cats in parent_category %}
+                                                {% if cats.name == category.name %}
+
+                                                {% else %}
+                                                <option value="{{cats.id}}">{{cats.name}}</option>
+                                                {% endif %}
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                        <div class="flex flex-col gap-2">
+                                            <p class="text-sm">Subcategory Name</p>
+                                            <input type="text" placeholder="Enter Subcategory Name"
+                                                class="subcategory_name border rounded-md text-sm outline-none lg:px-4 px-2 lg:py-3 py-[0.6rem] placeholder:text-[#A1A1A1] text-[#101928] focus:border-[#205a42] ease-in transition-all focus:border-l-[7px]  bg-transparent"
+                                                required value="" name="name">
+                                        </div>
+                                        <div class="flex flex-col gap-2">
+                                            <p class="text-sm">Subcategory Status</p>
+                                            <select name="status"
+                                                class="subcategory_status bg-white border rounded-md text-sm outline-none lg:px-4 px-2 lg:py-3 py-[0.6rem] placeholder:text-[#A1A1A1] text-[#101928] focus:border-[#205a42] ease-in transition-all focus:border-l-[7px]  bg-transparent"
+                                                required>
+                                                <option disabled>Select Status</option>
+                                                <option value="Active">Active</option>
+                                                <option value="Inactive">Inactive</option>
+                                            </select>
+                                        </div>
+                                        <div class="flex flex-col gap-2 img_render">
+                                            <p class="text-sm">Subcategory Image</p>
+                                            <input class="subcategory_image_ img_render_inp" required name="image"
+                                                hidden id="image-select-{{category.id}}_" type='file' accept="image/*">
+                                            <label for="image-select-{{category.id}}_"
+                                                class="text-center h-[8rem] cursor-pointer w-full rounded-lg flex items-center justify-center border-2 border-dashed border-[#A1A1A1]">
+                                                <div>
+                                                    <svg class="mx-auto mb-2" width="35" height="35" viewBox="0 0 35 35"
+                                                        fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                        <path
+                                                            d="M2 8.17327C2 6.53601 2.6504 4.96582 3.80811 3.80811C4.96582 2.6504 6.53601 2 8.17327 2H26.6931C28.3303 2 29.9005 2.6504 31.0582 3.80811C32.2159 4.96582 32.8663 6.53601 32.8663 8.17327V26.6931C32.8663 28.3303 32.2159 29.9005 31.0582 31.0582C29.9005 32.2159 28.3303 32.8663 26.6931 32.8663H8.17327C6.53601 32.8663 4.96582 32.2159 3.80811 31.0582C2.6504 29.9005 2 28.3303 2 26.6931V8.17327Z"
+                                                            stroke="#A1A1A1" stroke-width="3.08663"
+                                                            stroke-linecap="round" stroke-linejoin="round" />
+                                                        <path
+                                                            d="M12.0302 15.8899C14.161 15.8899 15.8885 14.1625 15.8885 12.0316C15.8885 9.90076 14.161 8.17334 12.0302 8.17334C9.89929 8.17334 8.17188 9.90076 8.17188 12.0316C8.17188 14.1625 9.89929 15.8899 12.0302 15.8899Z"
+                                                            stroke="#A1A1A1" stroke-width="3.08663"
+                                                            stroke-linecap="round" stroke-linejoin="round" />
+                                                        <path
+                                                            d="M21.3302 18.3914L8.17188 32.8662H26.8969C28.4798 32.8662 29.9977 32.2374 31.117 31.1182C32.2362 29.999 32.8649 28.481 32.8649 26.8982V26.6929C32.8649 25.9738 32.5949 25.6975 32.1087 25.1651L25.8892 18.3822C25.5993 18.066 25.2467 17.8137 24.8539 17.6414C24.461 17.469 24.0366 17.3805 23.6076 17.3814C23.1787 17.3822 22.7546 17.4725 22.3625 17.6464C21.9703 17.8203 21.6188 18.0741 21.3302 18.3914Z"
+                                                            stroke="#A1A1A1" stroke-width="3.08663"
+                                                            stroke-linecap="round" stroke-linejoin="round" />
+                                                    </svg>
+                                                    <p class="text-[#A1A1A1] text-sm"><span
+                                                            class="text-[#205a42]">Browse Now</span></p>
+                                                            <p class="text-sm text-[#656565]">Image dimensions should be:	96px x 96px</p>
+                                                </div>
+                                            </label>
+                                        </div>
+                                        <button
+                                            class="subcategory_bt px-4 py-2 text-sm text-white font-semibold bg-[#205a42] rounded-md w-fit ml-auto"
+                                            type="submit">Create</button>
+
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% if subcategory.category.name == category.name %}
+
+                <div
+                    class="text-center rounded-lg admin-card-hover p-4 min-w-[14rem] w-fit bg-white flex flex-col gap-3">
+                    <div class="flex items-center justify-between">
+                        <div class="rounded-full py-1 px-3 border 
+                        {% if subcategory.status == 'Inactive' %}
+                        border-red-600 bg-red-400/20 text-red-600
+                        {% else %}
+                        border-[#05D672] bg-[#E7FFF3] text-[#05D672]
+                        {% endif %}  text-sm">
+                            {{subcategory.status}}
+                        </div>
+                        <div class="flex items-center gap-2">
+                         
+                            <button type="button"
+                                class="cursor-pointer h-[2rem] w-[2rem] rounded-full border flex items-center justify-center"
+                                data-bs-toggle="modal" data-bs-target="#exampleModal-{{subcategory.id}}">
+                                
+                                <svg width="1.25rem" height="1.25rem" viewBox="0 0 9 9" fill="none"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <path
+                                        d="M3.51298 1.45849H4.99012C4.99012 1.26261 4.91231 1.07475 4.7738 0.936243C4.63529 0.797733 4.44743 0.71992 4.25155 0.71992C4.05567 0.71992 3.86781 0.797733 3.7293 0.936243C3.59079 1.07475 3.51298 1.26261 3.51298 1.45849ZM3.0206 1.45849C3.0206 1.13202 3.15028 0.818925 3.38113 0.588077C3.61198 0.357228 3.92508 0.227539 4.25155 0.227539C4.57802 0.227539 4.89111 0.357228 5.12196 0.588077C5.35281 0.818925 5.4825 1.13202 5.4825 1.45849H7.94441C8.0097 1.45849 8.07232 1.48443 8.11849 1.5306C8.16466 1.57677 8.1906 1.63939 8.1906 1.70468C8.1906 1.76998 8.16466 1.83259 8.11849 1.87876C8.07232 1.92493 8.0097 1.95087 7.94441 1.95087H7.42544L6.83753 7.04406C6.79598 7.40408 6.62351 7.73627 6.35296 7.9774C6.08241 8.21854 5.73265 8.3518 5.37024 8.35182H3.13286C2.77044 8.3518 2.42068 8.21854 2.15013 7.9774C1.87958 7.73627 1.70712 7.40408 1.66556 7.04406L1.07766 1.95087H0.55869C0.493397 1.95087 0.430777 1.92493 0.384608 1.87876C0.338438 1.83259 0.3125 1.76998 0.3125 1.70468C0.3125 1.63939 0.338438 1.57677 0.384608 1.5306C0.430777 1.48443 0.493397 1.45849 0.55869 1.45849H3.0206ZM3.75917 3.42801C3.75917 3.36272 3.73323 3.3001 3.68706 3.25393C3.64089 3.20776 3.57827 3.18182 3.51298 3.18182C3.44768 3.18182 3.38506 3.20776 3.33889 3.25393C3.29272 3.3001 3.26679 3.36272 3.26679 3.42801V6.3823C3.26679 6.44759 3.29272 6.51021 3.33889 6.55638C3.38506 6.60255 3.44768 6.62849 3.51298 6.62849C3.57827 6.62849 3.64089 6.60255 3.68706 6.55638C3.73323 6.51021 3.75917 6.44759 3.75917 6.3823V3.42801ZM4.99012 3.18182C4.92483 3.18182 4.86221 3.20776 4.81604 3.25393C4.76987 3.3001 4.74393 3.36272 4.74393 3.42801V6.3823C4.74393 6.44759 4.76987 6.51021 4.81604 6.55638C4.86221 6.60255 4.92483 6.62849 4.99012 6.62849C5.05541 6.62849 5.11803 6.60255 5.1642 6.55638C5.21037 6.51021 5.23631 6.44759 5.23631 6.3823V3.42801C5.23631 3.36272 5.21037 3.3001 5.1642 3.25393C5.11803 3.20776 5.05541 3.18182 4.99012 3.18182Z"
+                                        fill="#555555"></path>
+                                </svg>
+
+                            </button> 
+                            <div data-bs-target="#editSubCat" data-bs-toggle="modal"
+                                class="cursor-pointer h-[2rem] w-[2rem] rounded-full border flex items-center justify-center">
+                                <svg class="edit_subcat_btn" data-url="{% url 'subcategory_retrieve'  subcategory.id %}"
+                                    width="1.25rem" height="1.25rem" viewBox="0 0 8 7" fill="none"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <path
+                                        d="M1.0587 6.56892C1.01064 6.56884 0.963126 6.55875 0.919176 6.53931C0.875227 6.51986 0.835803 6.49148 0.803413 6.45597C0.770437 6.42076 0.745274 6.37898 0.729574 6.33336C0.713874 6.28774 0.707992 6.23931 0.712314 6.19126L0.797178 5.25785L4.71754 1.3378L5.9427 2.56295L2.02337 6.48265L1.09022 6.56754C1.07974 6.5685 1.06922 6.56896 1.0587 6.56892ZM6.18724 2.31799L4.96243 1.09284L5.69711 0.357965C5.72928 0.325751 5.76748 0.300195 5.80954 0.282759C5.85158 0.265322 5.89666 0.256348 5.94218 0.256348C5.9877 0.256348 6.03277 0.265322 6.07482 0.282759C6.11687 0.300195 6.15508 0.325751 6.18724 0.357965L6.92192 1.09284C6.95413 1.12502 6.97968 1.16323 6.99711 1.2053C7.01454 1.24736 7.02351 1.29244 7.02351 1.33798C7.02351 1.38351 7.01454 1.4286 6.99711 1.47066C6.97968 1.51272 6.95413 1.55093 6.92192 1.58311L6.18759 2.31764L6.18724 2.31799Z"
+                                        fill="#555555" />
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-2 w-fit h-fit mx-auto rounded-full border border-[#205a42]">
+                        <div class="h-[6rem] w-[6rem] overflow-hidden rounded-full">
+                            {% if subcategory.image %}
+                            <img class="object-cover w-full h-full" src='/media/{{subcategory.image}}' />
+                            {% else %}
+                            <img class="object-cover w-full h-full" src='/static/assets/images/dummy.png'/>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <h2 class="font-semibold">{{subcategory.name}}</h2>
+
+                    <p class="text-[#555555] text-sm">{{subcategory.businessdeal_sub_category.all|length}} Deals</p>
+                </div>
+                <!-- Modal -->
+                <div class="modal fade fixed top-0 left-0 hidden w-full h-full outline-none overflow-x-hidden overflow-y-auto"
+                    id="exampleModal-{{subcategory.id}}" tabindex="-1" aria-labelledby="exampleModalLabel"
+                    aria-hidden="true">
+                    <div class="modal-dialog relative w-auto pointer-events-none">
+                        <div
+                            class="modal-content border-none shadow-lg relative flex flex-col w-full pointer-events-auto bg-white bg-clip-padding rounded-md outline-none text-current">
+                            <div
+                                class="modal-header flex flex-shrink-0 items-center justify-between p-4 border-b border-gray-200 rounded-t-md">
+                                <h5 class="text-xl font-medium leading-normal text-gray-800" id="exampleModalLabel">
+                                    Confirm Delete
+
+                                </h5>
+                                <button type="button"
+                                    class="btn-close box-content w-4 h-4 p-1 text-black border-none rounded-none opacity-50 focus:shadow-none focus:outline-none focus:opacity-100 hover:text-black hover:opacity-75 hover:no-underline"
+                                    data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body relative p-4">
+                                Do you want to delete this Subcategory?
+                            </div>
+                            <div
+                                class="modal-footer flex flex-shrink-0 flex-wrap items-center justify-end p-4 border-t border-gray-200 rounded-b-md">
+                                <button type="button" class="px-6
+py-2.5
+bg-purple-600
+text-white
+font-medium
+text-xs
+leading-tight
+uppercase
+rounded
+shadow-md
+hover:bg-purple-700 hover:shadow-lg
+focus:bg-purple-700 focus:shadow-lg focus:outline-none focus:ring-0
+active:bg-purple-800 active:shadow-lg
+transition
+duration-150
+ease-in-out" data-bs-dismiss="modal">Close</button>
+                                <a href="{% url 'subcategory_destroy' subcategory.id %}">
+
+                                    <button type="button" class="px-6
+py-2.5
+bg-blue-600
+text-white
+font-medium
+text-xs
+leading-tight
+uppercase
+rounded
+shadow-md
+hover:bg-blue-700 hover:shadow-lg
+focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0
+active:bg-blue-800 active:shadow-lg
+transition
+duration-150
+ease-in-out
+ml-1">Delete</button>
+                                </a>
+
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+                {% endfor%}
+            </div>
+
+            {% endfor %}
+
+        </div>
+
+    </div>
+</div>
+</div>
+
+
+
+
+
+
+
+
+<div class="modal fade fixed top-0 left-0 hidden w-full h-full outline-none overflow-x-hidden overflow-y-auto"
+    id="addCategory" tabindex="-1" aria-labelledby="SignupLabel" aria-modal="true" role="dialog">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable relative w-auto pointer-events-none">
+        <div
+            class="modal-content border-none rounded-lg shadow-lg relative flex flex-col w-full pointer-events-auto bg-white bg-clip-padding outline-none text-current">
+            <div
+                class="modal-header flex flex-shrink-0 items-center justify-between p-4 border-b border-gray-200 rounded-t-md">
+                <h5 class="text-xl font-medium leading-normal text-gray-800" id="exampleModalLabel">
+                    Add Category
+                </h5>
+                <button type="button"
+                    class="category_close btn-close box-content text-black border-none rounded-none opacity-50 focus:shadow-none focus:outline-none focus:opacity-100 hover:text-black hover:opacity-75 hover:no-underline"
+                    data-bs-dismiss="modal" aria-label="Close">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path
+                            d="M12 0.625C5.6625 0.625 0.625 5.6625 0.625 12C0.625 18.3375 5.6625 23.375 12 23.375C18.3375 23.375 23.375 18.3375 23.375 12C23.375 5.6625 18.3375 0.625 12 0.625ZM16.3875 17.6875L12 13.3L7.6125 17.6875L6.3125 16.3875L10.7 12L6.3125 7.6125L7.6125 6.3125L12 10.7L16.3875 6.3125L17.6875 7.6125L13.3 12L17.6875 16.3875L16.3875 17.6875Z"
+                            fill="#205a42" />
+                    </svg>
+
+                </button>
+            </div>
+            <div class="modal-body relative p-4">
+                <form action="{% url 'category_create' %}" method="POST" class="category_create">
+                    {% csrf_token %}
+                    <div class="flex flex-col gap-4">
+
+
+                        <div class="flex flex-col gap-2">
+                            <p class="text-sm">Category Name</p>
+                            <input type="text" placeholder="Enter Category Name" name="name"
+                                class="category_name border rounded-md text-sm outline-none lg:px-4 px-2 lg:py-3 py-[0.6rem] placeholder:text-[#A1A1A1] text-[#101928] focus:border-[#205a42] ease-in transition-all focus:border-l-[7px]"
+                                value="" required>
+                        </div>
+                        <div class="flex flex-col gap-2">
+                            <p class="text-sm">Category Status</p>
+                            <select name="status"
+                                class="category_status bg-white border rounded-md text-sm outline-none lg:px-4 px-2 lg:py-3 py-[0.6rem] placeholder:text-[#A1A1A1] text-[#101928] focus:border-[#205a42] ease-in transition-all focus:border-l-[7px]  bg-transparent"
+                                required>
+                                <option selected disabled>Select Status</option>
+                                <option>Active</option>
+                                <option>Inactive</option>
+                            </select>
+                        </div>
+                        <button
+                            class="px-4 py-2 text-sm text-white font-semibold bg-[#205a42] rounded-md w-fit ml-auto create_category"
+                            type="submit">Create</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade fixed top-0 left-0 hidden w-full h-full outline-none overflow-x-hidden overflow-y-auto"
+    id="edit_cat" tabindex="-1" aria-labelledby="SignupLabel" aria-modal="true" role="dialog">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable relative w-auto pointer-events-none">
+        <div
+            class="modal-content border-none rounded-lg shadow-lg relative flex flex-col w-full pointer-events-auto bg-white bg-clip-padding outline-none text-current">
+            <div
+                class="modal-header flex flex-shrink-0 items-center justify-between p-4 border-b border-gray-200 rounded-t-md">
+                <h5 class="text-xl font-medium leading-normal text-gray-800" id="exampleModalLabel">
+                    Edit Category
+                </h5>
+                <button type="button"
+                    class="category_close btn-close box-content text-black border-none rounded-none opacity-50 focus:shadow-none focus:outline-none focus:opacity-100 hover:text-black hover:opacity-75 hover:no-underline"
+                    data-bs-dismiss="modal" aria-label="Close">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path
+                            d="M12 0.625C5.6625 0.625 0.625 5.6625 0.625 12C0.625 18.3375 5.6625 23.375 12 23.375C18.3375 23.375 23.375 18.3375 23.375 12C23.375 5.6625 18.3375 0.625 12 0.625ZM16.3875 17.6875L12 13.3L7.6125 17.6875L6.3125 16.3875L10.7 12L6.3125 7.6125L7.6125 6.3125L12 10.7L16.3875 6.3125L17.6875 7.6125L13.3 12L17.6875 16.3875L16.3875 17.6875Z"
+                            fill="#205a42" />
+                    </svg>
+
+                </button>
+            </div>
+            <div class="modal-body relative p-4">
+                <form method="POST" class="get_cat_url">
+                    {% csrf_token %}
+                    <div class="flex flex-col gap-4">
+                        <div class="flex flex-col gap-2">
+                            <p class="text-sm">Category Name</p>
+                            <input type="text" placeholder="Enter Category Name" name="name"
+                                class="edit_category_name border rounded-md text-sm outline-none lg:px-4 px-2 lg:py-3 py-[0.6rem] placeholder:text-[#A1A1A1] text-[#101928] focus:border-[#205a42] ease-in transition-all focus:border-l-[7px]  bg-transparent"
+                                value="" required>
+                        </div>
+                        <div class="flex flex-col gap-2">
+                            <p class="text-sm">Category Status</p>
+                            <select name="status"
+                                class="edit_category_status bg-white border rounded-md text-sm outline-none lg:px-4 px-2 lg:py-3 py-[0.6rem] placeholder:text-[#A1A1A1] text-[#101928] focus:border-[#205a42] ease-in transition-all focus:border-l-[7px]  bg-transparent"
+                                required>
+                                <option selected disabled>Select Status</option>
+                                <option>Active</option>
+                                <option>Inactive</option>
+                            </select>
+                        </div>
+                        <button
+                            class="px-4 py-2 text-sm text-white font-semibold bg-[#205a42] rounded-md w-fit ml-auto create_categor">Update</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+
+
+<div class="modal fade fixed top-0 left-0 hidden w-full h-full outline-none overflow-x-hidden overflow-y-auto"
+    id="editSubCat" tabindex="-1" aria-labelledby="SignupLabel" aria-modal="true" role="dialog">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable relative w-auto pointer-events-none">
+        <div
+            class="modal-content border-none rounded-lg shadow-lg relative flex flex-col w-full pointer-events-auto bg-white bg-clip-padding outline-none text-current">
+            <div
+                class="modal-header flex flex-shrink-0 items-center justify-between p-4 border-b border-gray-200 rounded-t-md">
+                <h5 class="text-xl font-medium leading-normal text-gray-800" id="exampleModalLabel">
+                    Edit Subcategory
+                </h5>
+                <button type="button"
+                    class="subcat_close btn-close box-content text-black border-none rounded-none opacity-50 focus:shadow-none focus:outline-none focus:opacity-100 hover:text-black hover:opacity-75 hover:no-underline"
+                    data-bs-dismiss="modal" aria-label="Close">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path
+                            d="M12 0.625C5.6625 0.625 0.625 5.6625 0.625 12C0.625 18.3375 5.6625 23.375 12 23.375C18.3375 23.375 23.375 18.3375 23.375 12C23.375 5.6625 18.3375 0.625 12 0.625ZM16.3875 17.6875L12 13.3L7.6125 17.6875L6.3125 16.3875L10.7 12L6.3125 7.6125L7.6125 6.3125L12 10.7L16.3875 6.3125L17.6875 7.6125L13.3 12L17.6875 16.3875L16.3875 17.6875Z"
+                            fill="#205a42" />
+                    </svg>
+
+                </button>
+            </div>
+            <div class="modal-body relative p-4">
+                <form method="POST" class="get_subcat_url" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="flex flex-col gap-4 subcategory_p">
+
+                        <div class="flex flex-col gap-2">
+                            <p class="text-sm">Select Category</p>
+                            <select name="category"
+                                class="edit_frncategory_name subcategory_type bg-white border rounded-md text-sm outline-none lg:px-4 px-2 lg:py-3 py-[0.6rem] placeholder:text-[#A1A1A1] text-[#101928] focus:border-[#205a42] ease-in transition-all focus:border-l-[7px]  bg-transparent"
+                                required>
+                                <option selected disabled>Select Category</option>
+                                {% for category in parent_category %}
+                                <option value="{{category.id}}">{{category.name}}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="flex flex-col gap-2">
+                            <p class="text-sm">Subcategory Name</p>
+                            <input type="text" placeholder="Enter Subcategory Name" name="name"
+                                class="subcategory_name edit_subcategory_name border rounded-md text-sm outline-none lg:px-4 px-2 lg:py-3 py-[0.6rem] placeholder:text-[#A1A1A1] text-[#101928] focus:border-[#205a42] ease-in transition-all focus:border-l-[7px]  bg-transparent"
+                                value="" required>
+                        </div>
+
+                        <div class="flex flex-col gap-2">
+                            <p class="text-sm">Subcategory Status</p>
+                            <select name="status"
+                                class="subcategory_status edit_subcategory_status bg-white border rounded-md text-sm outline-none lg:px-4 px-2 lg:py-3 py-[0.6rem] placeholder:text-[#A1A1A1] text-[#101928] focus:border-[#205a42] ease-in transition-all focus:border-l-[7px]  bg-transparent"
+                                required>
+                                <option disabled>Select Status</option>
+                                <option value="Active">Active</option>
+                                <option value="Inactive">Inactive</option>
+                            </select>
+                        </div>
+                        <div class="flex flex-col gap-2 img_render">
+                            <p class="text-sm">Subcategory Image</p>
+                            <input class="subcategory_image_ img_render_inp" hidden name="image" id="image-select_"
+                                type='file' accept="image/*" />
+                            <label for="image-select_"
+                                class="text-center h-[8rem] cursor-pointer w-full rounded-lg flex items-center justify-center border-2 border-dashed border-[#A1A1A1]">
+                                <div>
+                                    <svg class="mx-auto mb-2" width="35" height="35" viewBox="0 0 35 35" fill="none"
+                                        xmlns="http://www.w3.org/2000/svg">
+                                        <path
+                                            d="M2 8.17327C2 6.53601 2.6504 4.96582 3.80811 3.80811C4.96582 2.6504 6.53601 2 8.17327 2H26.6931C28.3303 2 29.9005 2.6504 31.0582 3.80811C32.2159 4.96582 32.8663 6.53601 32.8663 8.17327V26.6931C32.8663 28.3303 32.2159 29.9005 31.0582 31.0582C29.9005 32.2159 28.3303 32.8663 26.6931 32.8663H8.17327C6.53601 32.8663 4.96582 32.2159 3.80811 31.0582C2.6504 29.9005 2 28.3303 2 26.6931V8.17327Z"
+                                            stroke="#A1A1A1" stroke-width="3.08663" stroke-linecap="round"
+                                            stroke-linejoin="round" />
+                                        <path
+                                            d="M12.0302 15.8899C14.161 15.8899 15.8885 14.1625 15.8885 12.0316C15.8885 9.90076 14.161 8.17334 12.0302 8.17334C9.89929 8.17334 8.17188 9.90076 8.17188 12.0316C8.17188 14.1625 9.89929 15.8899 12.0302 15.8899Z"
+                                            stroke="#A1A1A1" stroke-width="3.08663" stroke-linecap="round"
+                                            stroke-linejoin="round" />
+                                        <path
+                                            d="M21.3302 18.3914L8.17188 32.8662H26.8969C28.4798 32.8662 29.9977 32.2374 31.117 31.1182C32.2362 29.999 32.8649 28.481 32.8649 26.8982V26.6929C32.8649 25.9738 32.5949 25.6975 32.1087 25.1651L25.8892 18.3822C25.5993 18.066 25.2467 17.8137 24.8539 17.6414C24.461 17.469 24.0366 17.3805 23.6076 17.3814C23.1787 17.3822 22.7546 17.4725 22.3625 17.6464C21.9703 17.8203 21.6188 18.0741 21.3302 18.3914Z"
+                                            stroke="#A1A1A1" stroke-width="3.08663" stroke-linecap="round"
+                                            stroke-linejoin="round" />
+                                    </svg>
+                                    <p class="text-[#A1A1A1] text-sm"><span class="text-[#205a42]">Browse Now</span></p>
+                                    <p class="text-sm text-[#656565]">Image dimensions should be:	96px x 96px</p>
+                                </div>
+                            </label>
+                            <div class="rounded-md h-[7rem] w-[7rem] img_rendered overflow-hidden relative">
+                                <div class="absolute top-2 right-2 img_del z-1 cursor-pointer">
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none"
+                                        xmlns="http://www.w3.org/2000/svg">
+                                        <path
+                                            d="M12 0.625C5.6625 0.625 0.625 5.6625 0.625 12C0.625 18.3375 5.6625 23.375 12 23.375C18.3375 23.375 23.375 18.3375 23.375 12C23.375 5.6625 18.3375 0.625 12 0.625ZM16.3875 17.6875L12 13.3L7.6125 17.6875L6.3125 16.3875L10.7 12L6.3125 7.6125L7.6125 6.3125L12 10.7L16.3875 6.3125L17.6875 7.6125L13.3 12L17.6875 16.3875L16.3875 17.6875Z"
+                                            fill="#205a42"></path>
+                                    </svg>
+                                </div>
+                                <img src="" class="h-full w-full object-cover imge_subcat">
+                            </div>
+                        </div>
+                        <button
+                            class="subcategory_btn px-4 py-2 text-sm text-white font-semibold bg-[#205a42] rounded-md w-fit ml-auto">Update</button>
+
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+{% if searched_categories %}
+    {% for category in parent_category_by_order %}
+    <div class="modal fade fixed top-0 left-0 hidden w-full h-full outline-none overflow-x-hidden overflow-y-auto"
+    id="category-delete-{{category.id}}" tabindex="-1" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog relative w-auto pointer-events-none">
+        <div
+            class="modal-content border-none shadow-lg relative flex flex-col w-full pointer-events-auto bg-white bg-clip-padding rounded-md outline-none text-current">
+            <div
+                class="modal-header flex flex-shrink-0 items-center justify-between p-4 border-b border-gray-200 rounded-t-md">
+                <h5 class="text-xl font-medium leading-normal text-gray-800" id="exampleModalLabel">
+                    Confirm Delete
+    
+                </h5>
+                <button type="button"
+                    class="btn-close box-content w-4 h-4 p-1 text-black border-none rounded-none opacity-50 focus:shadow-none focus:outline-none focus:opacity-100 hover:text-black hover:opacity-75 hover:no-underline"
+                    data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body relative p-4">
+                Do you want to delete this Category?
+            </div>
+            <div
+                class="modal-footer flex flex-shrink-0 flex-wrap items-center justify-end p-4 border-t border-gray-200 rounded-b-md">
+                <button type="button" class="px-6
+                        py-2.5
+                        bg-purple-600
+                        text-white
+                        font-medium
+                        text-xs
+                        leading-tight
+                        uppercase
+                        rounded
+                        shadow-md
+                        hover:bg-purple-700 hover:shadow-lg
+                        focus:bg-purple-700 focus:shadow-lg focus:outline-none focus:ring-0
+                        active:bg-purple-800 active:shadow-lg
+                        transition
+                        duration-150
+                        ease-in-out" data-bs-dismiss="modal">Close</button>
+                                                        <a href="#">
+                                                            
+                    <form method="post" action="{% url 'category_destroy' category.id %}">
+                        {% csrf_token %}
+                    <button type="submit" class="px-6
+                    py-2.5
+                        bg-blue-600
+                        text-white
+                        font-medium
+                        text-xs
+                        leading-tight
+                        uppercase
+                        rounded
+                        shadow-md
+                        hover:bg-blue-700 hover:shadow-lg
+                        focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0
+                        active:bg-blue-800 active:shadow-lg
+                        transition
+                        duration-150
+                        ease-in-out
+                        ml-1">Delete</button>
+                </a>
+            </div>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+{% endif %}
+
+
+
+
+
+
+
+
+
+{% else %}
+
+{% include 'common/not-found.html' %}
+
+{% endif %}
+{% include 'common/footer-com.html' %}
+<script>
+    let dashboard_tabs = document.querySelectorAll('.dashboard-tab');
+    document.addEventListener('DOMContentLoaded', () => {
+        if (dashboard_tabs) {
+            dashboard_tabs.forEach(tab => {
+                dashboard_tabs.forEach(all => {
+                    all.classList.remove('dashboard-tab-active')
+                })
+                dashboard_tabs[1].classList.add('dashboard-tab-active')
+            })
+        }
+    })
+</script>
+{% if messages %}
+{% for msg in messages %}
+<script>
+    setTimeout(() => {
+        Toast.fire({
+            icon: '{{msg.tags}}', // success
+            title: '{{msg}}'
+        });
+    }, 1000);
+</script>
+{% endfor %}
+{% endif %}
+
+<script>
+    $(".category_create").validate();
+    $(".General").validate();
+</script>
+
+{% for subcategory in searched_categories %}
+<script>
+    setTimeout(() => {
+        document.addEventListener('DOMContentLoaded', () => {
+            $(".subcategory_create-{{subcategory.id}}").validate();
+        })
+    }, 1000);
+</script>
+{% endfor %}
+
+{% endblock body %}

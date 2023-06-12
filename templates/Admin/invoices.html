@@ -1,0 +1,161 @@
+{% extends 'Admin/admin/base.html' %}
+{% block title %} Top Deals - Admin Invoices {% endblock title %}
+{% block body %}
+
+<div class="col-span-1 lg:col-span-4 m-4 lg:ml-0">
+    <div class="flex flex-col gap-6 py-[1rem]">
+        <div class="flex items-center justify-between gap-4 flex-wrap">
+            <h1 class="font-bold text-2xl text-[#205a42]">Invoices</h1>
+            <div class="flex items-center gap-4">
+                <div class="rounded-xl bg-white py-2 px-5 flex items-center gap-2">
+                    <div>
+                        <svg width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path
+                                d="M5.4344 0.665436C6.79903 0.665436 8.10777 1.20753 9.0727 2.17247C10.0376 3.13741 10.5797 4.44615 10.5797 5.81077C10.5797 7.08523 10.1127 8.25679 9.34486 9.1592L9.55859 9.37293H10.1839L14.1419 13.3309L12.9545 14.5183L8.99656 10.5603V9.93496L8.78283 9.72123C7.88041 10.4891 6.70886 10.9561 5.4344 10.9561C4.06977 10.9561 2.76104 10.414 1.7961 9.44908C0.831159 8.48414 0.289063 7.1754 0.289062 5.81077C0.289062 4.44615 0.831159 3.13741 1.7961 2.17247C2.76104 1.20753 4.06977 0.665436 5.4344 0.665436ZM5.4344 2.24862C3.45542 2.24862 1.87224 3.8318 1.87224 5.81077C1.87224 7.78975 3.45542 9.37293 5.4344 9.37293C7.41338 9.37293 8.99656 7.78975 8.99656 5.81077C8.99656 3.8318 7.41338 2.24862 5.4344 2.24862Z"
+                                fill="#868686"></path>
+                        </svg>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <form action="/user_listed/" method="GET">
+                            <input type="text" class="text-[#373737] outline-none w-full min-w-[120px]" name="item"
+                                placeholder="Search businesses... ">
+                        </form>
+                    </div>
+                </div>
+                <div class="bg-white rounded-lg flex items-center justify-center h-[2.5rem] w-[2.5rem]">
+                    <svg width="17" height="17" viewBox="0 0 17 17" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path
+                            d="M13.9823 10.7511V7.52113C13.9823 5.12194 12.4468 3.02985 10.3328 2.24841C10.3574 2.12501 10.3711 1.9989 10.3711 1.87275C10.3712 0.839049 9.53213 0 8.49843 0C7.46473 0 6.62568 0.839049 6.62568 1.87275C6.62568 1.99615 6.63937 2.11951 6.66131 2.23742C5.93472 2.49517 5.26294 2.9037 4.68988 3.45758C3.60956 4.49952 3.01457 5.90064 3.01457 7.40322V10.7511C3.01457 10.869 2.9186 10.9678 2.79794 10.9678C1.78617 10.9678 0.922445 11.73 0.829217 12.7007C0.777109 13.2409 0.955368 13.7782 1.32004 14.1786C1.68196 14.5762 2.2002 14.8065 2.74034 14.8065H6.04713C6.18422 16.0376 7.23166 17 8.49843 17C9.7652 17 10.8126 16.0376 10.9497 14.8065H14.2565C14.7967 14.8065 15.3149 14.5762 15.6768 14.1786C16.0388 13.7782 16.217 13.2409 16.1676 12.7007C16.0744 11.73 15.208 10.9678 14.1989 10.9678C14.0783 10.9677 13.9823 10.8717 13.9823 10.7511ZM8.49843 1.09675C8.92615 1.09675 9.27438 1.44498 9.27438 1.8727C9.27438 1.90833 9.26889 1.94125 9.26339 1.97688C9.07694 1.94945 8.88774 1.93026 8.69853 1.92477C8.37224 1.91378 8.05143 1.93576 7.73338 1.97962C7.72788 1.944 7.72239 1.91108 7.72239 1.87545C7.72248 1.44498 8.07071 1.09675 8.49843 1.09675ZM8.49843 15.9032C7.83764 15.9032 7.28377 15.4316 7.15487 14.8064H9.84195C9.71314 15.4316 9.15927 15.9032 8.49843 15.9032ZM15.0763 12.8048C15.0983 13.0407 15.0242 13.2682 14.868 13.441C14.7062 13.6137 14.4923 13.7096 14.2565 13.7096H2.74039C2.50457 13.7096 2.29073 13.6137 2.13166 13.441C1.97263 13.2682 1.89859 13.0406 1.92052 12.8048C1.95889 12.3908 2.34554 12.0645 2.79794 12.0645C3.52183 12.0645 4.11133 11.475 4.11133 10.7511V7.40322C4.11133 6.20225 4.58841 5.08082 5.45214 4.24726C6.27745 3.44938 7.35232 3.01612 8.49843 3.01612C8.55329 3.01612 8.60535 3.01612 8.66021 3.01887C10.9881 3.1011 12.8855 5.12194 12.8855 7.52113V10.7511C12.8855 11.475 13.475 12.0645 14.1989 12.0645C14.6513 12.0645 15.0352 12.3908 15.0763 12.8048Z"
+                            fill="#868686" />
+                    </svg>
+                </div>
+                <div class="bg-white rounded-lg flex items-center justify-center h-[2.5rem] w-[2.5rem]">
+                    <svg width="23" height="21" viewBox="0 0 23 21" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path
+                            d="M19.2692 15.6154H6.84615L3.19231 1H1M3.92308 3.78388H21.4615L19.2692 12.8315H6.11538L3.92308 3.78388Z"
+                            stroke="#868686" stroke-width="1.46154" stroke-linecap="round" stroke-linejoin="round" />
+                        <path
+                            d="M17.0787 20C17.8859 20 18.5403 19.3456 18.5403 18.5384C18.5403 17.7313 17.8859 17.0769 17.0787 17.0769C16.2715 17.0769 15.6172 17.7313 15.6172 18.5384C15.6172 19.3456 16.2715 20 17.0787 20Z"
+                            stroke="#868686" stroke-width="1.46154" stroke-linecap="round" stroke-linejoin="round" />
+                        <path
+                            d="M8.30529 20C9.11247 20 9.76683 19.3456 9.76683 18.5384C9.76683 17.7313 9.11247 17.0769 8.30529 17.0769C7.4981 17.0769 6.84375 17.7313 6.84375 18.5384C6.84375 19.3456 7.4981 20 8.30529 20Z"
+                            stroke="#868686" stroke-width="1.46154" stroke-linecap="round" stroke-linejoin="round" />
+                    </svg>
+                </div>
+            </div>
+        </div>
+        <div class="business_tab_data" tab-name="1">
+            <div class="rounded-2xl shadow bg-white px-4 py-4">
+                <div class="flex flex-col gap-3">
+                    <div class="flex items-center gap-4 justify-between">
+                        <div>
+                            <h1 class="font-semibold text-xl text-[#205a42]">Reports</h1>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <h1 class="font-semibold text-[#555555]">Filter By:</h1>
+                            <select required="" id="cities_dropdown" name="city"
+                                class="border bg-[#F8F9FD] border-[#D2D2D2] rounded-md text-sm outline-none lg:px-4 px-2 lg:py-3 !pr-[1.8rem] py-[0.6rem] placeholder:text-[#A1A1A1] text-[#101928] focus:border-[#205a42] ease-in transition-all focus:border-l-[7px]  bg-transparent">
+                                <option value="" selected disabled>Category</option>
+                            </select>
+                            <select required="" id="cities_dropdown" name="city"
+                                class="border bg-[#F8F9FD] border-[#D2D2D2] rounded-md text-sm outline-none lg:px-4 px-2 lg:py-3 !pr-[1.8rem] py-[0.6rem] placeholder:text-[#A1A1A1] text-[#101928] focus:border-[#205a42] ease-in transition-all focus:border-l-[7px]  bg-transparent">
+                                <option value="" selected disabled>Date Range</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="overflow-x-auto sm:-mx-6 lg:-mx-8">
+                        <div class="py-2 inline-block min-w-full sm:px-6 lg:px-8">
+                            <div class="overflow-auto">
+                                <table class="min-w-full table-fixed">
+                                    <thead>
+                                        <tr class="bg-[#F8F9FD]">
+                                            <th scope="col"
+                                                class="text-sm font-medium text-gray-900 px-3 py-4 text-left">
+                                                Deal Name
+                                            </th>
+                                            <th scope="col"
+                                                class="text-sm font-medium text-gray-900 px-3 py-4 text-left">
+                                                Package
+                                            </th>
+                                            <th scope="col"
+                                                class="text-sm font-medium text-gray-900 px-3 py-4 text-left">
+                                                Date
+                                            </th>
+                                            <th scope="col"
+                                                class="text-sm font-medium text-gray-900 px-3 py-4 text-left">
+                                                Amount
+                                            </th>
+                                            <th scope="col"
+                                                class="text-sm font-medium text-gray-900 px-3 py-4 text-left">
+                                                Billing Name
+                                            </th>
+                                            <th scope="col"
+                                                class="text-sm font-medium text-gray-900 px-3 py-4 text-left">
+                                                Order status
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr class="bg-white odd-bg">
+                                            <td class="px-3 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                                                <div class="flex items-center gap-2 w-fit">
+                                                    <div class="h-[3rem] w-[3rem] rounded-xl overflow-hidden">
+                                                        <img src="https://images.unsplash.com/photo-1474511320723-9a56873867b5?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8YW5pbWFsfGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=500&q=60"
+                                                            class="h-full w-full object-cover">
+                                                    </div>
+                                                    <h1 class="flex-1 line-clamp-1 ">
+                                                        Lorem ipsum.</h1>
+                                                </div>
+                                            </td>
+                                            <td class="text-sm text-gray-900 font-light px-3 py-4 whitespace-nowrap">
+                                                user.email
+                                            </td>
+                                            <td class="text-sm text-gray-900 font-light px-3 py-4 whitespace-nowrap">
+                                                user.dail_code user.phone
+                                            </td>
+                                            <td class="text-sm text-gray-900 font-light px-3 py-4 whitespace-nowrap">
+                                                user.city.name
+                                            </td>
+                                            <td class="text-sm text-gray-900 font-light px-3 py-4 whitespace-nowrap">
+                                                user.country.name
+                                            </td>
+                                            <td class="py-4 px-3 ">
+                                                <div
+                                                    class="w-fit flex items-center gap-2 rounded-full py-1 px-3 border border-[#05D672] bg-[#E7FFF3] text-sm text-[#05D672]">
+                                                    <svg width="8" height="7" viewBox="0 0 8 7" fill="none"
+                                                        xmlns="http://www.w3.org/2000/svg">
+                                                        <circle cx="4.31338" cy="3.52285" r="3.37588" fill="#05D672" />
+                                                    </svg>
+                                                    Active
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% include 'common/footer-com.html' %}
+<link rel="stylesheet" type="text/css" id="mce-u0" referrerpolicy="origin"
+    href="https://cdn.tiny.cloud/1/qagffr3pkuv17a8on1afax661irst1hbr4e6tbv888sz91jc/tinymce/6.2.0-10/skins/ui/oxide/skin.min.css">
+
+</body>
+<script>
+    let dashboard_tabs = document.querySelectorAll('.dashboard-tab');
+    document.addEventListener('DOMContentLoaded', () => {
+        if (dashboard_tabs) {
+            dashboard_tabs.forEach(tab => {
+                dashboard_tabs.forEach(all => {
+                    all.classList.remove('dashboard-tab-active')
+                })
+                dashboard_tabs[4].classList.add('dashboard-tab-active')
+            })
+        }
+    })
+</script>
+{% endblock body %}

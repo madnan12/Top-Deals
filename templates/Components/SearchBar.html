@@ -1,0 +1,146 @@
+<div class="container mx-auto">
+    <div
+        class="static lg:absolute top-full left-1/2 border z-[123] bg-white rounded-lg shadow-cstm-2 lg:-translate-x-1/2 lg:-translate-y-1/2 w-[70vw] max-w-full mx-auto">
+        <div class="border-b flex items-center gap-6 justify-center py-2">
+            <h1 class="text-center font-semibold text-xl py-2">Find A Deal Near You</h1>
+        </div>
+
+        <form method='get' action="{% url 'view_subcategory' selected_country.id %}">
+            <div class="py-3 px-3 flex items-center justify-around gap-4 md:flex-row flex-col">
+                <div class="relative w-full">
+                    <select
+                        class="w-full id_country border rounded-md !pr-7 !pl-[2.5rem] text-sm outline-none lg:py-3 py-[0.6rem] placeholder:text-[#A1A1A1] text-[#101928] focus:border-[#205a42] ease-in transition-all bg-transparent"
+                        placeholder="Enter your Category" autocomplete="off" name='category'
+                        onchange='get_sub_categories(this.value)'>
+                        <option value="" selected disabled>Select Category</option>
+                        {% for cat in parent_category_filter_by_status %}
+                        {% if search_queries.category == cat.slug %}
+                        <option value="{{ cat.slug }}" selected>{{ cat.name }}</option>
+                        {% else %}
+                        <option value="{{ cat.slug }}">{{ cat.name }}</option>
+                        {% endif  %}
+                        {% endfor %}
+                    </select>
+                    <div class="absolute left-3 top-1/2 -translate-y-1/2 ">
+                        <svg width="14" height="13" viewBox="0 0 14 13" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path
+                                d="M6.22967 0.390268C5.03147 0.462217 3.88486 0.844927 2.91082 1.49706C0.925632 2.8243 -0.103246 5.09606 0.246702 7.37854C0.411193 8.45472 0.869189 9.45589 1.58682 10.3101C1.80937 10.5749 2.31413 11.0541 2.59312 11.2638C3.36559 11.8486 4.2719 12.2619 5.22015 12.4609C5.38786 12.4977 5.42012 12.5007 5.43786 12.4824C5.44914 12.4701 5.62331 12.1869 5.82489 11.8516L6.19097 11.2424L5.33303 9.59366C4.86214 8.68741 4.47026 7.93883 4.46381 7.93117C4.45575 7.92352 4.3993 7.93117 4.33157 7.94648C4.24126 7.96944 4.15579 7.97557 3.96388 7.97557C3.65909 7.97557 3.53008 7.94648 3.26076 7.82248C2.85599 7.63572 2.54797 7.33415 2.34316 6.92235C2.20286 6.64068 2.06901 6.1998 2.0045 5.80943C1.96902 5.59052 1.95451 5.12209 1.9787 4.92614C2.06417 4.23267 2.41573 3.88364 2.96081 3.95559C3.42364 4.01682 3.9655 4.32452 4.488 4.82204C4.94599 5.2568 5.21531 5.65022 5.3282 6.04518C5.49591 6.64374 5.3411 7.24842 4.91697 7.63572L4.80247 7.74135L4.8315 7.79033C4.89761 7.91127 6.56833 10.601 6.57639 10.601C6.58123 10.5994 6.9715 9.95647 7.44401 9.16962L8.30355 7.73829L8.22292 7.65103C8.05037 7.46733 7.97296 7.24689 7.97296 6.9346C7.97296 6.71416 8.00521 6.5626 8.0923 6.38043C8.1568 6.24725 9.33082 4.49597 9.71624 3.96171C10.2258 3.25293 10.1097 3.53155 9.29373 4.96747C8.96474 5.54766 8.54384 6.29624 8.54384 6.30389C8.54384 6.31308 8.73736 6.39727 8.74381 6.38962C8.74704 6.38656 9.05667 5.89822 9.4308 5.30426C10.2371 4.02601 10.4468 3.71678 10.4468 3.80404C10.4468 3.86068 10.2952 4.16531 9.6469 5.41448C9.32437 6.036 9.05989 6.54576 9.05989 6.55036C9.05989 6.55648 9.23083 6.65139 9.24373 6.65139C9.2518 6.65139 9.23083 6.6866 9.9017 5.54154C10.6403 4.28166 10.8645 3.92497 10.8661 4.00611C10.8677 4.07499 10.6742 4.5021 10.1807 5.52623C9.77591 6.36359 9.57594 6.78917 9.57594 6.80601C9.57594 6.81978 9.72431 6.89633 9.75172 6.89633C9.76785 6.89633 9.83881 6.76927 10.4952 5.55684C11.0225 4.58323 11.2209 4.23726 11.2692 4.20971C11.2773 4.20511 11.2854 4.20665 11.2854 4.2143C11.2854 4.27859 11.0031 4.96288 10.5629 5.96252C9.9775 7.29434 9.9404 7.36476 9.69689 7.59439C9.46628 7.81177 9.20987 7.92352 8.93088 7.92811C8.84702 7.92811 8.74865 7.92505 8.71156 7.91892L8.64544 7.90668L7.84233 9.49569C7.40046 10.3683 7.02149 11.1184 6.99891 11.1612L6.96021 11.2378L7.34241 11.8578C7.55205 12.1976 7.73106 12.4839 7.73912 12.4931C7.75041 12.5068 7.8133 12.4992 7.97618 12.467C9.85977 12.0905 11.5063 10.8826 12.3707 9.2431C12.7174 8.58637 12.9077 7.99547 13.0141 7.24229C13.0432 7.03563 13.0496 6.91929 13.0496 6.52127C13.0512 6.22429 13.0432 5.97782 13.0303 5.86301C12.8029 3.91732 11.6595 2.22727 9.89041 1.22457C9.13246 0.79594 8.20196 0.503551 7.29887 0.413231C7.01343 0.385675 6.49576 0.373429 6.22967 0.390268Z"
+                                fill="#205A42" />
+                        </svg>
+                    </div>
+                </div>
+                <div class="relative w-full">
+                    <select
+                        class="w-full id_country border rounded-md !pr-7 !pl-[2.5rem] text-sm outline-none lg:py-3 py-[0.6rem] placeholder:text-[#A1A1A1] text-[#101928] focus:border-[#205a42] ease-in transition-all bg-transparent"
+                        placeholder="Enter your Sub-Category" autocomplete="off" name='sub_category'>
+                        {% if search_queries.category %}
+                        {% if selected_category_sub_categories|length > 0 %}
+                        <option value="ALL" selected>Select All</option>
+                        {% endif %}
+                        {% for sub in selected_category_sub_categories %}
+                        {% if sub.slug == search_queries.sub_category %}
+                        <option value="{{ sub.slug }}" selected>{{ sub.name }}</option>
+                        {% else %}
+                        <option value="{{ sub.slug }}">{{ sub.name }}</option>
+                        {% endif %}
+                        {% endfor %}
+                        {% else %}
+                        <option value="" selected>Select Sub Category</option>
+                        {% endif %}
+                    </select>
+                    <div class="absolute left-3 top-1/2 -translate-y-1/2 ">
+                        <svg width="15" height="13" viewBox="0 0 9 13" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path
+                                d="M0.351562 1.85714V3.71429H1.28796H2.22436V7.42857V11.1429H3.62896H5.03356V12.0714V13H6.90636H8.77916V11.1429V9.28571H6.90636H5.03356V9.75V10.2143H4.09716H3.16076V8.35714V6.5H4.09716H5.03356V7.42857V8.35714H6.90636H8.77916V6.5V4.64286H6.90636H5.03356V5.10714V5.57143H4.09716H3.16076V4.64286V3.71429H3.62896H4.09716V1.85714V0H2.22436H0.351562V1.85714Z"
+                                fill="#205a42" />
+                        </svg>
+                    </div>
+                </div>
+                <div class="relative w-full">
+                    <select value='{{ location_data.city }}' name="city"
+                        class="w-full id_country border rounded-md !pr-7 !pl-[2.5rem] text-sm outline-none lg:py-3 py-[0.6rem] placeholder:text-[#A1A1A1] text-[#101928] focus:border-[#205a42] ease-in transition-all bg-transparent"
+                        id="id_country" placeholder="Enter your name" autocomplete="off">
+                        <option value="" selected>Select City</option>
+
+                        {% for city in cities %}
+                        {% if city.name == location_data.city or search_queries.city == city.name %}
+                        <option value="{{ city.name }}" selected>{{ city.name }}</option>
+                        {% else %}
+                        <option value="{{ city.name }}">{{ city.name }}</option>
+                        {% endif %}
+                        {% endfor %}
+                    </select>
+
+                    <div class="absolute left-3 top-1/2 -translate-y-1/2 ">
+                        <svg width="9" height="13" viewBox="0 0 9 13" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path
+                                d="M4.18797 12.7885C4.25752 12.8929 4.37463 12.9555 4.5 12.9555C4.62538 12.9555 4.74247 12.8929 4.81202 12.7885C5.6995 11.4574 7.00668 9.81335 7.91758 8.14132C8.64593 6.80442 9 5.6642 9 4.65555C9 2.17425 6.9813 0.155548 4.5 0.155548C2.0187 0.155548 0 2.17425 0 4.65555C0 5.6642 0.354075 6.80442 1.08242 8.14132C1.99265 9.81207 3.30233 11.4601 4.18797 12.7885ZM4.5 0.905548C6.56775 0.905548 8.25 2.5878 8.25 4.65555C8.25 5.53565 7.92583 6.5585 7.25898 7.78252C6.4738 9.22375 5.35335 10.6857 4.5 11.9148C3.64678 10.6859 2.52625 9.22382 1.74103 7.78252C1.07418 6.5585 0.75 5.53565 0.75 4.65555C0.75 2.5878 2.43225 0.905548 4.5 0.905548V0.905548Z"
+                                fill="#205a42" />
+                            <path
+                                d="M4.5 6.90555C5.74065 6.90555 6.75 5.8962 6.75 4.65555C6.75 3.4149 5.74065 2.40555 4.5 2.40555C3.25935 2.40555 2.25 3.4149 2.25 4.65555C2.25 5.8962 3.25935 6.90555 4.5 6.90555ZM4.5 3.15555C5.3271 3.15555 6 3.82845 6 4.65555C6 5.48265 5.3271 6.15555 4.5 6.15555C3.6729 6.15555 3 5.48265 3 4.65555C3 3.82845 3.6729 3.15555 4.5 3.15555Z"
+                                fill="#205a42" />
+                        </svg>
+                    </div>
+                </div>
+
+                <div
+                    class="rounded-md border py-[0.8rem] px-4 flex items-center gap-2 focus-within:border-[#205a42] transition-all ease-in w-full">
+                    <div>
+                        <svg width="13" height="13" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path
+                                d="M5.4344 0.665436C6.79903 0.665436 8.10777 1.20753 9.0727 2.17247C10.0376 3.13741 10.5797 4.44615 10.5797 5.81077C10.5797 7.08523 10.1127 8.25679 9.34486 9.1592L9.55859 9.37293H10.1839L14.1419 13.3309L12.9545 14.5183L8.99656 10.5603V9.93496L8.78283 9.72123C7.88041 10.4891 6.70886 10.9561 5.4344 10.9561C4.06977 10.9561 2.76104 10.414 1.7961 9.44908C0.831159 8.48414 0.289063 7.1754 0.289062 5.81077C0.289062 4.44615 0.831159 3.13741 1.7961 2.17247C2.76104 1.20753 4.06977 0.665436 5.4344 0.665436ZM5.4344 2.24862C3.45542 2.24862 1.87224 3.8318 1.87224 5.81077C1.87224 7.78975 3.45542 9.37293 5.4344 9.37293C7.41338 9.37293 8.99656 7.78975 8.99656 5.81077C8.99656 3.8318 7.41338 2.24862 5.4344 2.24862Z"
+                                fill="#868686" />
+                        </svg>
+                    </div>
+                    <input type="text" class="text-[#373737] outline-none w-full min-w-[120px] text-sm bg-transparent"
+                        placeholder="Search by keywords" value='{{ search_queries.search_by }}' name="search_by">
+                </div>
+                <button type='submit'
+                    class="px-4 py-[0.8rem] rounded-md bg-[#205a42] text-white font-semibold text-sm">Search</button>
+            </div>
+        </form>
+    </div>
+
+</div>
+<script>
+    const get_sub_categories = (category_id) => {
+        fetch(`/api/sub_category_view/?category_id=${category_id}`)
+            .then(response => {
+                if (response.ok) {
+                    return response.json()
+                }
+            })
+            .then(result => {
+                let data = result.message
+                let sub_category = document.querySelector('[name="sub_category"]')
+                sub_category.innerHTML = ''
+                if (data.length == 0) {
+                    let new_opt = document.createElement('option')
+                    new_opt.value = ''
+                    new_opt.innerText = 'Select Sub Category'
+
+                    new_opt.setAttribute('selected', true)
+                    new_opt.setAttribute('disabled', true)
+                    sub_category.appendChild(new_opt)
+                } else {
+                    let new_opt = document.createElement('option')
+                    new_opt.value = 'ALL'
+                    new_opt.innerText = 'Select All'
+                    new_opt.setAttribute('selected', true)
+
+                    sub_category.appendChild(new_opt)
+                    data.forEach((itm, index) => {
+                        let new_opt = document.createElement('option')
+                        new_opt.value = itm.slug
+                        new_opt.innerText = itm.name
+                        sub_category.appendChild(new_opt)
+                    })
+                }
+
+
+            })
+            .catch(err => {
+                console.log(err)
+            })
+    }
+</script>

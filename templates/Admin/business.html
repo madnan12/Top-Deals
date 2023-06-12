@@ -1,0 +1,922 @@
+{% extends 'Admin/admin/base.html' %}
+{% block title %} Top Deals -  Admin Business {% endblock title %}
+{% block body %}
+{% load static %}
+
+
+<div class="col-span-1 lg:col-span-4 m-4 lg:ml-0">
+    <div class="flex flex-col gap-6 py-[1rem]">
+        <div class="flex items-center justify-between gap-4 flex-wrap">
+            <h1 class="font-bold text-2xl text-[#205a42]">Manage Businesses</h1>
+            <div class="flex items-center gap-4">
+                <div class="rounded-xl bg-white py-2 px-5 flex items-center gap-2">
+                    <div>
+                        <svg width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path
+                                d="M5.4344 0.665436C6.79903 0.665436 8.10777 1.20753 9.0727 2.17247C10.0376 3.13741 10.5797 4.44615 10.5797 5.81077C10.5797 7.08523 10.1127 8.25679 9.34486 9.1592L9.55859 9.37293H10.1839L14.1419 13.3309L12.9545 14.5183L8.99656 10.5603V9.93496L8.78283 9.72123C7.88041 10.4891 6.70886 10.9561 5.4344 10.9561C4.06977 10.9561 2.76104 10.414 1.7961 9.44908C0.831159 8.48414 0.289063 7.1754 0.289062 5.81077C0.289062 4.44615 0.831159 3.13741 1.7961 2.17247C2.76104 1.20753 4.06977 0.665436 5.4344 0.665436ZM5.4344 2.24862C3.45542 2.24862 1.87224 3.8318 1.87224 5.81077C1.87224 7.78975 3.45542 9.37293 5.4344 9.37293C7.41338 9.37293 8.99656 7.78975 8.99656 5.81077C8.99656 3.8318 7.41338 2.24862 5.4344 2.24862Z"
+                                fill="#868686"></path>
+                        </svg>
+                    </div>
+                    <form action="{% url 'admin_business' %}" method="GET">
+                        <input type="text" class="text-[#373737] outline-none w-full min-w-[120px]" name="item"
+                            placeholder="Search businesses... ">
+                    </form>
+                </div>
+            </div>
+        </div>
+        {% if searched_business %}
+        <div class="flex items-center gap-3">
+            <div class="cursor-pointer store_active_id_tab business_tab business_tab_active rounded-full py-1 px-3 border flex items-center gap-2"
+                tab-name="business" tab-id="1">
+                <h1 class="text-sm">Businesses</h1>
+
+            </div>
+            <div class="cursor-pointer store_active_id_tab business_tab rounded-full py-1 px-3 border flex items-center gap-2"
+                tab-name="business-req" tab-id="2">
+                <h1 class="text-sm">Business Requests</h1>
+
+            </div>
+
+
+
+        </div>
+        <div class="business_tab_data" tab-name="business">
+            <div class="rounded-2xl shadow bg-white px-4 py-4">
+                <div class="flex items-start justify-between gap-4 lg:flex-row flex-col flex-wrap">
+                    <div class="flex flex-col gap-1">
+                        <h1 class="font-bold text-lg">Best Sellers</h1>
+                        <p class="text-xs text-[#656565]"> <br class="lg:block hidden" />
+                          </p>
+                    </div>
+                    <div class="lg:w-fit w-full swiper category-slider">
+                        <ul class="swiper-wrapper business-tabss nav nav-tabs flex list-none border-b-0 pl-0 mb-4 text-center whitespace-nowrap w-[52vw]"
+                            id="tabs-tab" role="tablist">
+                            <li class="nav-item w-fit swiper-slide" role="presentation">
+                                <a href="#tabs-all"
+                                    class="nav-link block font-medium text-xs leading-tight uppercase border-x-0 border-t-0 border-b-2 border-transparent px-6 py-3 my-2 hover:border-transparent hover:bg-gray-100 focus:border-transparent active"
+                                    id="tabs-home-tab" data-bs-toggle="pill" data-bs-target="#tabs-all" role="tab"
+                                    aria-controls="tabs-home" aria-selected="true">All</a>
+                            </li>
+                            {% for category in parent_category_filter_by_status %}
+                            <li class="nav-item w-fit swiper-slide" role="presentation">
+                                <a href="#tabs-{{ category.id }}"
+                                    class="nav-link block font-medium text-xs leading-tight uppercase border-x-0 border-t-0 border-b-2 border-transparent px-6 py-3 my-2 hover:border-transparent hover:bg-gray-100 focus:border-transparent"
+                                    id="tabs-home-tab" data-bs-toggle="pill" data-bs-target="#tabs-{{ category.id }}"
+                                    role="tab" aria-controls="tabs-home" aria-selected="true">{{category.name}}....</a>
+                                    
+                            </li>
+                            {% endfor%}
+                        </ul>
+                    </div>
+                </div>
+                <div class="tab-content mt-[1.2rem]" id="tabs-tabContent">
+
+
+                    {% for category in parent_category_filter_by_status %}
+                    <div class="tab-pane fade {% if forloop.first %} show active {% endif %}" id="tabs-all"
+                        role="tabpanel" aria-labelledby="tabs-all">
+                        <div class="grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-4">
+                            {% for s in searched_business %}
+
+                            {#                            {% if user.category.name == category.name %}#}
+                                {% if s.user.user_type == 'Business' %}
+                                    {% if s.store_status == 'Active' %}
+                                    <div class="rounded-md shadow-md p-3 flex items-center gap-3 cursor-pointer"
+                                        data-bs-toggle="modal" data-bs-target="#BusinessDeatails-1-{{user.id}}">
+                                        <div class="h-[6rem] w-[6rem]">
+                                            {% if user.logo %}
+                                            <img src="{{front_url}}/media/{{user.logo}}" class="rounded-lg w-full h-full">
+                                            {% else %}
+                                            <img src="/static/assets/images/dummy.png" class="rounded-lg w-full h-full">
+                                            {% endif %}
+                                        </div>
+                                        <div class="flex items-center gap-3 flex-1">
+                                            <div class="flex flex-col gap-1 flex-1">
+                                                <h2 class="font-bold text-[#1E1E1E] line-clamp-1 break-words">{{s.name}}</h2>
+                                                <div class="flex items-center gap-2">
+                                                    <svg width="12" height="12" viewBox="0 0 7 8" fill="none"
+                                                        xmlns="http://www.w3.org/2000/svg">
+                                                        <path
+                                                            d="M3.55428 7.65689L3.55427 7.65688C3.50092 7.59273 2.85164 6.80769 2.21544 5.856C1.89737 5.3802 1.58189 4.86174 1.34575 4.37021C1.11033 3.88018 0.950752 3.41092 0.950752 3.03537C0.950752 1.50434 2.19626 0.258858 3.72726 0.258858C5.25829 0.258858 6.50377 1.50434 6.50377 3.03537C6.50377 3.41092 6.3442 3.88018 6.10878 4.37021C5.87264 4.86173 5.55716 5.3802 5.2391 5.85599C4.60291 6.80766 3.95364 7.59268 3.90026 7.65688L3.55428 7.65689ZM3.55428 7.65689C3.59701 7.70826 3.66039 7.73802 3.72726 7.73802M3.55428 7.65689L3.72726 7.73802M3.72726 7.73802C3.79409 7.73802 3.8575 7.7083 3.90025 7.65688L3.72726 7.73802ZM4.81824 5.67429C4.39087 6.30644 3.95915 6.86395 3.72726 7.15524C3.49537 6.86395 3.06363 6.30644 2.63629 5.67429C2.23024 5.07366 1.92073 4.54452 1.71291 4.09908C1.50451 3.65238 1.40071 3.29467 1.40071 3.03537C1.40071 1.75253 2.44445 0.708814 3.72726 0.708814C5.01007 0.708814 6.05382 1.75253 6.05382 3.03537C6.05382 3.29466 5.95002 3.65236 5.74162 4.09906C5.53381 4.5445 5.2243 5.07365 4.81824 5.67429Z"
+                                                            fill="#6C6C6C" stroke="#6C6C6C" stroke-width="0.0984954" />
+                                                        <path
+                                                            d="M4.62448 5.32114C4.54406 5.26681 4.43481 5.28799 4.38049 5.3684C4.14335 5.71944 3.87769 6.08735 3.5909 6.46191C3.5319 6.53898 3.54652 6.64927 3.62359 6.70826C3.65545 6.73268 3.69301 6.74449 3.73029 6.74449C3.7831 6.74449 3.83535 6.72075 3.86994 6.67558C4.16095 6.29553 4.43071 5.92193 4.67171 5.56515C4.72605 5.48474 4.70491 5.37548 4.62448 5.32114Z"
+                                                            fill="#6C6C6C" />
+                                                        <path
+                                                            d="M3.73005 1.60651C2.90829 1.60651 2.23981 2.27499 2.23981 3.09675C2.23981 3.91851 2.90829 4.58698 3.73005 4.58698C4.55181 4.58698 5.22029 3.91851 5.22029 3.09675C5.22029 2.27499 4.55181 1.60651 3.73005 1.60651ZM3.73005 4.13703C3.15649 4.13703 2.68977 3.67031 2.68977 3.09675C2.68977 2.52319 3.15649 2.05647 3.73005 2.05647C4.30364 2.05647 4.77033 2.52318 4.77033 3.09675C4.77033 3.67031 4.30364 4.13703 3.73005 4.13703Z"
+                                                            fill="#6C6C6C" stroke="#6C6C6C" stroke-width="0.0984954" />
+                                                    </svg>
+
+                                                    <p class="text-xs text-[#6C6C6C] line-clamp-1 flex-1">
+                                                        {{s.user.business_address}}</p>
+                                                </div>
+                                                <div class="flex items-center gap-2">
+
+                                                    <h1 class="font-bold text-xs">{% if s.user.first_name %} {{s.user.first_name}}
+                                                        {% endif%} {% if s.user.last_name %} {{s.user.last_name}} {% endif %}</h1>
+                                                </div>
+                                            </div>
+                                            <div class="flex flex-col items-center gap-2 text-center">
+                                                <div
+                                                    class="h-[3.5rem] w-[3.5rem] rounded-full border-[0.3rem] border-[#205a42] flex items-center justify-center font-bold text-sm">
+                                                    12K</div>
+                                                <h1 class="text-sm text-[#205a42]">Total Sales</h1>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                        <!-- Popup -->
+                                        <div class="modal fade fixed top-0 left-0 hidden w-full h-full outline-none overflow-x-hidden overflow-y-auto"
+                                            id="BusinessDeatails-1-{{user.id}}" tabindex="-1" aria-labelledby="BusinessDeatailsLabel"
+                                            aria-modal="true" role="dialog">
+                                            <div
+                                                class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg relative w-auto pointer-events-none">
+                                                <div
+                                                    class="modal-content border-none rounded-lg shadow-lg relative flex flex-col w-full pointer-events-auto bg-white bg-clip-padding outline-none text-current">
+                                                    <div class="modal-body relative">
+                                                        <div class="absolute top-2 right-2" data-bs-dismiss="modal"
+                                                            aria-label="Close">
+                                                            <svg class="cursor-pointer" width="27" height="27" viewBox="0 0 27 27" fill="none"
+                                                                xmlns="http://www.w3.org/2000/svg">
+                                                                <path
+                                                                    d="M13.5 0C5.97857 0 0 5.97857 0 13.5C0 21.0214 5.97857 27 13.5 27C21.0214 27 27 21.0214 27 13.5C27 5.97857 21.0214 0 13.5 0ZM18.7071 20.25L13.5 15.0429L8.29286 20.25L6.75 18.7071L11.9571 13.5L6.75 8.29286L8.29286 6.75L13.5 11.9571L18.7071 6.75L20.25 8.29286L15.0429 13.5L20.25 18.7071L18.7071 20.25Z"
+                                                                    fill="#205a42" />
+                                                            </svg>
+                                                        </div>
+                                                        <div class="bg-[#FCFCFC] p-[3rem] flex flex-col items-center gap-3">
+                                                          
+                                                            <div class="h-[6rem] w-[6rem] rounded-full overflow-hidden">
+                                                                {% if user.logo %}
+                                                                <img src="{{front_url}}/media/{{user.logo}}"
+                                                                
+                                                                    class="h-full w-full bg-cover">
+                                                                    {% else %}
+                                                                    <img src="/static/assets/images/dummy.png" class="rounded-lg w-full h-full">
+                                                                    {% endif %}
+
+                                                            </div>
+                                                            <h1 class="text-[#1E1E1E] font-semibold">
+                                                                {{user.name}}
+                                                            </h1>
+                                                            <div class="flex items-center gap-1">
+                                                                <svg width="12" height="16" viewBox="0 0 12 16" fill="none"
+                                                                    xmlns="http://www.w3.org/2000/svg">
+                                                                    <path
+                                                                        d="M5.97617 14.7884L5.97618 14.7884L6.6502 14.7884C6.65021 14.7884 6.65021 14.7884 6.65021 14.7884C6.75421 14.6633 8.01911 13.134 9.25851 11.2799C9.87815 10.353 10.4928 9.34295 10.9528 8.38537C11.4114 7.43071 11.7223 6.51651 11.7223 5.78487C11.7223 2.80216 9.2959 0.375736 6.31319 0.375736C3.33052 0.375736 0.904057 2.80216 0.904057 5.78487C0.904057 6.51651 1.21493 7.43072 1.67358 8.38538C2.13362 9.34296 2.74824 10.353 3.36789 11.28C4.60732 13.134 5.87224 14.6634 5.97617 14.7884ZM8.4386 10.926C7.60601 12.1575 6.76495 13.2436 6.31319 13.8111C5.86142 13.2436 5.02033 12.1575 4.18778 10.926C3.39672 9.75581 2.79374 8.72495 2.38888 7.85717C1.98287 6.98691 1.78065 6.29004 1.78065 5.78487C1.78065 3.28568 3.81404 1.25233 6.31319 1.25233C8.81233 1.25233 10.8457 3.28568 10.8457 5.78487C10.8457 6.29002 10.6435 6.98688 10.2375 7.85713C9.83266 8.72492 9.22968 9.75579 8.4386 10.926Z"
+                                                                        fill="#6C6C6C" stroke="#6C6C6C" stroke-width="0.191886" />
+                                                                    <path
+                                                                        d="M8.05289 10.2364C7.89623 10.1306 7.68338 10.1718 7.57757 10.3285C7.11557 11.0124 6.59802 11.7291 6.0393 12.4589C5.92436 12.609 5.95285 12.8238 6.10298 12.9388C6.16506 12.9863 6.23823 13.0094 6.31086 13.0094C6.41375 13.0094 6.51554 12.9631 6.58291 12.8751C7.14985 12.1347 7.67539 11.4069 8.14491 10.7118C8.25077 10.5551 8.2096 10.3423 8.05289 10.2364Z"
+                                                                        fill="#6C6C6C" />
+                                                                    <path
+                                                                        d="M6.3073 3.00171C4.70637 3.00171 3.40406 4.30403 3.40406 5.90495C3.40406 7.50588 4.70637 8.8082 6.3073 8.8082C7.90823 8.8082 9.21054 7.50588 9.21054 5.90495C9.21054 4.30403 7.90823 3.00171 6.3073 3.00171ZM6.3073 7.9316C5.18989 7.9316 4.28065 7.02236 4.28065 5.90495C4.28065 4.78755 5.18989 3.87831 6.3073 3.87831C7.42475 3.87831 8.33395 4.78755 8.33395 5.90495C8.33395 7.02236 7.42475 7.9316 6.3073 7.9316Z"
+                                                                        fill="#6C6C6C" stroke="#6C6C6C" stroke-width="0.191886" />
+                                                                </svg>
+                                                                <p class="text-[#6C6C6C] text-sm">{{user.business_address}}</p>
+                                                            </div>
+                                                        </div>
+                                                        <div class="grid lg:grid-cols-3 grid-cols-2 gap-4 p-[2.2rem]">
+                                                            <div class="flex flex-col gap-2">
+                                                                <h1 class="font-semibold">Owner Name</h1>
+                                                                <div class="flex items-center gap-2">
+                                                                    {% comment %} <div class="h-[1.2rem] w-[1.2rem] rounded-full overflow-hidden">
+                                                                        <img src="https://images.unsplash.com/photo-1555169062-013468b47731?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=387&q=80"
+                                                                            alt="" class="h-full w-full object-cover">
+                                                                    </div> {% endcomment %}
+                                                                    <p class="text-[#555555] font-semibold text-sm">{{s.user.first_name}}{{s.user.last_name}}</p>
+                                                                </div>
+                                                            </div>
+                                                            <div class="flex flex-col gap-2">
+                                                                <h1 class="font-semibold">Email Address</h1>
+                                                                <p class="text-[#555555] font-semibold text-sm">{{s.user.email}}</p>
+                                                            </div>
+                                                            <div class="flex flex-col gap-2">
+                                                                <h1 class="font-semibold">Owner Contact</h1>
+                                                                <p class="text-[#555555] font-semibold text-sm">{{s.user.dial_code}}{{s.user.phone}}</p>
+                                                            </div>
+                                                            <div class="flex flex-col gap-2">
+                                                                <h1 class="font-semibold">Category</h1>
+                                                                <p class="text-[#555555] font-semibold text-sm">{{s.user.category}}</p>
+                                                            </div>
+                                                            <div class="flex flex-col gap-2">
+                                                                <h1 class="font-semibold">Country</h1>
+                                                                <p class="text-[#555555] font-semibold text-sm">{{s.user.country}}</p>
+                                                            </div>
+                                                            <div class="flex flex-col gap-2">
+                                                                <h1 class="font-semibold">City</h1>
+                                                                <p class="text-[#555555] font-semibold text-sm">{{s.user.city}}</p>
+                                                            </div>
+                                                            <div class="flex flex-col gap-2">
+                                                                <h1 class="font-semibold">License No</h1>
+                                                                <p class="text-[#555555] font-semibold text-sm">{{s.user.license_id}}</p>
+                                                            </div>
+                                                    
+                                                            <div class="flex flex-col gap-2">
+                                                                <h1 class="font-semibold">License Attachment</h1>
+                                                                <div class="flex items-center gap-2">
+                                                                    
+                                                                        <div class="h-[3rem] w-[3rem] rounded-lg border overflow-hidden">
+                                                                        <img src="{% static 'assets/images/attachment.png' %}"
+                                                                            alt="" class="h-full w-full object-cover">
+                                                                    </div>
+                                                                
+                                                                    <div class="flex-1">
+                                                                        {% comment %} <p class="text-[#205a42] font-semibold text-sm">{{b.license_document}}</p> {% endcomment %}
+                                                                        <div class="flex items-center justify-between">
+                                                                            <p class="text-xs text-[#555555]">29 KB</p>
+                                                                            <a href ="{{front_url}}/media/{{user.license_document}}" download>
+                                                                            <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                                                <path d="M7.92037 5.799L6.375 7.34475V3.375C6.375 3.168 6.207 3 6 3C5.793 3 5.625 3.168 5.625 3.375V7.34475L4.07963 5.79937C3.933 5.65275 3.69563 5.65275 3.54937 5.79937C3.40275 5.946 3.40275 6.18337 3.54937 6.32961L5.67075 8.45098C5.76075 8.54098 5.88375 8.56873 6.00039 8.5481C6.11665 8.56873 6.24002 8.54061 6.33002 8.45098L8.45139 6.32961C8.59802 6.18298 8.59802 5.94563 8.45139 5.79937C8.30437 5.65275 8.067 5.65275 7.92037 5.799ZM6 0C2.68651 0 0 2.68612 0 6C0 9.31388 2.68651 12 6 12C9.31349 12 12 9.31349 12 6C12 2.68651 9.31388 0 6 0ZM6 11.25C3.10049 11.25 0.75 8.89951 0.75 6C0.75 3.10049 3.10049 0.75 6 0.75C8.89951 0.75 11.25 3.10049 11.25 6C11.25 8.89951 8.89951 11.25 6 11.25Z" fill="#205a42"/>
+                                                                            </svg>
+                                                                            </a>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- Popup -->
+
+
+                                    {% endif %}
+                                {% endif %}
+
+
+                            {% endfor %}
+                        </div>
+                        <div class="flex items-center justify-center my-[1rem]">
+                            <div class="flex items-center gap-3">
+                                <div
+                                    class="h-[1.8rem] w-[1.8rem] rounded-full border border-[#EEEEEE] flex items-center justify-center">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% for category in parent_category_filter_by_status %}
+                    <div class="tab-pane fade " id="tabs-{{ category.id }}" role="tabpanel"
+                        aria-labelledby="tabs-{{category.id}}">
+                        <div class="grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-4">
+                            {% for s in searched_business %}
+                            {% if s.category.name == category.name %}
+                            {% if s.user.user_type == 'Business' %}
+                            {% if s.store_status == 'Active' %}
+                            <div class="rounded-md shadow-md p-3 flex items-center gap-3" data-bs-toggle="modal" data-bs-target="#BusinessDeatails-2-{{s.user.id}}">
+                                <div class="h-[6rem] w-[6rem]">
+                                    {% if user.logo %}
+                                    <img src="{{front_url}}/media/{{user.logo}}" class="rounded-lg w-full h-full">
+                                    {% else %}
+                                    <img src="/static/assets/images/dummy.png" class="rounded-lg w-full h-full">
+                                    {% endif %}
+                                </div>
+                                <div class="flex items-center gap-3 flex-1">
+                                    <div class="flex flex-col gap-1 flex-1">
+                                        <h2 class="font-bold text-[#1E1E1E] line-clamp-1 w-[15ch] break-words">{{user.name}}</h2>
+                                        <div class="flex items-center gap-2">
+                                            <svg width="12" height="12" viewBox="0 0 7 8" fill="none"
+                                                xmlns="http://www.w3.org/2000/svg">
+                                                <path
+                                                    d="M3.55428 7.65689L3.55427 7.65688C3.50092 7.59273 2.85164 6.80769 2.21544 5.856C1.89737 5.3802 1.58189 4.86174 1.34575 4.37021C1.11033 3.88018 0.950752 3.41092 0.950752 3.03537C0.950752 1.50434 2.19626 0.258858 3.72726 0.258858C5.25829 0.258858 6.50377 1.50434 6.50377 3.03537C6.50377 3.41092 6.3442 3.88018 6.10878 4.37021C5.87264 4.86173 5.55716 5.3802 5.2391 5.85599C4.60291 6.80766 3.95364 7.59268 3.90026 7.65688L3.55428 7.65689ZM3.55428 7.65689C3.59701 7.70826 3.66039 7.73802 3.72726 7.73802M3.55428 7.65689L3.72726 7.73802M3.72726 7.73802C3.79409 7.73802 3.8575 7.7083 3.90025 7.65688L3.72726 7.73802ZM4.81824 5.67429C4.39087 6.30644 3.95915 6.86395 3.72726 7.15524C3.49537 6.86395 3.06363 6.30644 2.63629 5.67429C2.23024 5.07366 1.92073 4.54452 1.71291 4.09908C1.50451 3.65238 1.40071 3.29467 1.40071 3.03537C1.40071 1.75253 2.44445 0.708814 3.72726 0.708814C5.01007 0.708814 6.05382 1.75253 6.05382 3.03537C6.05382 3.29466 5.95002 3.65236 5.74162 4.09906C5.53381 4.5445 5.2243 5.07365 4.81824 5.67429Z"
+                                                    fill="#6C6C6C" stroke="#6C6C6C" stroke-width="0.0984954" />
+                                                <path
+                                                    d="M4.62448 5.32114C4.54406 5.26681 4.43481 5.28799 4.38049 5.3684C4.14335 5.71944 3.87769 6.08735 3.5909 6.46191C3.5319 6.53898 3.54652 6.64927 3.62359 6.70826C3.65545 6.73268 3.69301 6.74449 3.73029 6.74449C3.7831 6.74449 3.83535 6.72075 3.86994 6.67558C4.16095 6.29553 4.43071 5.92193 4.67171 5.56515C4.72605 5.48474 4.70491 5.37548 4.62448 5.32114Z"
+                                                    fill="#6C6C6C" />
+                                                <path
+                                                    d="M3.73005 1.60651C2.90829 1.60651 2.23981 2.27499 2.23981 3.09675C2.23981 3.91851 2.90829 4.58698 3.73005 4.58698C4.55181 4.58698 5.22029 3.91851 5.22029 3.09675C5.22029 2.27499 4.55181 1.60651 3.73005 1.60651ZM3.73005 4.13703C3.15649 4.13703 2.68977 3.67031 2.68977 3.09675C2.68977 2.52319 3.15649 2.05647 3.73005 2.05647C4.30364 2.05647 4.77033 2.52318 4.77033 3.09675C4.77033 3.67031 4.30364 4.13703 3.73005 4.13703Z"
+                                                    fill="#6C6C6C" stroke="#6C6C6C" stroke-width="0.0984954" />
+                                            </svg>
+
+                                            <p class="text-xs text-[#6C6C6C] line-clamp-1 flex-1">
+                                                {{user.business_address}}</p>
+                                        </div>
+                                        <div class="flex items-center gap-2">
+                                            <h1 class="font-bold text-xs">{% if s.user.first_name %} {{s.user.first_name}}
+                                                {% endif%} {% if s.user.last_name %} {{s.user.last_name}} {% endif %}</h1>
+                                        </div>
+                                    </div>
+                                    <div class="flex flex-col items-center gap-2 text-center">
+                                        <div
+                                            class="h-[3.5rem] w-[3.5rem] rounded-full border-[0.3rem] border-[#205a42] flex items-center justify-center font-bold text-sm">
+                                            12K</div>
+                                        <h1 class="text-sm text-[#205a42]">Total Sales</h1>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            {% endif %}
+                            {% endif %}
+                            {% endif %}
+
+
+
+         <!-- Popup -->
+         <div class="modal fade fixed top-0 left-0 hidden w-full h-full outline-none overflow-x-hidden overflow-y-auto"
+            id="BusinessDeatails-2-{{user.id}}" tabindex="-1" aria-labelledby="BusinessDeatailsLabel"
+            aria-modal="true" role="dialog">
+         <div
+             class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg relative w-auto pointer-events-none">
+             <div
+                 class="modal-content border-none rounded-lg shadow-lg relative flex flex-col w-full pointer-events-auto bg-white bg-clip-padding outline-none text-current">
+                 <div class="modal-body relative">
+                     <div class="absolute top-2 right-2" data-bs-dismiss="modal"
+                         aria-label="Close">
+                         <svg class="cursor-pointer" width="27" height="27" viewBox="0 0 27 27" fill="none"
+                             xmlns="http://www.w3.org/2000/svg">
+                             <path
+                                 d="M13.5 0C5.97857 0 0 5.97857 0 13.5C0 21.0214 5.97857 27 13.5 27C21.0214 27 27 21.0214 27 13.5C27 5.97857 21.0214 0 13.5 0ZM18.7071 20.25L13.5 15.0429L8.29286 20.25L6.75 18.7071L11.9571 13.5L6.75 8.29286L8.29286 6.75L13.5 11.9571L18.7071 6.75L20.25 8.29286L15.0429 13.5L20.25 18.7071L18.7071 20.25Z"
+                                 fill="#205a42" />
+                         </svg>
+                     </div>
+                     <div class="bg-[#FCFCFC] p-[3rem] flex flex-col items-center gap-3">
+                       
+                         <div class="h-[6rem] w-[6rem] rounded-full overflow-hidden">
+                             {% if s.user.logo %}
+                             <img src="{{front_url}}/media/{{user.logo}}"
+                             
+                                 class="h-full w-full bg-cover">
+                                 {% else %}
+                                 <img src="/static/assets/images/dummy.png" class="rounded-lg w-full h-full">
+                                 {% endif %}
+
+                         </div>
+                         <h1 class="text-[#1E1E1E] font-semibold">
+                             {{s.name}}
+                         </h1>
+                         <div class="flex items-center gap-1">
+                             <svg width="12" height="16" viewBox="0 0 12 16" fill="none"
+                                 xmlns="http://www.w3.org/2000/svg">
+                                 <path
+                                     d="M5.97617 14.7884L5.97618 14.7884L6.6502 14.7884C6.65021 14.7884 6.65021 14.7884 6.65021 14.7884C6.75421 14.6633 8.01911 13.134 9.25851 11.2799C9.87815 10.353 10.4928 9.34295 10.9528 8.38537C11.4114 7.43071 11.7223 6.51651 11.7223 5.78487C11.7223 2.80216 9.2959 0.375736 6.31319 0.375736C3.33052 0.375736 0.904057 2.80216 0.904057 5.78487C0.904057 6.51651 1.21493 7.43072 1.67358 8.38538C2.13362 9.34296 2.74824 10.353 3.36789 11.28C4.60732 13.134 5.87224 14.6634 5.97617 14.7884ZM8.4386 10.926C7.60601 12.1575 6.76495 13.2436 6.31319 13.8111C5.86142 13.2436 5.02033 12.1575 4.18778 10.926C3.39672 9.75581 2.79374 8.72495 2.38888 7.85717C1.98287 6.98691 1.78065 6.29004 1.78065 5.78487C1.78065 3.28568 3.81404 1.25233 6.31319 1.25233C8.81233 1.25233 10.8457 3.28568 10.8457 5.78487C10.8457 6.29002 10.6435 6.98688 10.2375 7.85713C9.83266 8.72492 9.22968 9.75579 8.4386 10.926Z"
+                                     fill="#6C6C6C" stroke="#6C6C6C" stroke-width="0.191886" />
+                                 <path
+                                     d="M8.05289 10.2364C7.89623 10.1306 7.68338 10.1718 7.57757 10.3285C7.11557 11.0124 6.59802 11.7291 6.0393 12.4589C5.92436 12.609 5.95285 12.8238 6.10298 12.9388C6.16506 12.9863 6.23823 13.0094 6.31086 13.0094C6.41375 13.0094 6.51554 12.9631 6.58291 12.8751C7.14985 12.1347 7.67539 11.4069 8.14491 10.7118C8.25077 10.5551 8.2096 10.3423 8.05289 10.2364Z"
+                                     fill="#6C6C6C" />
+                                 <path
+                                     d="M6.3073 3.00171C4.70637 3.00171 3.40406 4.30403 3.40406 5.90495C3.40406 7.50588 4.70637 8.8082 6.3073 8.8082C7.90823 8.8082 9.21054 7.50588 9.21054 5.90495C9.21054 4.30403 7.90823 3.00171 6.3073 3.00171ZM6.3073 7.9316C5.18989 7.9316 4.28065 7.02236 4.28065 5.90495C4.28065 4.78755 5.18989 3.87831 6.3073 3.87831C7.42475 3.87831 8.33395 4.78755 8.33395 5.90495C8.33395 7.02236 7.42475 7.9316 6.3073 7.9316Z"
+                                     fill="#6C6C6C" stroke="#6C6C6C" stroke-width="0.191886" />
+                             </svg>
+                             <p class="text-[#6C6C6C] text-sm">{{s.user.business_address}}</p>
+                         </div>
+                     </div>
+                     <div class="grid lg:grid-cols-3 grid-cols-2 gap-4 p-[2.2rem]">
+                         <div class="flex flex-col gap-2">
+                             <h1 class="font-semibold">Owner Name</h1>
+                             <div class="flex items-center gap-2">
+                                 {% comment %} <div class="h-[1.2rem] w-[1.2rem] rounded-full overflow-hidden">
+                                     <img src="https://images.unsplash.com/photo-1555169062-013468b47731?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=387&q=80"
+                                         alt="" class="h-full w-full object-cover">
+                                 </div> {% endcomment %}
+                                 <p class="text-[#555555] font-semibold text-sm">
+                                     {{s.user.first_name}}{{s.user.last_name}}</p>
+                             </div>
+                         </div>
+                         <div class="flex flex-col gap-2">
+                             <h1 class="font-semibold">Email Address</h1>
+                             <p class="text-[#555555] font-semibold text-sm">{{s.user.email}}</p>
+                         </div>
+                         <div class="flex flex-col gap-2">
+                             <h1 class="font-semibold">Owner Contact</h1>
+                             <p class="text-[#555555] font-semibold text-sm">
+                                 {{s.user.dial_code}}{{s.user.phone}}</p>
+                         </div>
+                         <div class="flex flex-col gap-2">
+                             <h1 class="font-semibold">Category</h1>
+                             <p class="text-[#555555] font-semibold text-sm">{{s.user.category}}</p>
+                         </div>
+                         <div class="flex flex-col gap-2">
+                             <h1 class="font-semibold">Country</h1>
+                             <p class="text-[#555555] font-semibold text-sm">
+                                 {{s.user.country}}</p>
+                         </div>
+                         <div class="flex flex-col gap-2">
+                             <h1 class="font-semibold">City</h1>
+                             <p class="text-[#555555] font-semibold text-sm">{{s.user.city}}</p>
+                         </div>
+                         <div class="flex flex-col gap-2">
+                             <h1 class="font-semibold">License No</h1>
+                             <p class="text-[#555555] font-semibold text-sm">
+                                 {{s.user.license_id}}</p>
+                         </div>
+                 
+                         <div class="flex flex-col gap-2">
+                             <h1 class="font-semibold">License Attachment</h1>
+                             <div class="flex items-center gap-2">
+                                 
+                                     <div class="h-[3rem] w-[3rem] rounded-lg border overflow-hidden">
+                                     <img src="{% static 'assets/images/attachment.png' %}"
+                                         alt="" class="h-full w-full object-cover">
+                                 </div>
+                             
+                                 <div class="flex-1">
+                                     {% comment %} <p class="text-[#205a42] font-semibold text-sm">{{b.license_document}}</p> {% endcomment %}
+                                     <div class="flex items-center justify-between">
+                                         <p class="text-xs text-[#555555]">29 KB</p>
+                                        <a href ="{{front_url}}/media/{{user.license_document}}" download>
+                                            <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                <path d="M7.92037 5.799L6.375 7.34475V3.375C6.375 3.168 6.207 3 6 3C5.793 3 5.625 3.168 5.625 3.375V7.34475L4.07963 5.79937C3.933 5.65275 3.69563 5.65275 3.54937 5.79937C3.40275 5.946 3.40275 6.18337 3.54937 6.32961L5.67075 8.45098C5.76075 8.54098 5.88375 8.56873 6.00039 8.5481C6.11665 8.56873 6.24002 8.54061 6.33002 8.45098L8.45139 6.32961C8.59802 6.18298 8.59802 5.94563 8.45139 5.79937C8.30437 5.65275 8.067 5.65275 7.92037 5.799ZM6 0C2.68651 0 0 2.68612 0 6C0 9.31388 2.68651 12 6 12C9.31349 12 12 9.31349 12 6C12 2.68651 9.31388 0 6 0ZM6 11.25C3.10049 11.25 0.75 8.89951 0.75 6C0.75 3.10049 3.10049 0.75 6 0.75C8.89951 0.75 11.25 3.10049 11.25 6C11.25 8.89951 8.89951 11.25 6 11.25Z" fill="#205a42"/>
+                                            </svg>
+                                        </a>
+                                     </div>
+                                 </div>
+                             </div>
+                         </div>
+                     </div>
+                 </div>
+             </div>
+         </div>
+     </div>
+     <!-- Popup -->
+
+                            {% endfor %}
+                        </div>
+                        <div class="flex items-center justify-center my-[1rem]">
+                            <div class="flex items-center gap-3">
+                                <div
+                                    class="h-[1.8rem] w-[1.8rem] rounded-full border border-[#EEEEEE] flex items-center justify-center">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                    {% endfor %}
+
+
+                </div>
+            </div>
+        </div>
+        <div class="business_tab_data hidden" tab-name="business-req">
+            <div class="rounded-2xl shadow bg-white px-4 py-4">
+                <div class="flex items-start justify-between gap-4 lg:flex-row flex-col flex-wrap">
+                    <div class="flex flex-col gap-1">
+                        <h1 class="font-bold text-lg">Best Sellers</h1>
+                        <p class="text-xs text-[#656565]">Lorem ipsum dolor sit amet, <br class="lg:block hidden" />
+                            consectetuer adipiscing elit. Aenean commod 2</p>
+                    </div>
+                    <div class="lg:w-fit w-full overflow-auto">
+                        <ul class="business-tabss swiper category-slider nav nav-tabs flex list-none border-b-0 pl-0 mb-4 text-center whitespace-nowrap w-[52vw] overflow-auto"
+                            id="tabs-tab" role="tablist">
+                            <li class="nav-item w-fit swiper-slide" role="presentation">
+                                <a href="#tabs-b-all"
+                                    class="nav-link block font-medium text-xs leading-tight uppercase border-x-0 border-t-0 border-b-2 border-transparent px-6 py-3 my-2 hover:border-transparent hover:bg-gray-100 focus:border-transparent active"
+                                    id="tabs-home-tab" data-bs-toggle="pill" data-bs-target="#tabs-b-all" role="tab"
+                                    aria-controls="tabs-home" aria-selected="true">All</a>
+                            </li>
+                            {% for category in parent_category_filter_by_status %}
+                            <li class="nav-item w-fit swiper-slide" role="presentation">
+                                <a href="#tabs-b-{{ category.id }}"
+                                    class="nav-link block font-medium text-xs leading-tight uppercase border-x-0 border-t-0 border-b-2 border-transparent px-6 py-3 my-2 hover:border-transparent hover:bg-gray-100 focus:border-transparent"
+                                    id="tabs-home-tab" data-bs-toggle="pill" data-bs-target="#tabs-b-{{ category.id }}"
+                                    role="tab" aria-controls="tabs-home" aria-selected="true">{{category.name}}</a>
+                            </li>
+                            {% endfor%}
+                        </ul>
+                    </div>
+                </div>
+                <div class="tab-content mt-[1.2rem]" id="tabs-tabContent">
+                    {% for category in parent_category_filter_by_status %}
+                    <div class="tab-pane fade " id="tabs-b-{{ category.id }}" role="tabpanel"
+                        aria-labelledby="tabs-b-{{category.id}}">
+                        <div class="grid lg:grid-cols-3 grid-cols-1 gap-4">
+                            {% for s in searched_business %}
+                            {% if s.category.name == category.name %}
+                            {% if s.user.user_type == 'Business' and s.user.is_active is True %}
+                            
+                            
+                            <div class="rounded-md shadow-md p-3 flex items-center gap-3"  data-bs-toggle="modal" data-bs-target="#BusinessDeatails-3-{{user.id}}">
+                                <div class="h-[6rem] w-[6rem]">
+                                    {% if user.logo %}
+                                    <img src="{{front_url}}/media/{{user.logo}}" class="rounded-lg w-full h-full">
+                                    {% else %}
+                                    <img src="/static/assets/images/dummy.png" class="rounded-lg w-full h-full">
+                                    {% endif %}
+                                </div>
+                                <div class="flex items-center justify-between gap-3 flex-1">
+                                    <div class="flex flex-col gap-1">
+                                        <h2 class="font-bold text-[#1E1E1E]">{{user.name}}</h2>
+                                        <div class="flex items-center gap-2">
+                                            <svg width="12" height="12" viewBox="0 0 7 8" fill="none"
+                                                xmlns="http://www.w3.org/2000/svg">
+                                                <path
+                                                    d="M3.55428 7.65689L3.55427 7.65688C3.50092 7.59273 2.85164 6.80769 2.21544 5.856C1.89737 5.3802 1.58189 4.86174 1.34575 4.37021C1.11033 3.88018 0.950752 3.41092 0.950752 3.03537C0.950752 1.50434 2.19626 0.258858 3.72726 0.258858C5.25829 0.258858 6.50377 1.50434 6.50377 3.03537C6.50377 3.41092 6.3442 3.88018 6.10878 4.37021C5.87264 4.86173 5.55716 5.3802 5.2391 5.85599C4.60291 6.80766 3.95364 7.59268 3.90026 7.65688L3.55428 7.65689ZM3.55428 7.65689C3.59701 7.70826 3.66039 7.73802 3.72726 7.73802M3.55428 7.65689L3.72726 7.73802M3.72726 7.73802C3.79409 7.73802 3.8575 7.7083 3.90025 7.65688L3.72726 7.73802ZM4.81824 5.67429C4.39087 6.30644 3.95915 6.86395 3.72726 7.15524C3.49537 6.86395 3.06363 6.30644 2.63629 5.67429C2.23024 5.07366 1.92073 4.54452 1.71291 4.09908C1.50451 3.65238 1.40071 3.29467 1.40071 3.03537C1.40071 1.75253 2.44445 0.708814 3.72726 0.708814C5.01007 0.708814 6.05382 1.75253 6.05382 3.03537C6.05382 3.29466 5.95002 3.65236 5.74162 4.09906C5.53381 4.5445 5.2243 5.07365 4.81824 5.67429Z"
+                                                    fill="#6C6C6C" stroke="#6C6C6C" stroke-width="0.0984954" />
+                                                <path
+                                                    d="M4.62448 5.32114C4.54406 5.26681 4.43481 5.28799 4.38049 5.3684C4.14335 5.71944 3.87769 6.08735 3.5909 6.46191C3.5319 6.53898 3.54652 6.64927 3.62359 6.70826C3.65545 6.73268 3.69301 6.74449 3.73029 6.74449C3.7831 6.74449 3.83535 6.72075 3.86994 6.67558C4.16095 6.29553 4.43071 5.92193 4.67171 5.56515C4.72605 5.48474 4.70491 5.37548 4.62448 5.32114Z"
+                                                    fill="#6C6C6C" />
+                                                <path
+                                                    d="M3.73005 1.60651C2.90829 1.60651 2.23981 2.27499 2.23981 3.09675C2.23981 3.91851 2.90829 4.58698 3.73005 4.58698C4.55181 4.58698 5.22029 3.91851 5.22029 3.09675C5.22029 2.27499 4.55181 1.60651 3.73005 1.60651ZM3.73005 4.13703C3.15649 4.13703 2.68977 3.67031 2.68977 3.09675C2.68977 2.52319 3.15649 2.05647 3.73005 2.05647C4.30364 2.05647 4.77033 2.52318 4.77033 3.09675C4.77033 3.67031 4.30364 4.13703 3.73005 4.13703Z"
+                                                    fill="#6C6C6C" stroke="#6C6C6C" stroke-width="0.0984954" />
+                                            </svg>
+
+                                            <p class="text-xs text-[#6C6C6C]">{{user.business_address}}</p>
+                                        </div>
+                                        <div class="flex items-center gap-2">
+                                            <h1 class="font-bold text-xs">
+                                                {% if user.first_name %} 
+                                                {{user.first_name}}
+                                                {% endif%} 
+                                                {% if user.last_name %} {{user.last_name}} 
+                                                {% endif %}
+                                            </h1>
+                                        </div>
+                                    </div>
+                                    <!-- <div class="flex items-center gap-3">
+                                        <form action="{% url 'request_verify' %}" method="POST">
+                                            {% csrf_token %}
+                                            <input type="hidden" value="{{user.id}}" name="request_id">
+                                            <input type="hidden" value="Accept" name="send_request">
+                                            <input type="hidden" value="{{user.email}}" name="user_email">
+                                            <button
+                                                class="border border-[#05D672] text-[#05D672] bg-[#EEFFF7] rounded-full px-4 py-1 text-sm">Accept</button>
+                                        </form>
+                                        <form action="{% url 'request_verify' %}" method="POST">
+                                            {% csrf_token %}
+                                            <input type="hidden" value="{{user.id}}" name="request_id">
+                                            <input type="hidden" value="Reject" name="send_request">
+                                            <input type="hidden" value="{{user.email}}" name="user_email">
+                                            <button
+                                                class="border border-[#E6212B] text-[#E6212B] bg-[#FFF2F2] rounded-full px-4 py-1 text-sm">Reject</button>
+                                        </form>
+                                    </div> -->
+                                </div>
+                            </div>
+
+
+
+
+                            <div class="modal fade fixed top-0 left-0 hidden w-full h-full outline-none overflow-x-hidden overflow-y-auto"
+                            id="BusinessDeatails-3-{{user.id}}" tabindex="-1" aria-labelledby="BusinessDeatailsLabel"
+                            aria-modal="true" role="dialog">
+                            <div
+                                class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg relative w-auto pointer-events-none">
+                                <div
+                                    class="modal-content border-none rounded-lg shadow-lg relative flex flex-col w-full pointer-events-auto bg-white bg-clip-padding outline-none text-current">
+                                    <div class="modal-body relative">
+                                        <div class="absolute top-2 right-2" data-bs-dismiss="modal"
+                                            aria-label="Close">
+                                            <svg class="cursor-pointer" width="27" height="27" viewBox="0 0 27 27" fill="none"
+                                                xmlns="http://www.w3.org/2000/svg">
+                                                <path
+                                                    d="M13.5 0C5.97857 0 0 5.97857 0 13.5C0 21.0214 5.97857 27 13.5 27C21.0214 27 27 21.0214 27 13.5C27 5.97857 21.0214 0 13.5 0ZM18.7071 20.25L13.5 15.0429L8.29286 20.25L6.75 18.7071L11.9571 13.5L6.75 8.29286L8.29286 6.75L13.5 11.9571L18.7071 6.75L20.25 8.29286L15.0429 13.5L20.25 18.7071L18.7071 20.25Z"
+                                                    fill="#205a42" />
+                                            </svg>
+                                        </div>
+                                        <div class="bg-[#FCFCFC] p-[3rem] flex flex-col items-center gap-3">
+                                          
+                                            <div class="h-[6rem] w-[6rem] rounded-full overflow-hidden">
+                                                {% if user.logo %}
+                                                <img src="{{front_url}}/media/{{user.logo}}"
+                                                
+                                                class="h-full w-full bg-cover">
+                                                 {% else %}
+                                                <img src="/static/assets/images/dummy.png" class="rounded-lg w-full h-full">
+                                                {% endif %}
+                                            </div>
+                                            <h1 class="text-[#1E1E1E] font-semibold">
+                                                {{user.name}}
+                                            </h1>
+                                            <div class="flex items-center gap-1">
+                                                <svg width="12" height="16" viewBox="0 0 12 16" fill="none"
+                                                    xmlns="http://www.w3.org/2000/svg">
+                                                    <path
+                                                        d="M5.97617 14.7884L5.97618 14.7884L6.6502 14.7884C6.65021 14.7884 6.65021 14.7884 6.65021 14.7884C6.75421 14.6633 8.01911 13.134 9.25851 11.2799C9.87815 10.353 10.4928 9.34295 10.9528 8.38537C11.4114 7.43071 11.7223 6.51651 11.7223 5.78487C11.7223 2.80216 9.2959 0.375736 6.31319 0.375736C3.33052 0.375736 0.904057 2.80216 0.904057 5.78487C0.904057 6.51651 1.21493 7.43072 1.67358 8.38538C2.13362 9.34296 2.74824 10.353 3.36789 11.28C4.60732 13.134 5.87224 14.6634 5.97617 14.7884ZM8.4386 10.926C7.60601 12.1575 6.76495 13.2436 6.31319 13.8111C5.86142 13.2436 5.02033 12.1575 4.18778 10.926C3.39672 9.75581 2.79374 8.72495 2.38888 7.85717C1.98287 6.98691 1.78065 6.29004 1.78065 5.78487C1.78065 3.28568 3.81404 1.25233 6.31319 1.25233C8.81233 1.25233 10.8457 3.28568 10.8457 5.78487C10.8457 6.29002 10.6435 6.98688 10.2375 7.85713C9.83266 8.72492 9.22968 9.75579 8.4386 10.926Z"
+                                                        fill="#6C6C6C" stroke="#6C6C6C" stroke-width="0.191886" />
+                                                    <path
+                                                        d="M8.05289 10.2364C7.89623 10.1306 7.68338 10.1718 7.57757 10.3285C7.11557 11.0124 6.59802 11.7291 6.0393 12.4589C5.92436 12.609 5.95285 12.8238 6.10298 12.9388C6.16506 12.9863 6.23823 13.0094 6.31086 13.0094C6.41375 13.0094 6.51554 12.9631 6.58291 12.8751C7.14985 12.1347 7.67539 11.4069 8.14491 10.7118C8.25077 10.5551 8.2096 10.3423 8.05289 10.2364Z"
+                                                        fill="#6C6C6C" />
+                                                    <path
+                                                        d="M6.3073 3.00171C4.70637 3.00171 3.40406 4.30403 3.40406 5.90495C3.40406 7.50588 4.70637 8.8082 6.3073 8.8082C7.90823 8.8082 9.21054 7.50588 9.21054 5.90495C9.21054 4.30403 7.90823 3.00171 6.3073 3.00171ZM6.3073 7.9316C5.18989 7.9316 4.28065 7.02236 4.28065 5.90495C4.28065 4.78755 5.18989 3.87831 6.3073 3.87831C7.42475 3.87831 8.33395 4.78755 8.33395 5.90495C8.33395 7.02236 7.42475 7.9316 6.3073 7.9316Z"
+                                                        fill="#6C6C6C" stroke="#6C6C6C" stroke-width="0.191886" />
+                                                </svg>
+                                                <p class="text-[#6C6C6C] text-sm">{{user.business_address}}</p>
+                                            </div>
+                                        </div>
+                                        <div class="grid lg:grid-cols-3 grid-cols-2 gap-4 p-[2.2rem]">
+                                            <div class="flex flex-col gap-2">
+                                                <h1 class="font-semibold">Owner Name</h1>
+                                                <div class="flex items-center gap-2">
+                                                    {% comment %} <div class="h-[1.2rem] w-[1.2rem] rounded-full overflow-hidden">
+                                                        <img src="https://images.unsplash.com/photo-1555169062-013468b47731?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=387&q=80"
+                                                            alt="" class="h-full w-full object-cover">
+                                                    </div> {% endcomment %}
+                                                    <p class="text-[#555555] font-semibold text-sm">{{user.first_name}}{{b.last_name}}</p>
+                                                </div>
+                                            </div>
+                                            <div class="flex flex-col gap-2">
+                                                <h1 class="font-semibold">Email Address</h1>
+                                                <p class="text-[#555555] font-semibold text-sm">{{user.email}}</p>
+                                            </div>
+                                            <div class="flex flex-col gap-2">
+                                                <h1 class="font-semibold">Owner Contact</h1>
+                                                <p class="text-[#555555] font-semibold text-sm">{{user.dial_code}}{{user.phone}}</p>
+                                            </div>
+                                            <div class="flex flex-col gap-2">
+                                                <h1 class="font-semibold">Category</h1>
+                                                <p class="text-[#555555] font-semibold text-sm">{{user.category}}</p>
+                                            </div>
+                                            <div class="flex flex-col gap-2">
+                                                <h1 class="font-semibold">Country</h1>
+                                                <p class="text-[#555555] font-semibold text-sm">{{user.country}}</p>
+                                            </div>
+                                            <div class="flex flex-col gap-2">
+                                                <h1 class="font-semibold">City</h1>
+                                                <p class="text-[#555555] font-semibold text-sm">{{user.city}}</p>
+                                            </div>
+                                            <div class="flex flex-col gap-2">
+                                                <h1 class="font-semibold">License No</h1>
+                                                <p class="text-[#555555] font-semibold text-sm">{{user.license_id}}</p>
+                                            </div>
+                                    
+                                            <div class="flex flex-col gap-2">
+                                                <h1 class="font-semibold">License </h1>
+                                                <div class="flex items-center gap-2">
+                                                    
+                                                        <div class="h-[3rem] w-[3rem] rounded-lg border overflow-hidden">
+                                                        <img src="{% static 'assets/images/attachment.png' %}"
+                                                            alt="" class="h-full w-full object-cover">
+                                                    </div>
+                                                    <div class="flex-1">
+                                                        {% comment %} <p class="text-[#205a42] font-semibold text-sm">{{b.license_document}}</p> {% endcomment %}
+                                                        <div class="flex items-center justify-between">
+                                                            <p class="text-xs text-[#555555]">29 KB</p>
+                                                            <a href ="{{front_url}}/media/{{user.license_document}}" download>
+                                                                <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                                    <path d="M7.92037 5.799L6.375 7.34475V3.375C6.375 3.168 6.207 3 6 3C5.793 3 5.625 3.168 5.625 3.375V7.34475L4.07963 5.79937C3.933 5.65275 3.69563 5.65275 3.54937 5.79937C3.40275 5.946 3.40275 6.18337 3.54937 6.32961L5.67075 8.45098C5.76075 8.54098 5.88375 8.56873 6.00039 8.5481C6.11665 8.56873 6.24002 8.54061 6.33002 8.45098L8.45139 6.32961C8.59802 6.18298 8.59802 5.94563 8.45139 5.79937C8.30437 5.65275 8.067 5.65275 7.92037 5.799ZM6 0C2.68651 0 0 2.68612 0 6C0 9.31388 2.68651 12 6 12C9.31349 12 12 9.31349 12 6C12 2.68651 9.31388 0 6 0ZM6 11.25C3.10049 11.25 0.75 8.89951 0.75 6C0.75 3.10049 3.10049 0.75 6 0.75C8.89951 0.75 11.25 3.10049 11.25 6C11.25 8.89951 8.89951 11.25 6 11.25Z" fill="#205a42"/>
+                                                                </svg>
+                                                            </a>
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                            {% endif %}
+                            {% endif %}
+                            {% endfor %}
+                        </div>
+                        <div class="flex items-center justify-center my-[1rem]">
+                            <div class="flex items-center gap-3">
+                                <div
+                                    class="h-[1.8rem] w-[1.8rem] rounded-full border border-[#EEEEEE] flex items-center justify-center">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                    <div class="tab-pane fade  show active " id="tabs-b-all" role="tabpanel"
+                        aria-labelledby="tabs-b-all">
+                        <div class="grid lg:grid-cols-3 grid-cols-1 gap-4">
+
+                            {% for s in searched_business %}
+                            {% if s.user.user_type == 'Business' and s.user.is_active is True %}
+                            {% if s.store_status == 'Pending' %}
+                            <div class="rounded-md shadow-md p-3 flex items-center gap-3">
+                                <div class="h-[6rem] w-[6rem]">
+                                    {% if user.logo %}
+                                    <img src="{{front_url}}/media/{{user.logo}}" class="rounded-lg w-full h-full" data-bs-toggle="modal" data-bs-target="#BusinessDeatails-4-{{user.id}}">
+                                    {% else %}
+                                    <img src="/static/assets/images/dummy.png" class="rounded-lg w-full h-full" data-bs-toggle="modal" data-bs-target="#BusinessDeatails-4-{{user.id}}">
+                                    {% endif %}
+                                </div>
+                                <div class="flex items-center gap-3 flex-1">
+                                    <div class="flex flex-col gap-1">
+                                        <h2 class="font-bold text-[#1E1E1E]">{{s.name}}</h2>
+                                        <div class="flex items-center gap-2">
+                                            <svg width="12" height="12" viewBox="0 0 7 8" fill="none"
+                                                xmlns="http://www.w3.org/2000/svg">
+                                                <path
+                                                    d="M3.55428 7.65689L3.55427 7.65688C3.50092 7.59273 2.85164 6.80769 2.21544 5.856C1.89737 5.3802 1.58189 4.86174 1.34575 4.37021C1.11033 3.88018 0.950752 3.41092 0.950752 3.03537C0.950752 1.50434 2.19626 0.258858 3.72726 0.258858C5.25829 0.258858 6.50377 1.50434 6.50377 3.03537C6.50377 3.41092 6.3442 3.88018 6.10878 4.37021C5.87264 4.86173 5.55716 5.3802 5.2391 5.85599C4.60291 6.80766 3.95364 7.59268 3.90026 7.65688L3.55428 7.65689ZM3.55428 7.65689C3.59701 7.70826 3.66039 7.73802 3.72726 7.73802M3.55428 7.65689L3.72726 7.73802M3.72726 7.73802C3.79409 7.73802 3.8575 7.7083 3.90025 7.65688L3.72726 7.73802ZM4.81824 5.67429C4.39087 6.30644 3.95915 6.86395 3.72726 7.15524C3.49537 6.86395 3.06363 6.30644 2.63629 5.67429C2.23024 5.07366 1.92073 4.54452 1.71291 4.09908C1.50451 3.65238 1.40071 3.29467 1.40071 3.03537C1.40071 1.75253 2.44445 0.708814 3.72726 0.708814C5.01007 0.708814 6.05382 1.75253 6.05382 3.03537C6.05382 3.29466 5.95002 3.65236 5.74162 4.09906C5.53381 4.5445 5.2243 5.07365 4.81824 5.67429Z"
+                                                    fill="#6C6C6C" stroke="#6C6C6C" stroke-width="0.0984954" />
+                                                <path
+                                                    d="M4.62448 5.32114C4.54406 5.26681 4.43481 5.28799 4.38049 5.3684C4.14335 5.71944 3.87769 6.08735 3.5909 6.46191C3.5319 6.53898 3.54652 6.64927 3.62359 6.70826C3.65545 6.73268 3.69301 6.74449 3.73029 6.74449C3.7831 6.74449 3.83535 6.72075 3.86994 6.67558C4.16095 6.29553 4.43071 5.92193 4.67171 5.56515C4.72605 5.48474 4.70491 5.37548 4.62448 5.32114Z"
+                                                    fill="#6C6C6C" />
+                                                <path
+                                                    d="M3.73005 1.60651C2.90829 1.60651 2.23981 2.27499 2.23981 3.09675C2.23981 3.91851 2.90829 4.58698 3.73005 4.58698C4.55181 4.58698 5.22029 3.91851 5.22029 3.09675C5.22029 2.27499 4.55181 1.60651 3.73005 1.60651ZM3.73005 4.13703C3.15649 4.13703 2.68977 3.67031 2.68977 3.09675C2.68977 2.52319 3.15649 2.05647 3.73005 2.05647C4.30364 2.05647 4.77033 2.52318 4.77033 3.09675C4.77033 3.67031 4.30364 4.13703 3.73005 4.13703Z"
+                                                    fill="#6C6C6C" stroke="#6C6C6C" stroke-width="0.0984954" />
+                                            </svg>
+
+                                            <p class="text-xs text-[#6C6C6C]">{{s.business_address}}</p>
+                                        </div>
+                                        <div class="flex items-center gap-2">
+                                            <h1 class="font-bold text-xs">{% if s.user.first_name %} {{s.user.first_name}}
+                                                {% endif%} {% if s.user.last_name %} {{s.user.last_name}} {% endif %}</h1>
+                                        </div>
+                                    </div>
+                                    <!-- <div class="flex items-center gap-3">
+                                        <form action="{% url 'request_verify' %}" method="POST">
+                                            {% csrf_token %}
+                                            <input type="hidden" value="{{user.id}}" name="request_id">
+                                            <input type="hidden" value="Accept" name="send_request">
+                                            <button
+                                                class="border border-[#05D672] text-[#05D672] bg-[#EEFFF7] rounded-full px-4 py-1 text-sm">Accept</button>
+                                        </form>
+                                        <form action="{% url 'request_verify' %}" method="POST">
+                                            {% csrf_token %}
+                                            <input type="hidden" value="{{user.id}}" name="request_id">
+                                            <input type="hidden" value="Reject" name="send_request">
+                                            <button
+                                                class="border border-[#E6212B] text-[#E6212B] bg-[#FFF2F2] rounded-full px-4 py-1 text-sm">Reject</button>
+                                        </form>
+                                    </div> -->
+                                </div>
+                            </div>
+
+
+                            <div class="modal fade fixed top-0 left-0 hidden w-full h-full outline-none overflow-x-hidden overflow-y-auto"
+                            id="BusinessDeatails-4-{{user.id}}" tabindex="-1" aria-labelledby="BusinessDeatailsLabel"
+                            aria-modal="true" role="dialog">
+                            <div
+                                class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg relative w-auto pointer-events-none">
+                                <div
+                                    class="modal-content border-none rounded-lg shadow-lg relative flex flex-col w-full pointer-events-auto bg-white bg-clip-padding outline-none text-current">
+                                    <div class="modal-body relative">
+                                        <div class="absolute top-2 right-2" data-bs-dismiss="modal"
+                                            aria-label="Close">
+                                            <svg class="cursor-pointer" width="27" height="27" viewBox="0 0 27 27" fill="none"
+                                                xmlns="http://www.w3.org/2000/svg">
+                                                <path
+                                                    d="M13.5 0C5.97857 0 0 5.97857 0 13.5C0 21.0214 5.97857 27 13.5 27C21.0214 27 27 21.0214 27 13.5C27 5.97857 21.0214 0 13.5 0ZM18.7071 20.25L13.5 15.0429L8.29286 20.25L6.75 18.7071L11.9571 13.5L6.75 8.29286L8.29286 6.75L13.5 11.9571L18.7071 6.75L20.25 8.29286L15.0429 13.5L20.25 18.7071L18.7071 20.25Z"
+                                                    fill="#205a42" />
+                                            </svg>
+                                        </div>
+                                        <div class="bg-[#FCFCFC] p-[3rem] flex flex-col items-center gap-3">
+                                          
+                                            <div class="h-[6rem] w-[6rem] rounded-full overflow-hidden">
+                                                {% if s.user.logo %}
+                                                <img src="{{front_url}}/media/{{user.logo}}"
+                                                
+                                                    class="h-full w-full bg-cover">
+                                                    {% else %}
+                                                    <img src="/static/assets/images/dummy.png" class="rounded-lg w-full h-full">
+                                                    {% endif %}
+                                            </div>
+                                            <h1 class="text-[#1E1E1E] font-semibold">
+                                                {{s.name}}
+                                            </h1>
+                                            <div class="flex items-center gap-1">
+                                                <svg width="12" height="16" viewBox="0 0 12 16" fill="none"
+                                                    xmlns="http://www.w3.org/2000/svg">
+                                                    <path
+                                                        d="M5.97617 14.7884L5.97618 14.7884L6.6502 14.7884C6.65021 14.7884 6.65021 14.7884 6.65021 14.7884C6.75421 14.6633 8.01911 13.134 9.25851 11.2799C9.87815 10.353 10.4928 9.34295 10.9528 8.38537C11.4114 7.43071 11.7223 6.51651 11.7223 5.78487C11.7223 2.80216 9.2959 0.375736 6.31319 0.375736C3.33052 0.375736 0.904057 2.80216 0.904057 5.78487C0.904057 6.51651 1.21493 7.43072 1.67358 8.38538C2.13362 9.34296 2.74824 10.353 3.36789 11.28C4.60732 13.134 5.87224 14.6634 5.97617 14.7884ZM8.4386 10.926C7.60601 12.1575 6.76495 13.2436 6.31319 13.8111C5.86142 13.2436 5.02033 12.1575 4.18778 10.926C3.39672 9.75581 2.79374 8.72495 2.38888 7.85717C1.98287 6.98691 1.78065 6.29004 1.78065 5.78487C1.78065 3.28568 3.81404 1.25233 6.31319 1.25233C8.81233 1.25233 10.8457 3.28568 10.8457 5.78487C10.8457 6.29002 10.6435 6.98688 10.2375 7.85713C9.83266 8.72492 9.22968 9.75579 8.4386 10.926Z"
+                                                        fill="#6C6C6C" stroke="#6C6C6C" stroke-width="0.191886" />
+                                                    <path
+                                                        d="M8.05289 10.2364C7.89623 10.1306 7.68338 10.1718 7.57757 10.3285C7.11557 11.0124 6.59802 11.7291 6.0393 12.4589C5.92436 12.609 5.95285 12.8238 6.10298 12.9388C6.16506 12.9863 6.23823 13.0094 6.31086 13.0094C6.41375 13.0094 6.51554 12.9631 6.58291 12.8751C7.14985 12.1347 7.67539 11.4069 8.14491 10.7118C8.25077 10.5551 8.2096 10.3423 8.05289 10.2364Z"
+                                                        fill="#6C6C6C" />
+                                                    <path
+                                                        d="M6.3073 3.00171C4.70637 3.00171 3.40406 4.30403 3.40406 5.90495C3.40406 7.50588 4.70637 8.8082 6.3073 8.8082C7.90823 8.8082 9.21054 7.50588 9.21054 5.90495C9.21054 4.30403 7.90823 3.00171 6.3073 3.00171ZM6.3073 7.9316C5.18989 7.9316 4.28065 7.02236 4.28065 5.90495C4.28065 4.78755 5.18989 3.87831 6.3073 3.87831C7.42475 3.87831 8.33395 4.78755 8.33395 5.90495C8.33395 7.02236 7.42475 7.9316 6.3073 7.9316Z"
+                                                        fill="#6C6C6C" stroke="#6C6C6C" stroke-width="0.191886" />
+                                                </svg>
+                                                <p class="text-[#6C6C6C] text-sm">{{user.business_address}}</p>
+                                            </div>
+                                        </div>
+                                        <form action="{% url 'request_verify' %}" method="POST">
+                                            {% csrf_token %}
+                                            <div class="grid lg:grid-cols-3 grid-cols-2 gap-4 p-[2.2rem] ">
+                                                <div class="flex flex-col gap-2">
+                                                    <h1 class="font-semibold">Owner Name</h1>
+                                                    <div class="flex items-center gap-2">
+                                                        {% comment %} <div class="h-[1.2rem] w-[1.2rem] rounded-full overflow-hidden">
+                                                            <img src="https://images.unsplash.com/photo-1555169062-013468b47731?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=387&q=80"
+                                                                alt="" class="h-full w-full object-cover">
+                                                        </div> {% endcomment %}
+                                                        <p class="text-[#555555] font-semibold text-sm">{{s.user.first_name}}{{s.user.last_name}}</p>
+                                                    </div>
+                                                </div>
+                                                <div class="flex flex-col gap-2">
+                                                    <h1 class="font-semibold">Email Address</h1>
+                                                    <p class="text-[#555555] font-semibold text-sm">{{s.user.email}}</p>
+                                                </div>
+                                                <div class="flex flex-col gap-2">
+                                                    <h1 class="font-semibold">Owner Contact</h1>
+                                                    <p class="text-[#555555] font-semibold text-sm">{{s.user.dial_code}}{{s.user.phone}}</p>
+                                                </div>
+                                                <div class="flex flex-col gap-2">
+                                                    <h1 class="font-semibold">Category</h1>
+                                                    <p class="text-[#555555] font-semibold text-sm">{{s.category}}</p>
+                                                </div>
+                                                <div class="flex flex-col gap-2">
+                                                    <h1 class="font-semibold">Country</h1>
+                                                    <p class="text-[#555555] font-semibold text-sm">{{s.country}}</p>
+                                                </div>
+                                                <div class="flex flex-col gap-2">
+                                                    <h1 class="font-semibold">City</h1>
+                                                    <p class="text-[#555555] font-semibold text-sm">{{s.user.city}}</p>
+                                                </div>
+
+                                                <div class="flex flex-col gap-2">
+                                                    <h1 class="font-semibold">License No</h1>
+                                                    <p class="text-[#555555] font-semibold text-sm">{{s.license_id}}</p>
+                                                </div>
+                                                <div class="flex flex-col gap-2">
+                                                    <h1 class="font-semibold">Reservation</h1>
+                                                    <input type="number" name="reservation" class="border rounded-md text-sm outline-none lg:px-4 px-2 lg:py-3 py-[0.6rem] placeholder:text-[#A1A1A1] text-[#101928] focus:border-[#205a42] ease-in transition-all focus:border-l-[7px]  bg-transparent" placeholder="Enter Reservation" autocomplete="off" required="">
+                                                </div>
+                                                <div class="flex flex-col gap-2">
+                                                    <h1 class="font-semibold">Commission</h1>
+                                                    <input type="number" name="commission" class="border rounded-md text-sm outline-none lg:px-4 px-2 lg:py-3 py-[0.6rem] placeholder:text-[#A1A1A1] text-[#101928] focus:border-[#205a42] ease-in transition-all focus:border-l-[7px]  bg-transparent" placeholder="Enter Commission" autocomplete="off" required="">
+                                                </div>
+                                        
+                                                <div class="flex flex-col gap-2">
+                                                    <h1 class="font-semibold">License Attachment</h1>
+                                                    <div class="flex items-center gap-2">
+                                                        
+                                                            <div class="h-[3rem] w-[3rem] rounded-lg border overflow-hidden">
+                                                            <img src="{% static 'assets/images/attachment.png' %}"
+                                                                alt="" class="h-full w-full object-cover">
+                                                        </div>
+                                                    
+                                                        <div class="flex-1">
+                                                            {% comment %} <p class="text-[#205a42] font-semibold text-sm">{{b.license_document}}</p> {% endcomment %}
+                                                            <div class="flex items-center justify-start">
+                                                                <p class="text-xs text-[#555555]">29 KB &nbsp;</p>
+                                                                <a href ="{{front_url}}/media/{{user.license_document}}" download>
+                                                                <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                                    <path d="M7.92037 5.799L6.375 7.34475V3.375C6.375 3.168 6.207 3 6 3C5.793 3 5.625 3.168 5.625 3.375V7.34475L4.07963 5.79937C3.933 5.65275 3.69563 5.65275 3.54937 5.79937C3.40275 5.946 3.40275 6.18337 3.54937 6.32961L5.67075 8.45098C5.76075 8.54098 5.88375 8.56873 6.00039 8.5481C6.11665 8.56873 6.24002 8.54061 6.33002 8.45098L8.45139 6.32961C8.59802 6.18298 8.59802 5.94563 8.45139 5.79937C8.30437 5.65275 8.067 5.65275 7.92037 5.799ZM6 0C2.68651 0 0 2.68612 0 6C0 9.31388 2.68651 12 6 12C9.31349 12 12 9.31349 12 6C12 2.68651 9.31388 0 6 0ZM6 11.25C3.10049 11.25 0.75 8.89951 0.75 6C0.75 3.10049 3.10049 0.75 6 0.75C8.89951 0.75 11.25 3.10049 11.25 6C11.25 8.89951 8.89951 11.25 6 11.25Z" fill="#205a42"/>
+                                                                </svg>
+                                                                </a>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="text-right py-[1.5rem] px-[.5rem]">
+                                                    <div class="flex items-center gap-3 ">
+                                                            <input type="hidden" value="{{s.id}}" name="request_id">
+                                                            <input type="hidden" value="Accept" name="send_request">
+                                                            <input type="hidden" value="{{s.user.email}}" name="user_email">
+                                                            <button
+                                                                class="border border-[#05D672] text-[#05D672] bg-[#EEFFF7] rounded-full px-4 py-1 text-sm">Accept</button>
+                                                    </form>
+                                                    <form action="{% url 'request_verify' %}" method="POST">
+                                                        {% csrf_token %}
+                                                            <input type="hidden" value="{{s.id}}" name="request_id">
+                                                            <input type="hidden" value="Reject" name="send_request">
+                                                            <input type="hidden" value="{{s.user.email}}" name="user_email">
+                                                            <button
+                                                                class="border border-[#E6212B] text-[#E6212B] bg-[#FFF2F2] rounded-full px-4 py-1 text-sm">Reject</button>
+                                                            </form>
+                                                    </div>
+                                                </div>
+                                            
+                                            </div>
+                                       
+                                        
+                                    </div>
+                                </div>
+                            
+                        </div>
+                            {% endif %}
+                            {% endif %}
+                            {#                            {% endif %}#}
+                            {% endfor %}
+                        </div>
+                        <div class="flex items-center justify-center my-[1rem]">
+                            <div class="flex items-center gap-3">
+                                <div
+                                    class="h-[1.8rem] w-[1.8rem] rounded-full border border-[#EEEEEE] flex items-center justify-center">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {#                    {% endfor %}#}
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+{% else %}
+{% include 'common/not-found.html' %}
+{% endif %}
+{% include 'common/footer-com.html' %}
+
+<script>
+    let store_active_ids = document.querySelectorAll('.store_active_id_tab');
+    document.addEventListener('DOMContentLoaded', () => {
+        store_active_ids[+(localStorage.getItem('store_active_id_tab_')) - 1].click();
+    })
+    store_active_ids.forEach(store_active_id => {
+        store_active_id.addEventListener('click', () => {
+            localStorage.setItem('store_active_id_tab_', store_active_id.getAttribute('tab-id'));
+        })
+    })
+</script>
+{% if messages %}
+{% for msg in messages %}
+<script>
+    setTimeout(() => {
+        Toast.fire({
+            icon: '{{msg.tags}}', // success
+            title: '{{msg}}'
+        });
+    }, 1000);
+</script>
+{% endfor %}
+{% endif %}
+{% endblock body %}

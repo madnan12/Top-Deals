@@ -1,0 +1,207 @@
+{% extends 'Business/base.html' %}
+{% block title %} Top Deals - user Account Settings {% endblock title %}
+{% block body %}
+
+<div class="bg-[#F8F9FD] p-[1.4rem] col-span-4">
+    <div class="container w-[90%] mx-auto">
+        <div class="flex flex-col gap-6 py-[1rem]">
+            <div class="flex flex-col gap-5">
+                <h1 class="font-bold text-2xl text-[#205a42]">Account Settings</h1>
+            </div>
+
+            <form method="POST" action="{% url 'update_user_profile' %}">
+                {% csrf_token %}
+            <div class="rounded-2xl shadow bg-white px-4 py-4">
+                <div class="flex flex-col gap-3">
+                    <div class="pb-[2rem]">
+                        <h2 class="text-[#205a42] text-lg font-bold">General Settings</h2>
+                    <p class="text-[#555555] text-sm">This section contains user basic information like name, email
+                        etc.
+                    </p>
+                    </div>
+                </div>
+                <div class="flex flex-col gap-3 w-full lg:w-[70%]">
+                    <div class="grid lg:grid-cols-2 gap-5">
+                        <div class="flex flex-col gap-2">
+                            <p class="text-sm">Full Name *</p>
+                            <input type="text" placeholder="Enter Full Name" name="first_name" class="border rounded-md text-sm outline-none lg:px-4 px-2 lg:py-3 py-[0.6rem] placeholder:text-[#A1A1A1] text-[#101928] focus:border-[#205a42] ease-in transition-all focus:border-l-[7px]  bg-transparent" value="{{ user.first_name }}">
+                        </div>
+                        <div class="flex flex-col gap-2">
+                            <p class="text-sm">Gender *</p>
+                            <select type="text" name="gender" class="border bg-transparent rounded-md text-sm outline-none lg:px-4 px-2 lg:py-3 py-[0.6rem] placeholder:text-[#A1A1A1] text-[#101928] focus:border-[#205a42] ease-in transition-all focus:border-l-[7px]" value="{{ user.gender }}">
+                                <option value="{{ user.gender }}">{{ user.gender }}</option>
+                                <option value="Male">Male</option>
+                                <option value="Female">Female</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="grid lg:grid-cols-2 gap-5">
+                        <div class="flex flex-col gap-2">
+                            <p class="text-sm">Email Address *</p>
+                            <input type="text" placeholder="Enter Email Address" name="email" class="border rounded-md text-sm outline-none lg:px-4 px-2 lg:py-3 py-[0.6rem] placeholder:text-[#A1A1A1] text-[#101928] focus:border-[#205a42] ease-in transition-all focus:border-l-[7px]  bg-transparent" value="{{ user.email }}">
+                        </div>
+                        <div class="flex flex-col gap-2">
+                            <p class="text-sm">Phone Number *</p>
+                             <div class="flex border rounded-md overflow-hidden ease-in transition-all ">
+                                    <div class="px-2 py-3 flex items-center before-plus">
+                                        <select class="bg-transparent text-sm pl-2 pr-5 outline-none" id="">
+                                            <option value="92">92</option>
+                                        </select>
+                                    </div>
+                                    <input type="number" placeholder="Enter your phone number" name="mobile_number" class="px-4 py-3 border-l w-full outline-none text-sm" value="{{ user.phone }}">
+                                </div>
+                        </div>
+                    </div><div class="grid lg:grid-cols-2 gap-5">
+
+                        <div class="flex flex-col gap-2">
+                            <p class="text-sm">Country *</p>
+                            <select type="text" name="country" class="border bg-transparent rounded-md text-sm outline-none lg:px-4 px-2 lg:py-3 py-[0.6rem] placeholder:text-[#A1A1A1] text-[#101928] focus:border-[#205a42] ease-in transition-all focus:border-l-[7px]" value="">
+                                {% for country in all_countries %}
+                                <option value="{{ country.id }}">{{ country.name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    <div class="flex flex-col gap-2">
+                            <p class="text-sm">City *</p>
+                            <select type="text" name="city" class="border bg-transparent rounded-md text-sm outline-none lg:px-4 px-2 lg:py-3 py-[0.6rem] placeholder:text-[#A1A1A1] text-[#101928] focus:border-[#205a42] ease-in transition-all focus:border-l-[7px]" value="">
+                                {% for city in all_cities %}
+                                <option value="{{ city.id }}">{{ city.name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div></div><div class="flex flex-col gap-2">
+                        <p class="text-sm">Address</p>
+                        <input type="text" placeholder="Enter Address" name="address" class="border rounded-md text-sm outline-none lg:px-4 px-2 lg:py-3 py-[0.6rem] placeholder:text-[#A1A1A1] text-[#101928] focus:border-[#205a42] ease-in transition-all focus:border-l-[7px]  bg-transparent" value="{{ user.business_address }}">
+                    </div>
+                    <button class="bg-[#205a42] rounded-md px-4 py-2 text-sm text-white font-bold w-fit" type="submit">Save
+                        Changes</button>
+                </div>
+            </div>
+            </form>
+            <form method="POST" action="{% url 'admin_password' %}">
+                {% csrf_token %}
+            <div class="rounded-2xl shadow bg-white px-4 py-4">
+                <div class="flex flex-col gap-3">
+                    <div class="flex items-center gap-5 justify-between pb-[1rem]">
+                        <div>
+                            <h2 class="text-[#205a42] text-lg font-bold">Change Password</h2>
+                            <p class="text-[#555555] text-sm">
+                                It is not a bad idea to change your password often for a more secure account.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex flex-col gap-3 w-full lg:w-[70%] password_p">
+
+                    <div class="grid lg:grid-cols-2 gap-5">
+                        <div class="flex flex-col gap-2">
+                            <p class="text-sm">Current Password</p>
+
+                            <div class="password-show-p relative">
+                                <input placeholder="Enter Current Password" name="old_password" required 
+                                class="w-full password-show border rounded-md text-sm outline-none lg:px-4 px-2 lg:py-3 py-[0.6rem] placeholder:text-[#A1A1A1] text-[#101928] focus:border-[#205a42] ease-in transition-all focus:border-l-[7px]  bg-transparent"
+                                value="">
+                                <div class="absolute password-show-icon right-4 top-1/2 -translate-y-1/2 cursor-pointer">
+                                    <svg width="13" height="9" viewBox="0 0 13 9" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M8.53125 4.5C8.53125 5.03872 8.31724 5.55538 7.93631 5.93631C7.55538 6.31724 7.03872 6.53125 6.5 6.53125C5.96128 6.53125 5.44462 6.31724 5.06369 5.93631C4.68276 5.55538 4.46875 5.03872 4.46875 4.5C4.46875 3.96128 4.68276 3.44462 5.06369 3.06369C5.44462 2.68276 5.96128 2.46875 6.5 2.46875C7.03872 2.46875 7.55538 2.68276 7.93631 3.06369C8.31724 3.44462 8.53125 3.96128 8.53125 4.5Z" fill="#A1A1A1"></path>
+                                        <path d="M0 4.5C0 4.5 2.4375 0.03125 6.5 0.03125C10.5625 0.03125 13 4.5 13 4.5C13 4.5 10.5625 8.96875 6.5 8.96875C2.4375 8.96875 0 4.5 0 4.5ZM6.5 7.34375C7.25421 7.34375 7.97753 7.04414 8.51083 6.51083C9.04414 5.97753 9.34375 5.25421 9.34375 4.5C9.34375 3.74579 9.04414 3.02247 8.51083 2.48917C7.97753 1.95586 7.25421 1.65625 6.5 1.65625C5.74579 1.65625 5.02247 1.95586 4.48917 2.48917C3.95586 3.02247 3.65625 3.74579 3.65625 4.5C3.65625 5.25421 3.95586 5.97753 4.48917 6.51083C5.02247 7.04414 5.74579 7.34375 6.5 7.34375V7.34375Z" fill="#A1A1A1"></path>
+                                    </svg>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="flex flex-col gap-2">
+                            <p class="text-sm">New Password *</p>
+
+                            <div class="password-show-p relative">
+                                <input placeholder="Enter New Password" name="new_password" required 
+                                class="w-full password-show border rounded-md text-sm outline-none lg:px-4 px-2 lg:py-3 py-[0.6rem] placeholder:text-[#A1A1A1] text-[#101928] focus:border-[#205a42] ease-in transition-all focus:border-l-[7px]  bg-transparent"
+                                value="">
+                                <div class="absolute password-show-icon right-4 top-1/2 -translate-y-1/2 cursor-pointer">
+                                    <svg width="13" height="9" viewBox="0 0 13 9" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M8.53125 4.5C8.53125 5.03872 8.31724 5.55538 7.93631 5.93631C7.55538 6.31724 7.03872 6.53125 6.5 6.53125C5.96128 6.53125 5.44462 6.31724 5.06369 5.93631C4.68276 5.55538 4.46875 5.03872 4.46875 4.5C4.46875 3.96128 4.68276 3.44462 5.06369 3.06369C5.44462 2.68276 5.96128 2.46875 6.5 2.46875C7.03872 2.46875 7.55538 2.68276 7.93631 3.06369C8.31724 3.44462 8.53125 3.96128 8.53125 4.5Z" fill="#A1A1A1"></path>
+                                        <path d="M0 4.5C0 4.5 2.4375 0.03125 6.5 0.03125C10.5625 0.03125 13 4.5 13 4.5C13 4.5 10.5625 8.96875 6.5 8.96875C2.4375 8.96875 0 4.5 0 4.5ZM6.5 7.34375C7.25421 7.34375 7.97753 7.04414 8.51083 6.51083C9.04414 5.97753 9.34375 5.25421 9.34375 4.5C9.34375 3.74579 9.04414 3.02247 8.51083 2.48917C7.97753 1.95586 7.25421 1.65625 6.5 1.65625C5.74579 1.65625 5.02247 1.95586 4.48917 2.48917C3.95586 3.02247 3.65625 3.74579 3.65625 4.5C3.65625 5.25421 3.95586 5.97753 4.48917 6.51083C5.02247 7.04414 5.74579 7.34375 6.5 7.34375V7.34375Z" fill="#A1A1A1"></path>
+                                    </svg>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <button class="password_btn bg-[#205a42] rounded-md px-4 py-2 text-sm text-white font-bold w-fit" type="submit">Change
+                        Password</button>
+                </div>
+            </div>
+            </form>
+
+            <form method="POST" action="{% url 'update_business_len_cur' %}">
+            <div class="rounded-2xl shadow bg-white px-4 py-4">
+                <div class="flex flex-col gap-3">
+                    <div class="flex items-center gap-5 justify-between pb-[1rem]">
+                        <div>
+                            <h2 class="text-[#205a42] text-lg font-bold">General Settings</h2>
+                            <p class="text-[#555555] text-sm">
+                                Change language and currency
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex flex-col gap-3 w-full lg:w-[70%]">
+
+                    <div class="grid lg:grid-cols-2 gap-5">
+{#                        <div class="flex flex-col gap-2">#}
+{#                            <p class="text-sm">Default Language</p>#}
+{#                            <select type="text" name="language" class="border bg-transparent rounded-md text-sm outline-none lg:px-4 px-2 lg:py-3 py-[0.6rem] placeholder:text-[#A1A1A1] text-[#101928] focus:border-[#205a42] ease-in transition-all focus:border-l-[7px]" value="">#}
+{#                                <<option value="English">English (UK)</option>#}
+{#                                <option value="Arabic">Arabic</option>#}
+{#                            </select>#}
+{#                        </div>#}
+                        <div class="flex flex-col gap-2">
+                        <p class="text-sm">Select Language</p>
+                        <select type="text" name="language"
+                            class="border bg-transparent rounded-md text-sm outline-none lg:px-4 px-2 lg:py-3 py-[0.6rem] placeholder:text-[#A1A1A1] text-[#101928] focus:border-[#205a42] ease-in transition-all focus:border-l-[7px]"
+                            value="">
+                            <option value="{{ user.language }}" selected>{{ user.language }}</option>
+                            <option value="English">English</option>
+                            <option value="Arabic">Arabic</option>
+                        </select>
+                    </div>
+                        <div class="flex flex-col gap-2">
+                        <p class="text-sm">Currency</p>
+
+                        <select type="text" name="currency"
+                            class="border bg-transparent rounded-md text-sm outline-none lg:px-4 px-2 lg:py-3 py-[0.6rem] placeholder:text-[#A1A1A1] text-[#101928] focus:border-[#205a42] ease-in transition-all focus:border-l-[7px]"
+                            value="">
+                            {% if user.currency.name %}
+                            <option value="{{user.currency.id}}" selected>{{user.currency.name}}</option>
+                            {% for currency in currencies %}
+                            {% if currency.name == user.currency.name %}
+                            {% else %}
+                            <option value="{{currency.id}}">{{currency.name}}</option>
+                            {% endif %}
+                            {% endfor %}
+
+                            {% else %}
+                            {% for currency in currencies %}
+                            {% if currency.name == 'AED' %}
+                            <option selected value="{{currency.id}}">{{currency.name}}</option>
+                            {% endif %}
+                            {% if currency.name == 'AED' %}
+                            {% else %}
+                            <option value="{{currency.id}}">{{currency.name}}</option>
+                            {% endif %}
+                            {% endfor %}
+                            {% endif %}
+                        </select>
+
+                    </div>
+                    </div>
+                    <button class="bg-[#205a42] rounded-md px-4 py-2 text-sm text-white font-bold w-fit" type="submit">
+                        Save Changes
+                    </button>
+                </div>
+            </div>
+            </form>
+
+        </div>
+    </div>
+</div>
+{% include 'common/footer-com.html' %}
+{% endblock body %}

@@ -1,0 +1,138 @@
+{% extends 'Store/base.html' %}
+{% block title %} Top Deals {% endblock title %}
+{% block body %}
+
+
+<div class="container mx-auto bg-white flex items-center w-[80%] my-[3rem] py-4 px-2">
+    <div class="rounded-2xl shadow-cstm-2 bg-white w-full">
+        <div class="flex flex-col gap-3">
+            <div class="flex items-center gap-4 justify-between px-4 py-4 border-b">
+                <div>
+                    <h1 class="font-semibold text-xl text-[#205a42]">My Orders</h1>
+                </div>
+                <div class="flex items-center gap-3">
+                    <h1 class="font-semibold text-[#555555]">Filter By:</h1>
+                    <select required="" id="cities_dropdown" name="city"
+                        class="border bg-[#F7F7F7] border-[#D2D2D2] rounded-md text-sm outline-none lg:px-4 px-2 lg:py-3 !pr-[1.8rem] py-[0.6rem] placeholder:text-[#A1A1A1] text-[#101928] focus:border-[#205a42] ease-in transition-all focus:border-l-[7px]  bg-transparent">
+                        <option value="" selected="" disabled="">Category</option>
+                    </select>
+                    <select required="" id="cities_dropdown" name="city"
+                        class="border bg-[#F7F7F7] border-[#D2D2D2] rounded-md text-sm outline-none lg:px-4 px-2 lg:py-3 !pr-[1.8rem] py-[0.6rem] placeholder:text-[#A1A1A1] text-[#101928] focus:border-[#205a42] ease-in transition-all focus:border-l-[7px]  bg-transparent">
+                        <option value="" selected="" disabled="">Date Range</option>
+                    </select>
+                </div>
+            </div>
+            <div class="grid grid-cols-2 gap-5 px-4 py-4 ">
+                <div class="rounded-md shadow-md p-3 flex items-center gap-3">
+                    <div class="h-[7rem] w-[7rem]">
+                        <img src="https://images.unsplash.com/photo-1456926631375-92c8ce872def?ixlib=rb-1.2.1&amp;ixid=MnwxMjA3fDB8MHxzZWFyY2h8OXx8YW5pbWFsfGVufDB8fDB8fA%3D%3D&amp;auto=format&amp;fit=crop&amp;w=500&amp;q=60"
+                            class="rounded-lg w-full h-full object-cover">
+                    </div>
+                    <div class="flex flex-col gap-3">
+                        <div class="flex items-center gap-4">
+                            <div class="flex-1">
+                                <h2 class="font-bold text-[#1E1E1E] line-clamp-1">
+                                    Buttler Cholocolate Cafe,
+                                    MM Alam Branch
+                                </h2>
+                            </div>
+
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <p class="text-xs text-[#6C6C6C]">25 August 2022</p>
+                            <div class="h-[12px] w-[1px] bg-[#6C6C6C]"></div>
+                            <p class="text-xs text-[#6C6C6C]">Ayesha Zaka</p>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <h1 class="font-bold text-[#1E1E1E]">
+                                AED 255
+                            </h1>
+                            <div
+                                class="w-fit flex items-center gap-2 rounded-full py-1 px-3 border border-[#05D672] bg-[#E7FFF3] text-sm text-[#05D672]">
+                                <svg width="8" height="7" viewBox="0 0 8 7" fill="none"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <circle cx="4.31338" cy="3.52285" r="3.37588" fill="#05D672"></circle>
+                                </svg>
+                                Active
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="rounded-md shadow-md p-3 flex items-center gap-3">
+                    <div class="h-[7rem] w-[7rem]">
+                        <img src="https://images.unsplash.com/photo-1456926631375-92c8ce872def?ixlib=rb-1.2.1&amp;ixid=MnwxMjA3fDB8MHxzZWFyY2h8OXx8YW5pbWFsfGVufDB8fDB8fA%3D%3D&amp;auto=format&amp;fit=crop&amp;w=500&amp;q=60"
+                            class="rounded-lg w-full h-full object-cover">
+                    </div>
+                    <div class="flex flex-col gap-3">
+                        <div class="flex items-center gap-4">
+                            <div class="flex-1">
+                                <h2 class="font-bold text-[#1E1E1E] line-clamp-1">
+                                    Buttler Cholocolate Cafe,
+                                    MM Alam Branch
+                                </h2>
+                            </div>
+
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <p class="text-xs text-[#6C6C6C]">25 August 2022</p>
+                            <div class="h-[12px] w-[1px] bg-[#6C6C6C]"></div>
+                            <p class="text-xs text-[#6C6C6C]">Ayesha Zaka</p>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <h1 class="font-bold text-[#1E1E1E]">
+                                AED 255
+                            </h1>
+                            <div
+                                class="w-fit flex items-center gap-2 rounded-full py-1 px-3 border border-[#05D672] bg-[#E7FFF3] text-sm text-[#05D672]">
+                                <svg width="8" height="7" viewBox="0 0 8 7" fill="none"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <circle cx="4.31338" cy="3.52285" r="3.37588" fill="#05D672"></circle>
+                                </svg>
+                                Active
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="rounded-md shadow-md p-3 flex items-center gap-3">
+                    <div class="h-[7rem] w-[7rem]">
+                        <img src="https://images.unsplash.com/photo-1456926631375-92c8ce872def?ixlib=rb-1.2.1&amp;ixid=MnwxMjA3fDB8MHxzZWFyY2h8OXx8YW5pbWFsfGVufDB8fDB8fA%3D%3D&amp;auto=format&amp;fit=crop&amp;w=500&amp;q=60"
+                            class="rounded-lg w-full h-full object-cover">
+                    </div>
+                    <div class="flex flex-col gap-3">
+                        <div class="flex items-center gap-4">
+                            <div class="flex-1">
+                                <h2 class="font-bold text-[#1E1E1E] line-clamp-1">
+                                    Buttler Cholocolate Cafe,
+                                    MM Alam Branch
+                                </h2>
+                            </div>
+
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <p class="text-xs text-[#6C6C6C]">25 August 2022</p>
+                            <div class="h-[12px] w-[1px] bg-[#6C6C6C]"></div>
+                            <p class="text-xs text-[#6C6C6C]">Ayesha Zaka</p>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <h1 class="font-bold text-[#1E1E1E]">
+                                AED 255
+                            </h1>
+                            <div
+                                class="w-fit flex items-center gap-2 rounded-full py-1 px-3 border border-[#05D672] bg-[#E7FFF3] text-sm text-[#05D672]">
+                                <svg width="8" height="7" viewBox="0 0 8 7" fill="none"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <circle cx="4.31338" cy="3.52285" r="3.37588" fill="#05D672"></circle>
+                                </svg>
+                                Active
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+{% include 'common/footer-com.html' %}
+{% endblock body %}

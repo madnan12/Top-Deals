@@ -1,0 +1,61 @@
+{% extends 'Store/base.html' %}
+{% block title %} Top Deals {% endblock title %}
+{% block body %}
+
+<section>
+    <div class="min-h-[22rem] flex items-center justify-center content-bg relative bg-no-repeat bg-cover bg-center">
+        <div class="flex flex-col gap-1 text-center items-center">
+            <h2 class="font-bold text-[#fff] text-[2.4rem] lg:w-full w-[70%]">All Categories</h2>
+        </div>
+    </div>
+</section>
+<div class="container py-[2rem] md:w-[96%] w-[90%] mx-auto">
+    <div class="grid md:grid-cols-2 gap-[2rem]">
+        {% for i in category %}
+        <div class="rounded-2xl shadow-cstm-2 border bg-white px-4 py-4">
+            <a href="#"><h1 class="font-semibold text-xl mb-3">{{i.name}}</h1></a>
+            <div class="flex items-center gap-4 flex-wrap">
+
+                {% if i.subcategory_category.all %}
+                {% for sub in  i.subcategory_category.all %}
+                   <a href="#">
+                     <div class="flex flex-col gap-1">
+                        <div class="h-[4.5rem] w-[5.5rem] rounded-lg overflow-hidden">
+                            <img src="{{front_url}}/media/{{sub.image}}" class="h-full w-full object-cover">
+                        </div>
+                        <p class="text-xs text-[#555555] text-center">{{sub.name}}</p>
+                    </div>
+                   </a>
+                {% endfor %}
+                   {% else %}
+                   <div class="text-center flex items-center justify-center h-full">
+                    <div class="flex flex-col gap-3">
+                        <svg class="mx-auto" width="88" height="88" viewBox="0 0 88 88" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M4.63709 87.2911L13.3472 17.8522H74.0645L82.5327 87.2911H4.63709Z" stroke="#909090" stroke-width="1.23119"></path>
+                            <path d="M61.5596 18.2214H73.379L82.736 86.183H80.5199L61.5596 18.2214Z" fill="#909090"></path>
+                            <path d="M24.8619 17.3597C25.9027 7.94155 33.8882 0.615594 43.5841 0.615594C53.2801 0.615594 61.2655 7.94155 62.3064 17.3597H24.8619Z" stroke="#909090" stroke-width="1.23119"></path>
+                            <path d="M30.2669 17.9987C31.0905 11.2463 36.7552 6.03283 43.6038 6.03283C50.4524 6.03283 56.1172 11.2463 56.9408 17.9987H30.2669Z" stroke="#909090" stroke-width="1.23119"></path>
+                            <circle cx="31.272" cy="40.6292" r="4.18604" fill="#909090"></circle>
+                            <circle cx="2.95485" cy="44.8152" r="2.70861" stroke="#909090" stroke-width="0.492475"></circle>
+                            <circle cx="84.9515" cy="64.2679" r="1.9699" stroke="#909090" stroke-width="0.492475"></circle>
+                            <circle cx="55.896" cy="40.6292" r="4.18604" fill="#909090"></circle>
+                            <path fill-rule="evenodd" clip-rule="evenodd" d="M62.1995 72.657C62.2413 72.8619 62.5446 72.849 62.5446 72.6399C62.5446 62.7124 54.0558 54.6646 43.5843 54.6646C33.1128 54.6646 24.624 62.7124 24.624 72.6399C24.624 72.8488 24.9269 72.8617 24.9687 72.657C26.6576 64.3703 34.35 58.112 43.5841 58.112C52.8182 58.112 60.5106 64.3703 62.1995 72.657Z" fill="#909090"></path>
+                            <path d="M85.9366 26.8398L82.4893 30.2872M82.4893 26.8398L85.9366 30.2872" stroke="#909090" stroke-width="0.492475"></path>
+                        </svg>
+                        <h6 class="text-[#205a42]  font-semibold text-xl">No Record Found</h6>
+                    </div>
+                </div>
+
+                {% endif %}
+
+            </div>
+        </div>
+        {% endfor %}
+
+
+    </div>
+</div>
+
+
+{% include 'common/footer-com.html' %}
+{% endblock body %}
